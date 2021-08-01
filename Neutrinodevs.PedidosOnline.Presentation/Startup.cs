@@ -49,7 +49,12 @@ namespace Neutrinodevs.PedidosOnline.Presentation
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            app.UseMvc();
+            app.UseMvc(path => {
+                path.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}"    
+                );
+            });
         }
     }
 }

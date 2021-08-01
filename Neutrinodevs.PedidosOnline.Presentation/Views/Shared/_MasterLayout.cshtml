@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Inicio</title>
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/bootstrap/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/master.css" />
+    </environment>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">LA PESCA</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link active" href='@Url.Action("Home/Index")'>INICIO<span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link" href="#">Platos</a>
+                <a class="nav-item nav-link" href="#">Sobre Nosotros</a>
+                <a class="nav-item nav-link disabled" href="#">Contacto</a>
+            </div>
+        </div>
+    </nav>
+
+    @*<partial name="_CookieConsentPartial" />*@
+
+    <div class="wrap-main">
+        @RenderBody()
+        <hr />
+
+    </div>
+    <footer class="bg-dark text-white text-center p-2" >
+        <p>&copy; 2021 - LA PESCA</p>
+    </footer>
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="~/bootstrap/js/bootstrap.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

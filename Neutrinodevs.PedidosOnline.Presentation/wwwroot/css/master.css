@@ -1,0 +1,14 @@
+﻿body {
+    width: 100%;
+}
+
+nav{
+    min-height: 10vh;
+}
+.wrap-main {
+    padding-top: 4rem;
+    min-height: 80vh;
+}
+footer{
+    height: 10vh;
+}

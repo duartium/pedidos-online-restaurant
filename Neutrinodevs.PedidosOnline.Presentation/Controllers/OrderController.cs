@@ -1,18 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Neutrinodevs.PedidosOnline.Domain.Contracts.Services;
 
 namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
 {
     public class OrderController : Controller
     {
-        private readonly IOrderRepository _rpsOrder;
-        public OrderController(IOrderRepository orderRepository)
+        private readonly IOrderService _srvOrder;
+        public OrderController(IOrderService orderService)
         {
-            _rpsOrder = orderRepository;
+            _srvOrder = orderService;
         }
 
         public IActionResult Index()
@@ -22,8 +18,15 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
 
         public JsonResult GetAll()
         {
-            var orders = _rpsOrder.GetAll();
-            return Json(orders);
+            try
+            {
+                var orders = _srvOrder.GetAll();
+                return Json(orders);
+            }
+            catch (System.Exception)
+            {
+                return Json("error");
+            }
         }
     }
 }

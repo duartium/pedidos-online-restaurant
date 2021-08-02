@@ -6,6 +6,6 @@ namespace Neutrinodevs.PedidosOnline.Domain.Contracts.Services
 {
     public interface IOrderService : IDisposable
     {
-        IEnumerable<Order> Listado();
+        IEnumerable<Order> GetAll();
     }
 }

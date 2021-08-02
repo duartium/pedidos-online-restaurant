@@ -23,7 +23,11 @@
 
   <ItemGroup>
     <Folder Include="DatabaseContext\" />
-    <Folder Include="Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Neutrinodevs.PedidosOnline.Domain\Neutrinodevs.PedidosOnline.Domain.csproj" />
+    <ProjectReference Include="..\Neutrinodevs.PedidosOnline.Infraestructure\Neutrinodevs.PedidosOnline.Infraestructure.csproj" />
   </ItemGroup>
 
 </Project>

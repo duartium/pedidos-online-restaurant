@@ -5,7 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Repositories\" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Neutrinodevs.PedidosOnline.Domain\Neutrinodevs.PedidosOnline.Domain.csproj" />
+    <ProjectReference Include="..\Neutrinodevs.PedidosOnline.Infraestructure.Hubs\Neutrinodevs.PedidosOnline.Infraestructure.Hubs.csproj" />
   </ItemGroup>
 
 </Project>

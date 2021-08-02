@@ -9,6 +9,9 @@ nav{
     padding-top: 4rem;
     min-height: 80vh;
 }
-footer{
+.wrap-content {
+    min-height: 80vh;
+}
+footer {
     height: 10vh;
 }

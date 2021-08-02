@@ -4,18 +4,31 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
+using Neutrinodevs.PedidosOnline.Infraestructure.Hubs.Hubs;
+using Neutrinodevs.PedidosOnline.Infraestructure.Repositories;
 
 namespace Neutrinodevs.PedidosOnline.Presentation
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private IHostingEnvironment _environment;
+        
+        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             Configuration = configuration;
+
+
+            _environment = hostingEnvironment;
+
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(_environment.ContentRootPath)
+                .AddJsonFile("appsetting.json")
+                .AddEnvironmentVariables();
+            
+            Configuration = builder.Build();
+            
+            
         }
 
         public IConfiguration Configuration { get; }
@@ -31,6 +44,9 @@ namespace Neutrinodevs.PedidosOnline.Presentation
             });
 
 
+            services.AddSingleton(Configuration);
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddSignalR();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -48,12 +64,16 @@ namespace Neutrinodevs.PedidosOnline.Presentation
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            
             app.UseMvc(path => {
                 path.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}"    
                 );
+            });
+
+            app.UseSignalR(hub => {
+                hub.MapHub<OrderHub>("/OrdersHub");
             });
         }
     }

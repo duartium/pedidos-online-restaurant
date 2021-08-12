@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="container table table-responsive">
+    <table class="table table-bordered table-striped" id="tbl_productos">
+        <thead>
+            <tr>
+                <td># Orden</td>
+                <td>Nombre de Cliente</td>
+                <td>Fecha</td>
+                <td>Valor</td>
+            </tr>
+        </thead>
+        <tbody id="tbody_orders">
+        </tbody>
+    </table>
+</div>
+<script>
+
+</script>
+@section Scripts {
+    <script src="~/aspnet/signalr/dist/browser/signalr.min.js"></script>
+}

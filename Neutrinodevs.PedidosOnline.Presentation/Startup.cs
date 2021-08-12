@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Services;
 using Neutrinodevs.PedidosOnline.Domain.Services;
 using Neutrinodevs.PedidosOnline.Infraestructure.Hubs.Hubs;
+using Neutrinodevs.PedidosOnline.Infraestructure.Repositories;
 
 namespace Neutrinodevs.PedidosOnline.Presentation
 {
@@ -26,7 +28,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation
                 .AddJsonFile("appsetting.json")
                 .AddEnvironmentVariables();
             
-            Configuration = builder.Build();
+            //Configuration = builder.Build();
             
             
         }
@@ -45,6 +47,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation
 
 
             services.AddSingleton(Configuration);
+            services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddSignalR();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

@@ -5,10 +5,12 @@
     
     var conn = new signalR.HubConnectionBuilder().withUrl("/OrdersHub").build();
     conn.on("UpdateOrdersTable", function () {
+        console.log('UpdateOrdersTable');
         fillOrdersTable();
     });
 
     conn.start().catch(function (e) {
+        console.log('error signalr');
         console.error(e);
     });
     
@@ -16,15 +18,17 @@
 });
 
 function fillOrdersTable() {
+    console.log('fill');
     $.ajax({
         url: "/Order/GetAll",
         type: "GET",
         contentType: "application/json; charset-utf-8",
         dateType: "json",
         success: function (resp) {
+            console.log(resp);
             if (resp.length < 0) return;
 
-            console.log(resp);
+            
             let tbody_orders = document.getElementById('tbody_orders');
 
             let rows = "<tr>";

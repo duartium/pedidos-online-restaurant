@@ -6,8 +6,8 @@ nav{
     min-height: 10vh;
 }
 .wrap-main {
-    padding-top: 4rem;
-    min-height: 80vh;
+    /*padding-top: 4rem;
+    min-height: 80vh;*/
 }
 .wrap-content {
     min-height: 80vh;
@@ -15,3 +15,12 @@ nav{
 footer {
     height: 10vh;
 }
+header{
+    height: 50vh;
+    width: 100vw;
+}
+
+    header img {
+        height: 100%;
+        width: 100%;
+    }

@@ -6,27 +6,15 @@
     <title>@ViewData["Title"] | LA PESCA</title>
 
     <environment include="Development">
-        <link rel="stylesheet" href="~/bootstrap/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/master.css" />
+        <link rel="stylesheet" href="~/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
+        <link rel="stylesheet" href="~/css/bootstrap.min.css">
+        <link rel="stylesheet" href="~/css/style.css">
+        <link rel="stylesheet" href="~/css/responsive.css">
     </environment>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">LA PESCA</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-item nav-link active" href='@Url.Action("home/Index")'>INICIO<span class="sr-only">(current)</span></a>
-                <a class="nav-item nav-link" href="#">Platos</a>
-                <a class="nav-item nav-link" href="#">Sobre Nosotros</a>
-                <a class="nav-item nav-link" href="#">Contacto</a>
-                <a class="nav-item nav-link" href='@Url.Action("Index", "dashboard")'>Dashboard</a>
-            </div>
-        </div>
-    </nav>
-
     @*<partial name="_CookieConsentPartial" />*@
 
     <div class="wrap-main">

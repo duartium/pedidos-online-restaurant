@@ -4,5 +4,30 @@
 }
 
 <header>
-    <img src="./images/HeaderBackground.jpg" alt="Restaurante La Pesca"  />
+    <nav>
+        <div class="logo"><span>LA PESCA</span></div>
+        <ul>
+            <li><a href="#">Inicio</a></li>
+            <li><a href="#">Sobre nosotros</a></li>
+            <li><button class="btn btn-success">Ingresar</button></li>
+        </ul>
+        <section></section>
+    </nav>
 </header>
+<script>
+    window.addEventListener("scroll", function () {
+        var navbar = document.querySelector("nav");
+        var span = document.querySelector("span");
+        
+        if (window.scrollY > 0) {
+            navbar.classList.toggle("sticky");
+            span.style.display = "block";
+        } else {
+            span.style.display = "none";
+        }
+        
+    });
+</script>
+<div class="container-fluid">
+
+</div>

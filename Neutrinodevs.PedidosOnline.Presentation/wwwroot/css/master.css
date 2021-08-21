@@ -1,6 +1,12 @@
 ﻿body {
     width: 100%;
 }
+back-primary {
+    background-color: #ff5b0e;
+}
+.color-primary {
+    color: #ff5b0e;
+}
 
 nav{
     min-height: 10vh;
@@ -15,12 +21,72 @@ nav{
 footer {
     height: 10vh;
 }
-header{
-    height: 50vh;
+header {
+    height: 55vh;
     width: 100vw;
+    background-image: url('/images/HeaderBackground.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
 }
 
-    header img {
-        height: 100%;
-        width: 100%;
-    }
+nav {
+    position: fixed;
+    width: 100%;
+    height: 100px;
+    top: 0;
+    left: 0;
+    padding: 10px 90px;
+    box-sizing: border-box;
+    background-color: rgba(0,0,0,0);
+    transition: 0.6s;
+}
+
+nav button{
+    margin-top: 2rem;
+}
+
+nav .logo{
+    padding: 22px 20px;
+    height: 80px;
+    float: left;
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff;
+    transition: 0.6s;
+}
+
+nav ul{
+    list-style: none;
+    float: right;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    
+}
+    
+nav ul li a{
+    line-height:80px;
+    padding: 15px 30px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    height: 80px;
+    text-transform: uppercase;
+    color: #fff;
+    transition: 0.4s;
+}
+
+nav ul li a:hover{
+    background-color: rgba(0,0,0,0.8);
+}
+.sticky{
+    padding:3px 140px;
+    background: #000;
+    height: 80px;
+}
+nav.sticky .logo,
+nav.sticky ul li a {
+    color: #fff;
+}

@@ -2,12 +2,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Services;
 using Neutrinodevs.PedidosOnline.Domain.Services;
 using Neutrinodevs.PedidosOnline.Infraestructure.Hubs.Hubs;
+using Neutrinodevs.PedidosOnline.Infraestructure.Models;
 using Neutrinodevs.PedidosOnline.Infraestructure.Repositories;
 
 namespace Neutrinodevs.PedidosOnline.Presentation
@@ -47,7 +49,14 @@ namespace Neutrinodevs.PedidosOnline.Presentation
 
 
             services.AddSingleton(Configuration);
+            //services.AddDbContext<ND_PEDIDOS_ONLINEContext>(options =>
+            //{
+            //    options.UseSqlServer(Configuration.GetSection("YourConn").Value);
+            //    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            //});
+
             services.AddScoped<IOrderRepository, OrderRepository>();
+            //services.AddScoped<IDishRepository, DishRepository>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddSignalR();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

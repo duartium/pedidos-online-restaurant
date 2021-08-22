@@ -1,0 +1,14 @@
+﻿@model IEnumerable<Neutrinodevs.PedidosOnline.Domain.DTOs.Product.ProductDTO>
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-12 col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <p>@item.Nombre</p>
+                    <p>@item.Precio</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>

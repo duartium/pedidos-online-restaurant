@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<Neutrinodevs.PedidosOnline.Domain.DTOs.Product.ProductDTO>
+@{
     Layout = "_MasterLayout";
     ViewData["Title"] = "Inicio";
 }
@@ -29,5 +30,5 @@
     });
 </script>
 <div class="container-fluid">
-
+    @Html.Partial("~/Views/Dish/Partial/_Dishes.cshtml", Model)
 </div>

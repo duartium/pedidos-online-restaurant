@@ -22,10 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DatabaseContext\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Neutrinodevs.PedidosOnline.Domain\Neutrinodevs.PedidosOnline.Domain.csproj" />
     <ProjectReference Include="..\Neutrinodevs.PedidosOnline.Infraestructure\Neutrinodevs.PedidosOnline.Infraestructure.csproj" />
   </ItemGroup>

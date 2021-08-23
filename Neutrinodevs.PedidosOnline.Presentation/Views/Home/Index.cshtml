@@ -10,6 +10,10 @@
         <ul>
             <li><a href="#">Inicio</a></li>
             <li><a href="#">Sobre nosotros</a></li>
+            <li><button class="btn btn-primary" data-pushbar-target="pushbar-cart">
+                <i class="fa fa-shopping-cart"></i>
+                <span class="badge badge-primary">0</span></button>
+            </li>
             <li><button class="btn btn-success">Ingresar</button></li>
         </ul>
         <section></section>
@@ -31,4 +35,5 @@
 </script>
 <div class="container">
     @await Html.PartialAsync("~/Views/Dish/Partial/_Dishes.cshtml", Model)
+    
 </div>

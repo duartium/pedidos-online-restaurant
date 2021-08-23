@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="~/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="~/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
+        <link rel="stylesheet" href="~/css/pushbar.css" />
         <link rel="stylesheet" href="~/css/master.css" />
     </environment>
 </head>
@@ -17,7 +18,13 @@
 
     <div class="wrap-main">
         @RenderBody()
-        
+        <div data-pushbar-id="pushbar-cart" data-pushbar-direction="right" class="pushbar from_right pushbar-carrito">
+            <div class="btn-cerrar derecha">
+                <button data-pushbar-close class="btn"><i class="fa fa-times"></i></button>
+            </div>
+            <h5>Mi Pedido</h5>
+            <p>Producto 1 asdasd asdasd as  asd</p>
+        </div>
     </div>
     <footer class="bg-dark text-white text-center">
         <p>&copy; 2021 La Pesca. Reservados todos los derechos.</p>
@@ -26,6 +33,8 @@
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
         <script src="~/bootstrap/js/bootstrap.js"></script>
+        <script src="~/js/pushbar.js"></script>
+        <script src="~/js/order/shopping-cart.js"></script>
     </environment>
 
     @RenderSection("Scripts", required: false)

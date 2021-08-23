@@ -6,12 +6,10 @@
     <title>@ViewData["Title"] | LA PESCA</title>
 
     <environment include="Development">
-        <link rel="stylesheet" href="~/css/master.css" />
+        <link rel="stylesheet" href="~/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="~/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
-        <link rel="stylesheet" href="~/css/bootstrap.min.css">
-        <link rel="stylesheet" href="~/css/style.css">
-        <link rel="stylesheet" href="~/css/responsive.css">
+        <link rel="stylesheet" href="~/css/master.css" />
     </environment>
 </head>
 <body>
@@ -19,17 +17,15 @@
 
     <div class="wrap-main">
         @RenderBody()
+        
     </div>
-    <footer class="bg-dark">
-        <div class="container-fluid">
-            <p>&copy; 2021 <a href="#">La Pesca</a>. Reservados todos los derechos.</p>
-        </div>
+    <footer class="bg-dark text-white text-center">
+        <p>&copy; 2021 La Pesca. Reservados todos los derechos.</p>
     </footer>
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
         <script src="~/bootstrap/js/bootstrap.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
 
     @RenderSection("Scripts", required: false)

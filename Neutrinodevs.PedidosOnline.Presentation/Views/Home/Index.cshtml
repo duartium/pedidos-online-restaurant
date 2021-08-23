@@ -29,6 +29,6 @@
         
     });
 </script>
-<div class="container-fluid">
-    @Html.Partial("~/Views/Dish/Partial/_Dishes.cshtml", Model)
+<div class="container">
+    @await Html.PartialAsync("~/Views/Dish/Partial/_Dishes.cshtml", Model)
 </div>

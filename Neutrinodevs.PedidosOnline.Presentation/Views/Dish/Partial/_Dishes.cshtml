@@ -1,12 +1,17 @@
 ﻿@model IEnumerable<Neutrinodevs.PedidosOnline.Domain.DTOs.Product.ProductDTO>
-<div class="row">
+<div class="row my-4">
     @foreach (var item in Model)
     {
-        <div class="col-md-12 col-lg-12">
-            <div class="card">
+        <div class="col-md-6 col-lg-4 col-sm-12">
+            <div class="card m-2 card-product">
+                <img src="~/images/products/@item.Imagen" />
                 <div class="card-body">
-                    <p>@item.Nombre</p>
-                    <p>@item.Precio</p>
+                    <strong>@item.Nombre</strong>
+                    <br />
+                    <span>@item.Precio</span>
+                </div>
+                <div class="overlay">
+                    <h5 class="text"><i class="fa fa-plus-circle"></i> Agregar al carrito</h5>
                 </div>
             </div>
         </div>

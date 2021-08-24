@@ -10,9 +10,11 @@
         <ul>
             <li><a href="#">Inicio</a></li>
             <li><a href="#">Sobre nosotros</a></li>
-            <li><button class="btn btn-primary" data-pushbar-target="pushbar-cart">
-                <i class="fa fa-shopping-cart"></i>
-                <span class="badge badge-primary">0</span></button>
+            <li>
+                <button class="btn btn-primary" data-pushbar-target="pushbar-cart">
+                    <i class="fa fa-shopping-cart"></i>
+                    <span class="badge badge-primary">0</span>
+                </button>
             </li>
             <li><button class="btn btn-success">Ingresar</button></li>
         </ul>
@@ -23,17 +25,43 @@
     window.addEventListener("scroll", function () {
         var navbar = document.querySelector("nav");
         var span = document.querySelector("span");
-        
+
         if (window.scrollY > 0) {
             navbar.classList.toggle("sticky");
             span.style.display = "block";
         } else {
             span.style.display = "none";
         }
-        
+
     });
 </script>
+<!-- Modal -->
+<div class="modal fade" id="product-modal" tabindex="-1" role="dialog" aria-labelledby="product-modalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <button type="button" class="btn btn-dark btn-lg"><i class="fa fa-minus"></i></button>
+                    </div>
+                    <input type="text" class="quantity-product" name="name" value="1" maxlength="4" />
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-dark btn-lg"><i class="fa fa-plus"></i></button>
+                    </div>
+                    <div class="input-group-append">
+                        <button type="button" class="form-control btn btn-primary">Agregar al carrito</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="container">
     @await Html.PartialAsync("~/Views/Dish/Partial/_Dishes.cshtml", Model)
-    
 </div>

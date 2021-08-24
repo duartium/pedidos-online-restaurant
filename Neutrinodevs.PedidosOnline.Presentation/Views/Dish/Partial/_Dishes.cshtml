@@ -3,7 +3,7 @@
     @foreach (var item in Model)
     {
         <div class="col-md-6 col-lg-4 col-sm-12">
-            <div class="card m-2 card-product">
+            <div class="card m-2 card-product" data-toggle="modal" data-target="#product-modal">
                 <img src="~/images/products/@item.Imagen" />
                 <div class="card-body">
                     <strong>@item.Nombre</strong>

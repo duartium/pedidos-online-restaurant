@@ -1,6 +1,7 @@
 ﻿using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Product;
 using Neutrinodevs.PedidosOnline.Infraestructure.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,10 +24,15 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                 {
                     var dishes = bd.Productos.Where(x => x.Estado == 1 && x.Tipo == 1)
                         .Select(x => new ProductDTO
-                        { 
-                           Nombre = x.Nombre,
-                           Precio = x.Precio,
-                           Imagen = x.Imagen
+                        {
+                            Nombre = x.Nombre,
+                            Precio = x.Precio,
+                            Imagen = x.Imagen,
+                            JsonProduct = JsonConvert.SerializeObject(new ProductDTO { 
+                                Nombre = x.Nombre,
+                                Precio = x.Precio,
+                                Imagen = x.Imagen
+                            })
                         }).ToList();
                     return dishes;
                 }

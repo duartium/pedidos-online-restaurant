@@ -136,10 +136,21 @@ card{
 }
 
 .quantity-product {
-    padding: 15px;
+    padding: 7px;
     width: 80px;
     max-width: 180px;
-    min-width: 80px;
-    font-size: 30px;
+    min-width: 70px;
+    font-size: 25px;
     font-weight: bold;
+    text-align: center;
+}
+
+.modal-body img{
+    width: 250%;
+    height: 200px;
+}
+
+.price{
+    text-align: center;
+    font-size: 4em;
 }

@@ -65,10 +65,10 @@ const setPendingOrder = () => {
         setElementsToCart(items);
 
         $("#subtotal-cart").text(subtotal.toFixed(2));
-        enabledCartButtons(false);
+        disabledCartButtons(false);
     } else {
         $("#subtotal-cart").text(parseFloat(0).toFixed(2));
-        enabledCartButtons(true);
+        disabledCartButtons(true);
     }
 }
 
@@ -83,10 +83,10 @@ const setElementsToCart = (items) => {
     });
     wrap_items.html(content);
     $("#subtotal-cart").text(subtotal.toFixed(2));
-    enabledCartButtons(false);
+    disabledCartButtons(false);
 }
 
-const enabledCartButtons = (enabled) => {
+const disabledCartButtons = (enabled) => {
     if (enabled) {
         $("#btn_order").attr("disabled", true);
         $("#btn_empty_cart").attr("disabled", true);
@@ -121,7 +121,8 @@ $("#btn_empty_cart").click(function () {
             localStorage.removeItem("order");
             $(".order-items").html('');
             $("#subtotal-cart").text(parseFloat(0).toFixed(2));
-            enabledCartButtons(false);
+            $("#quantity_cart").text(0);
+            disabledCartButtons(true);
         }
     })
     

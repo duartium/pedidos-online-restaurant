@@ -154,3 +154,43 @@ card{
     text-align: center;
     font-size: 4em;
 }
+.numeric{}
+
+.order-items {
+    list-style: none;
+    margin-top: 1rem;
+    padding: 0 !important;
+}
+
+.order-items li{
+    padding-bottom: .8rem;
+    padding-top: .5rem;
+    border-bottom: 1px solid #e2e2e2;
+    padding-right: 3rem;
+}
+.order-items a {
+    text-decoration: none;
+    font-weight: bold;
+    position: absolute !important;
+    right: 20px;
+    margin-top: 10px;
+    display: block;
+    width: 24px;
+    height: 24px;
+    border-radius: 100%;
+    text-align: center;
+}
+.order-items a:hover {
+    cursor:pointer;
+}
+
+.title-item-cart{
+    font-size: 18px;
+    
+}
+.price-item-cart{
+    color: #808080;
+}
+.separator {
+    border: 1px solid #212529;
+}

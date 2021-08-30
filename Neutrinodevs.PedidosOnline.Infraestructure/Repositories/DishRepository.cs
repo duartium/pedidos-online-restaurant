@@ -31,7 +31,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                             JsonProduct = JsonConvert.SerializeObject(new ProductDTO { 
                                 Nombre = x.Nombre,
                                 Precio = x.Precio,
-                                Imagen = x.Imagen
+                                Id = x.IdProducto
                             })
                         }).ToList();
                     return dishes;

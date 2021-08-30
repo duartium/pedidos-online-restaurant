@@ -22,8 +22,18 @@
             <div class="btn-cerrar derecha">
                 <button data-pushbar-close class="btn"><i class="fa fa-times"></i></button>
             </div>
-            <h5>Mi Pedido</h5>
-            <p>Producto 1 asdasd asdasd as  asd</p>
+            <h5 class="text-center">Mi Pedido</h5>
+            <hr class="separator" />
+            <label>SUBTOTAL: $123.33</label>
+            <button class="btn btn-primary btn-block" id="btn_order">ORDENAR</button>
+            <button class="btn btn-secondary btn-block" id="btn_empty_cart">VACIAR CARRITO</button>
+            <hr />
+            <div id="wrap-cart-items">
+                <ul class="order-items">
+                    <li>El carrito está vacío.</li>
+                </ul>
+
+            </div>
         </div>
     </div>
     <footer class="bg-dark text-white text-center">

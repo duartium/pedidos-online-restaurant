@@ -11,9 +11,9 @@
             <li><a href="#">Inicio</a></li>
             <li><a href="#">Sobre nosotros</a></li>
             <li>
-                <button class="btn btn-primary" data-pushbar-target="pushbar-cart">
+                <button class="btn btn-primary" @*data-pushbar-target="pushbar-cart"*@ id="btn_shopping_cart">
                     <i class="fa fa-shopping-cart"></i>
-                    <span class="badge badge-primary">0</span>
+                    <span id="quantity_cart" class="badge badge-primary">0</span>
                 </button>
             </li>
             <li><button class="btn btn-success">Ingresar</button></li>
@@ -22,6 +22,8 @@
     </nav>
 </header>
 <script>
+    var current_item_price = 0;
+
     window.addEventListener("scroll", function () {
         var navbar = document.querySelector("nav");
         var span = document.querySelector("span");
@@ -38,16 +40,28 @@
     function setQuantity(quantity) {
         
         let current_quantity = parseInt($(".quantity-product").val());
-        console.log(quantity);
-        if (current_quantity >= 1) {
-            let new_quantity = current_quantity + quantity;
+        let current_price_cart = 0;
+        let new_quantity = 0;
+
+        if (quantity > 0 && current_quantity >= 1) {
+            new_quantity = current_quantity + quantity;
             $(".quantity-product").val(new_quantity);
+
+            current_price_cart = (current_item_price * new_quantity).toFixed(2);
+            $("#modal-price").text(current_price_cart);
+
+        } else if (quantity < 0 && current_quantity > 1) {
+            new_quantity = current_quantity + quantity;
+            $(".quantity-product").val(new_quantity);
+
+            current_price_cart = (current_item_price * new_quantity).toFixed(2);
+            $("#modal-price").text(current_price_cart);
         }
 
     }
 </script>
 <!-- Modal -->
-<div class="modal fade" id="product-modal" tabindex="-1" role="dialog" aria-labelledby="product-modalTitle" aria-hidden="true">
+<div class="modal fade" id="product-modal" tabindex="-1" role="dialog" aria-labelledby="product-modalTitle" aria-hidden="true" data-id="">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -60,7 +74,7 @@
                 <div class="row container">
                     <div class="col-6">
                         <div id="wrap-price" class="text-center">
-                            <span class="price">$</span><span class="price" id="modal-price"></span>
+                            <span class="price text-success">$</span><span class="price text-success" id="modal-price"></span>
                         </div>
                     </div>
                     <div class="col-6">
@@ -68,12 +82,12 @@
                             <div class="input-group-prepend">
                                 <button type="button" class="btn btn-dark btn-lg" onclick="setQuantity(-1)"><i class="fa fa-minus"></i></button>
                             </div>
-                            <input type="text" class="quantity-product" name="name" value="1" maxlength="4" />
+                            <input type="text" class="quantity-product" id="txt_quantity" name="txt_quantity" value="1" maxlength="4" readonly/>
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-dark btn-lg" onclick="setQuantity(1)"><i class="fa fa-plus"></i></button>
                             </div>
                             <div class="input-group-append mt-3">
-                                <button type="button" class="form-control btn btn-primary" ><i class="fa fa-plus-circle"></i> Agregar al carrito</button>
+                                <button type="button" class="form-control btn btn-primary" id="add-cart"><i class="fa fa-plus-circle"></i> Agregar al carrito</button>
                             </div>
                         </div>
                     </div>

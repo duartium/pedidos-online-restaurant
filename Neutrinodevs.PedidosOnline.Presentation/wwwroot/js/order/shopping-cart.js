@@ -123,6 +123,8 @@ $("#btn_empty_cart").click(function () {
             $("#subtotal-cart").text(parseFloat(0).toFixed(2));
             $("#quantity_cart").text(0);
             disabledCartButtons(true);
+
+            window.location = '';
         }
     })
     

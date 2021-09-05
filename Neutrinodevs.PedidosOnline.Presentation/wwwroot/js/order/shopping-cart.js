@@ -124,7 +124,7 @@ $("#btn_empty_cart").click(function () {
             $("#quantity_cart").text(0);
             disabledCartButtons(true);
 
-            window.location = '';
+            //window.location = '';
         }
     })
     

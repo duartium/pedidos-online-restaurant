@@ -16,7 +16,7 @@
         
     </div>
 </nav>
-<div class="container" style="min-height:80vh">
+<div class="container pb-4" style="min-height:80vh">
     <div class="py-4">
         <h4>Mi Pedido</h4>
         <hr />
@@ -33,7 +33,7 @@
                             <th>SUBTOTAL</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tbody-invoice">
                     </tbody>
                 </table>
             </div>
@@ -44,18 +44,18 @@
         <div class="offset-lg-6 col-lg-6  offset-md-6 col-md-6 col-sm-6 col-xs-12">
             <div id="wrap_order_detail table-responsive">
                 <table class="table" id="tbl_order">
-                    <tbody>
+                    <tbody class='text-right'>
                         <tr>
                             <th>SUBTOTAL</th>
-                            <td>0</td>
+                            <td id="subtotal">0</td>
                         </tr>
                         <tr>
                             <th>IVA</th>
-                            <td>0</td>
+                            <td id="iva">0</td>
                         </tr>
                         <tr>
                             <th>TOTAL</th>
-                            <td>0</td>
+                            <td id="total">0</td>
                         </tr>
                     </tbody>
                 </table>
@@ -64,9 +64,11 @@
     </div>
     <div class="row mt-4">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-right">
-            <button class="btn bg-black text-white py-2 px-5 ">SEGUIR COMPRANDO</button>
-            <button class="btn btn-success py-2 px-5 ml-3">FINALIZAR COMPRA</button>
+            <a href='@Url.Action("Index", "Home")' class="btn bg-black text-white py-2 px-5 ">SEGUIR COMPRANDO</a>
+            <button class="btn btn-success py-2 px-5 ml-3" id="btnBuy">FINALIZAR COMPRA</button>
         </div>
     </div>
-
 </div>
+@section Scripts{  
+    <script src="~/js/order/my-order.js"></script>
+}

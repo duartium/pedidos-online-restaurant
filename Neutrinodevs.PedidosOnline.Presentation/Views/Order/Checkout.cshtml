@@ -1,8 +1,62 @@
 ﻿
 @{
-    ViewData["Title"] = "Checkout";
+    ViewData["Title"] = "Mi pedido";
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
 }
-
-<h2>Checkout</h2>
-
+@await Html.PartialAsync("~/Views/Shared/_Navbar.cshtml")
+<div class="container">
+    <div class="row my-5">
+        <div class="col-lg-7 col-lg-5">
+            <h3>Crear una cuenta</h3>
+            <p>Si es la primera vez que solicitas un pedido, por favor crea tu cuenta.</p>
+            @using (Html.BeginForm("Register", "User", FormMethod.Post, new { id = "frmRegistrarme" }))
+            {
+                <div class="form-group">
+                    <label for="identification">Cédula</label>
+                    <input id="identification" name="identification" type="text" class="form-control col-6" maxlength="10" />
+                </div>
+                <div class="form-group">
+                    <label for="name">Nombre</label>
+                    <input id="name" name="name" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Apellido</label>
+                    <input id="last_name" name="last_name" type="text" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="email">Correo electrónico</label>
+                    <input id="email" name="email" type="email" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="passsword">Contraseña</label>
+                    <input id="password" name="password" type="password" class="form-control col-6" />
+                </div>
+                <div class="form-group">
+                    <label for="passsword2">Confirmar contraseña</label>
+                    <input id="passsword2" name="passsword2" type="password" class="form-control col-6" />
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">REGISTRARME</button>
+                </div>
+            }
+        </div>
+        <div class="col-lg-5 col-md-5" style="border-left: 1px solid #808080">
+            <h3>Ingresar a mi cuenta</h3>
+            <p>Si es la primera vez que solicitas un pedido, por favor crea tu cuenta.</p>
+            @using (Html.BeginForm("Login", "User", FormMethod.Post, new { id = "frmLogin" }))
+            {
+                <div class="form-group">
+                    <label for="username">Correo electrónico</label>
+                    <input id="username" name="username" type="email" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="passsword">Contraseña</label>
+                    <input id="user_password" name="user_password" type="password" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success btn-block">INICIAR SESIÓN Y FINALIZAR COMPRA</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

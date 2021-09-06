@@ -12,5 +12,18 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        public JsonResult Register()
+        {
+            return Json("");
+        }
+
+        [HttpPost]
+        public JsonResult Login()
+        {
+            return Json("");
+        }
+
     }
 }

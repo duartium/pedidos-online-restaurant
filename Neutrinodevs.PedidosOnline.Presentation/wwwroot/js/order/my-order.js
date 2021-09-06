@@ -28,10 +28,11 @@
     }
 });
 
-$("#btnBuy").click(function () {
-    let my_order = localStorage.getItem('order');
-    if (my_order != undefined) {
-    let order_invoice = {
-            
-        }
-});
+//$("#btnBuy").click(function () {
+//    let my_order = localStorage.getItem('order');
+//    if (my_order != undefined) {
+//        let order_invoice = {
+
+//        }
+//    }
+//});

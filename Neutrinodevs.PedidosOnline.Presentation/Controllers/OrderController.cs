@@ -31,7 +31,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
 
         public IActionResult Checkout()
         {
-            return View("");
+            return View();
         }
 
     }

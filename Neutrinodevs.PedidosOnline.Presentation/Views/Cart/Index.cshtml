@@ -3,19 +3,7 @@
     ViewData["Title"] = "Mi Pedido";
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
 }
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container">
-        <div class="logo"><span>LA PESCA</span></div>
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-            <ul class="navbar-nav ml-auto   ">
-                <li class="nav-item"><a class="nav-link" href="#">Inicio</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Sobre nosotros</a></li>
-            </ul>
-
-        </div>
-        
-    </div>
-</nav>
+@Html.PartialAsync("~/Views/Shared/_Navbar.cshtml")
 <div class="container pb-4" style="min-height:80vh">
     <div class="py-4">
         <h4>Mi Pedido</h4>
@@ -65,7 +53,7 @@
     <div class="row mt-4">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-right">
             <a href='@Url.Action("Index", "Home")' class="btn bg-black text-white py-2 px-5 ">SEGUIR COMPRANDO</a>
-            <button class="btn btn-success py-2 px-5 ml-3" id="btnBuy">FINALIZAR COMPRA</button>
+            <a href='@Url.Action("Checkout", "Order")' class="btn btn-success py-2 px-5 ml-3" >FINALIZAR COMPRA</a>
         </div>
     </div>
 </div>

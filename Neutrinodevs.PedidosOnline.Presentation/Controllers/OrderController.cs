@@ -28,5 +28,11 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
                 return Json("error");
             }
         }
+
+        public IActionResult Checkout()
+        {
+            return View("");
+        }
+
     }
 }

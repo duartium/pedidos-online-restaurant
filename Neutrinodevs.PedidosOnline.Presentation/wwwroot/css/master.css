@@ -227,3 +227,10 @@ input {
 input:focus {
     border: 2px solid #000 !important;
 }
+.input-token {
+    width: 300px;
+    font-size: 20px;
+    padding: 10px;
+    border: 2px solid #000 !important;
+    margin: 0 auto;
+}

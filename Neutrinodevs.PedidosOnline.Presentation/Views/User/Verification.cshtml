@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Mi pedido";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+@await Html.PartialAsync("~/Views/Shared/_Navbar.cshtml")
+<div class="container" style="min-height:80vh">
+    <div class="row my-5">
+        <div class="offset-lg-2 col-lg-8 offset-md-2 col-md-8 col-sm-12">
+            <div class="card p-3">
+                <div class="card-body">
+                    <h2>Hemos enviado un código de verificación a tu correo electrónico</h2>
+                    <div class="text-center mt-4">
+                        <p>Ingresa el código recibido para iniciar sesión.</p>
+                        <input type="text" class="form-control input-lg input-token text-center" name="name" value="" maxlength="6" autofocus/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

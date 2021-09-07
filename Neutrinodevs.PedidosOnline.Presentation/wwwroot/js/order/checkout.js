@@ -40,5 +40,30 @@
 
     if (!form_valid) return;
 
-    //llamada ajax
+    let user_register = {
+        identification: user.identification.value,
+        first_name: user.first_name.value,
+        last_name: user.last_name.value,
+        email: user.email.value,
+        password: user.pass.value
+    }
+
+    $.ajax({
+        url: '/User/Register',
+        method: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify(user_register),
+        success: function (resp) {
+            console.log(resp);
+            if (resp === '000') {
+                window.location = '/User/Verification';
+            } else {
+                Swal.fire('Notificación', 'Lo sentimos, no se pudo completar la solicitud.', 'error');
+            }
+        },
+        error: function () {
+            Swal.fire('Notificación', 'Lo sentimos, no se pudo completar la solicitud.', 'error');
+        }
+    });
 });

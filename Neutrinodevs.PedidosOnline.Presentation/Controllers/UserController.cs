@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Neutrinodevs.PedidosOnline.Domain.DTOs.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,16 +14,21 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             return View();
         }
 
-        [HttpPost]
-        public JsonResult Register()
+        public IActionResult Verification()
         {
-            return Json("");
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult Register([FromBody] UserDto user)
+        {
+            return Json("register");
         }
 
         [HttpPost]
         public JsonResult Login()
         {
-            return Json("");
+            return Json("login");
         }
 
     }

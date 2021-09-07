@@ -207,3 +207,23 @@ card{
 .header-page{
     height: 30% !important;
 }
+
+input {
+    border-radius: 0 !important;
+    font-size: 1rem;
+    margin: 0.25rem;
+    min-width: 125px;
+    padding: 0.5rem;
+    transition: background-color 0.5s ease-out;
+}
+
+.invalid {
+    font-weight: 400 !important;
+    border: 2px solid #ff5b0e !important;
+}
+
+
+
+input:focus {
+    border: 2px solid #000 !important;
+}

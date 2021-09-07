@@ -6,17 +6,17 @@
 @await Html.PartialAsync("~/Views/Shared/_Navbar.cshtml")
 <div class="container">
     <div class="row my-5">
-        <div class="col-lg-7 col-lg-5">
+        <div class="col-lg-7 col-md-7 col-sm-12">
             <h3>Crear una cuenta</h3>
             <p>Si es la primera vez que solicitas un pedido, por favor crea tu cuenta.</p>
             @using (Html.BeginForm("Register", "User", FormMethod.Post, new { id = "frmRegistrarme" }))
             {
                 <div class="form-group">
                     <label for="identification">Cédula</label>
-                    <input id="identification" name="identification" type="text" class="form-control col-6" maxlength="10" />
+                    <input id="identification" name="identification" type="text" class="form-control col-6 effect-8" maxlength="10"/>
                 </div>
                 <div class="form-group">
-                    <label for="name">Nombre</label>
+                    <label for="name">Nombres</label>
                     <input id="name" name="name" class="form-control" />
                 </div>
                 <div class="form-group">
@@ -40,9 +40,9 @@
                 </div>
             }
         </div>
-        <div class="col-lg-5 col-md-5" style="border-left: 1px solid #808080">
+        <div class="col-lg-5 col-md-5 col-sm-12" style="border-left: 1px solid #808080">
             <h3>Ingresar a mi cuenta</h3>
-            <p>Si es la primera vez que solicitas un pedido, por favor crea tu cuenta.</p>
+            <p>Si ya tienes una cuenta, inicia sesión para procesar tu pedido.</p>
             @using (Html.BeginForm("Login", "User", FormMethod.Post, new { id = "frmLogin" }))
             {
                 <div class="form-group">
@@ -60,3 +60,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts{ 
+    <script src="~/js/order/checkout.js" type="text/javascript"></script>
+} 

@@ -19,7 +19,9 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
         public string Telefono { get; set; }
         public int? TipoCliente { get; set; }
         public int? Estado { get; set; }
+        public int? UsuarioId { get; set; }
 
+        public Usuarios Usuario { get; set; }
         public ICollection<Pedidos> Pedidos { get; set; }
     }
 }

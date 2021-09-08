@@ -28,6 +28,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Data Source=BDUARTE-LAP; Initial Catalog=ND_PEDIDOS_ONLINE; user id=sa; password=12345678");
             }
         }
@@ -78,6 +79,13 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.TipoCliente).HasColumnName("tipo_cliente");
+
+                entity.Property(e => e.UsuarioId).HasColumnName("usuario_id");
+
+                entity.HasOne(d => d.Usuario)
+                    .WithMany(p => p.Clientes)
+                    .HasForeignKey(d => d.UsuarioId)
+                    .HasConstraintName("FK_CLIENTES_USUARIOS");
             });
 
             modelBuilder.Entity<ComprobanteDetalle>(entity =>

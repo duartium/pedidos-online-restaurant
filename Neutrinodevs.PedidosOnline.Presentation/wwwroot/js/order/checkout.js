@@ -70,3 +70,9 @@
         }
     });
 });
+
+$(document).ready(function () {
+    $("#location").click(function () {
+        $("#map-modal").modal()
+    });
+});

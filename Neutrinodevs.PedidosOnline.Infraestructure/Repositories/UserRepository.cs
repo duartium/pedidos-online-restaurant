@@ -1,10 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.User;
 using Neutrinodevs.PedidosOnline.Infraestructure.Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 
 namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
@@ -22,39 +19,36 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
             try
             {
                 int resp = -1;
-                using (var bd = new ND_PEDIDOS_ONLINEContext())
+                using (var transaction = _context.Database.BeginTransaction())
                 {
-                    using (var transaction = bd.Database.BeginTransaction())
+                    var _user = new Usuarios
                     {
-                        var _user = new Usuarios
-                        {
-                            Nombres = userDto.FirstName + " " + userDto.LastName,
-                            Email = userDto.Email,
-                            Estado = 1,
-                            TipoUsuario = 1,
-                            Password = userDto.Password
-                        };
-                        bd.Usuarios.Add(_user);
-                        bd.SaveChanges();
+                        Nombres = userDto.FirstName + " " + userDto.LastName,
+                        Email = userDto.Email,
+                        Estado = 1,
+                        TipoUsuario = 1,
+                        Password = userDto.Password
+                    };
+                    _context.Usuarios.Add(_user);
+                    _context.SaveChanges();
 
-                        var _cliente = new Clientes
-                        {
-                            Identificacion = userDto.Identification,
-                            Nombres = userDto.FirstName,
-                            Apellidos = userDto.LastName,
-                            Direccion = userDto.Address,
-                            Email = userDto.Email,
-                            Telefono = String.Empty,
-                            TipoCliente = 1,
-                            Estado = 1,
-                            UsuarioId = _user.IdUsuario
-                        };
-                        bd.Clientes.Add(_cliente);
-                        bd.SaveChanges();
-                        resp = _cliente.IdCliente;
+                    var _cliente = new Clientes
+                    {
+                        Identificacion = userDto.Identification,
+                        Nombres = userDto.FirstName,
+                        Apellidos = userDto.LastName,
+                        Direccion = userDto.Address,
+                        Email = userDto.Email,
+                        Telefono = String.Empty,
+                        TipoCliente = 1,
+                        Estado = 1,
+                        UsuarioId = _user.IdUsuario
+                    };
+                    _context.Clientes.Add(_cliente);
+                    _context.SaveChanges();
+                    resp = _cliente.IdCliente;
 
-                        transaction.Commit();
-                    }
+                    transaction.Commit();
                 }
                 return resp > 0 ? true : false; 
             }

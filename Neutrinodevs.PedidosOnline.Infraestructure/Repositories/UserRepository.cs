@@ -5,14 +5,16 @@ using Neutrinodevs.PedidosOnline.Infraestructure.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
 {
     public class UserRepository
     {
-        public UserRepository()
+        private readonly ND_PEDIDOS_ONLINEContext _context;
+        public UserRepository(ND_PEDIDOS_ONLINEContext context)
         {
-
+            _context = context;
         }
 
         public bool Save(UserDto userDto)
@@ -61,17 +63,24 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                 //Logger.LogError(exc, $"{nameof(SaveChanges)} db update error: {exc?.InnerException?.Message}");
                 return false;
             }
-            //catch (DbEntityValidationException e)
-            //{
-            //    foreach (var eve in e.EntityValidationErrors)
-            //    {
-            //        Console.WriteLine("Entidad de tipo \"{0}\" en estado \"{1}\" tiene los siguientes errores de validación:",
-            //            eve.Entry.Entity.GetType().Name, eve.Entry.State);
-            //        foreach (var ve in eve.ValidationErrors)
-            //            Utils.WriteLog("RoadSafetyRepository>Save", $"- Propiedad: {ve.PropertyName}, Error: {ve.ErrorMessage}");
-            //    }
-            //    return -1;
-            //}
+        }
+
+        public bool ValidateDuplicateUser(string identification)
+        {
+            try
+            {
+                int count = -1;
+                count = (from client in _context.Clientes
+                            where client.Estado == 1
+                            && client.Identificacion == identification
+                            select client).Count();
+                return (count <= 0) ? false : true;
+            }
+            catch (Exception ex)
+            {
+                //Utils.WriteLog("Authenticate", ex.Message);
+                return false;
+            }
         }
 
     }

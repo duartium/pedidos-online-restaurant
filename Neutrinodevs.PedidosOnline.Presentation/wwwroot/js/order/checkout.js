@@ -58,6 +58,9 @@
             console.log(resp);
             if (resp === '000') {
                 window.location = '/User/Verification';
+            }
+            else if (resp === '002') {
+                Swal.fire('Notificación', 'Usted ya tiene una cuenta activa, por favor inicie sesión.', 'error');
             } else {
                 Swal.fire('Notificación', 'Lo sentimos, no se pudo completar la solicitud.', 'error');
             }

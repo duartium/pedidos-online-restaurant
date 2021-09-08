@@ -2,18 +2,15 @@
 using Neutrinodevs.PedidosOnline.Domain.DTOs.User;
 using Neutrinodevs.PedidosOnline.Infraestructure.Repositories;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
 {
     public class UserController : Controller
     {
         private UserRepository _rpsUser;
-        public UserController()
+        public UserController(UserRepository userRepository)
         {
-            _rpsUser = new UserRepository();
+            _rpsUser = userRepository;
         }
         public IActionResult Index()
         {
@@ -28,7 +25,10 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
         [HttpPost]
         public JsonResult Register([FromBody] UserDto user)
         {
-            if(_rpsUser.Save(user))
+            if(_rpsUser.ValidateDuplicateUser(user.Identification))
+                return Json("002");
+
+            if (_rpsUser.Save(user))
                 return Json("000");
             else
                 return Json("001");

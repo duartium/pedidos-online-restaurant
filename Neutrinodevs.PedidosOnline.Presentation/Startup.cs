@@ -49,15 +49,18 @@ namespace Neutrinodevs.PedidosOnline.Presentation
 
 
             services.AddSingleton(Configuration);
-            //services.AddDbContext<ND_PEDIDOS_ONLINEContext>(options =>
-            //{
-            //    options.UseSqlServer(Configuration.GetSection("YourConn").Value);
-            //    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            //});
+            services.AddDbContext<ND_PEDIDOS_ONLINEContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetSection("ConnectionStrings:pedidos_online").Value);
+                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            });
 
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<UserRepository, UserRepository>();
             //services.AddScoped<IDishRepository, DishRepository>();
             services.AddScoped<IOrderService, OrderService>();
+            
+
             services.AddSignalR();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

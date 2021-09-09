@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewData["Title"] = "OrderProcess";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+@await Html.PartialAsync("~/Views/Shared/_Navbar.cshtml")
+<div class="container" style="min-height:80vh">
+    <div class="row my-5">
+        <div class="offset-1 col-lg-10 col-md-10 col-sm-12">
+            <div class="card p-3">
+                <div class="card-body">
+                    <h2>Estamos preparando tu pedido</h2>
+                    <p>Nuestro repartidor encargado es <strong></strong>, se pondrá en contacto contigo al llegar a tu ubicación.</p>
+                    <strong class="mr-5">Nº pedido: <span id="delivery-time"></span></strong><strong class="ml-5">Hora de entrega:</strong> <span id="delivery-time"></span>
+                    <section class="mt-4">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div id="wrap_order_detail table-responsive ">
+                                    <table class="table table-hover table-sm" id="tbl_order">
+                                        <thead class="bg-black text-white">
+                                            <tr>
+                                                <th>PRODUCTO</th>
+                                                <th>PRECIO</th>
+                                                <th>CANTIDAD</th>
+                                                <th>SUBTOTAL</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbody-invoice">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="offset-lg-6 col-lg-6  offset-md-6 col-md-6 col-sm-6 col-xs-12">
+                                <div id="wrap_order_detail table-responsive">
+                                    <table class="table" id="tbl_order">
+                                        <tbody class='text-right'>
+                                            <tr>
+                                                <th>SUBTOTAL</th>
+                                                <td id="subtotal">0</td>
+                                            </tr>
+                                            <tr>
+                                                <th>IVA</th>
+                                                <td id="iva">0</td>
+                                            </tr>
+                                            <tr>
+                                                <th>TOTAL</th>
+                                                <td id="total">0</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <p>Preparamos tu pedido con los más altos estándares de seguridad e higiene.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

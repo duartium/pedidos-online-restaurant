@@ -16,6 +16,11 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             return View();
         }
 
+        public IActionResult Processing()
+        {
+            return View();
+        }
+
         public JsonResult GetAll()
         {
             try

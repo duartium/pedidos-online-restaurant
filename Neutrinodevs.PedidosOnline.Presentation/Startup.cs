@@ -57,6 +57,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation
 
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<UserRepository, UserRepository>();
+            services.AddScoped<IEmailService, EmailService>();
             //services.AddScoped<IDishRepository, DishRepository>();
             services.AddScoped<IOrderService, OrderService>();
             

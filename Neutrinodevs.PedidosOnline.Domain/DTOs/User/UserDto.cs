@@ -6,7 +6,7 @@ namespace Neutrinodevs.PedidosOnline.Domain.DTOs.User
     {
         [JsonProperty("id_client")]
         public int IdClient { get; set; }
-        
+
         [JsonProperty("identification")]
         public string Identification { get; set; }
 
@@ -27,5 +27,8 @@ namespace Neutrinodevs.PedidosOnline.Domain.DTOs.User
 
         [JsonProperty("password")]
         public string Password { get; set; }
+        
+        [JsonIgnore]
+        public string CodeEmailVerification { get; set; }
     }
 }

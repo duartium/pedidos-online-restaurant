@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Services;
 using Neutrinodevs.PedidosOnline.Domain.Services;
@@ -31,8 +32,6 @@ namespace Neutrinodevs.PedidosOnline.Presentation
                 .AddEnvironmentVariables();
             
             //Configuration = builder.Build();
-            
-            
         }
 
         public IConfiguration Configuration { get; }
@@ -58,7 +57,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<UserRepository, UserRepository>();
             services.AddScoped<IEmailService, EmailService>();
-            //services.AddScoped<IDishRepository, DishRepository>();
+            services.AddScoped<DishRepository, DishRepository>();
             services.AddScoped<IOrderService, OrderService>();
             
 
@@ -67,8 +66,10 @@ namespace Neutrinodevs.PedidosOnline.Presentation
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddFile("Log-{Date}.txt");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

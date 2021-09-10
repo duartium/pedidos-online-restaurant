@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.User;
 using Neutrinodevs.PedidosOnline.Infraestructure.Models;
 using System;
@@ -9,9 +10,11 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
     public class UserRepository
     {
         private readonly ND_PEDIDOS_ONLINEContext _context;
-        public UserRepository(ND_PEDIDOS_ONLINEContext context)
+        private readonly ILogger<UserRepository> _logger;
+        public UserRepository(ND_PEDIDOS_ONLINEContext context, ILogger<UserRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public bool Save(UserDto userDto)
@@ -52,9 +55,9 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                 }
                 return resp > 0 ? true : false; 
             }
-            catch (DbUpdateException exc)
+            catch (DbUpdateException ex)
             {
-                //Logger.LogError(exc, $"{nameof(SaveChanges)} db update error: {exc?.InnerException?.Message}");
+                _logger.LogError(ex, $"db update error: {ex?.InnerException?.Message}");
                 return false;
             }
         }
@@ -72,7 +75,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
             }
             catch (Exception ex)
             {
-                //Utils.WriteLog("Authenticate", ex.Message);
+                _logger.LogError(ex.ToString());
                 return false;
             }
         }

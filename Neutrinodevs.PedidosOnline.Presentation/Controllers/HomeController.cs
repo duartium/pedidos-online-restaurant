@@ -1,19 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Neutrinodevs.PedidosOnline.Domain.DTOs.Product;
 using Neutrinodevs.PedidosOnline.Infraestructure.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
 {
     public class HomeController : Controller
     {
-        private DishRepository _rpsDish;
-        public HomeController()
+        private readonly DishRepository _rpsDish;
+        public HomeController(DishRepository dishRepository)
         {
-            _rpsDish = new DishRepository();
+            _rpsDish = dishRepository;
         }
 
         public IActionResult Index()

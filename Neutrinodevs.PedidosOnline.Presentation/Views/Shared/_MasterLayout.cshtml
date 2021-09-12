@@ -26,8 +26,8 @@
             </div>
             <h5 class="text-center">Mi Pedido</h5>
             <hr class="separator" />
-            <label>SUBTOTAL: $<span id="subtotal-cart"></span></label>
-            <a href='@Url.Action("Index", "Cart")' class="btn btn-primary btn-block" id="btn_order">ORDENAR</a>
+            <label>SUBTOTAL: $<span id="subtotal-cart"></span></label>  
+            <a href='@Url.Action("Index", "Cart")' class="btn btn-block back-primary" id="btn_order">ORDENAR</a>
             <button class="btn btn-secondary btn-block" id="btn_empty_cart">VACIAR CARRITO</button>
             <hr />
             <div id="wrap-cart-items">
@@ -45,9 +45,8 @@
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
         <script src="~/bootstrap/js/bootstrap.js"></script>
-        <script src="~/js/pushbar.js"></script>
         <script src="~/js/sweetalert2.all.min.js"></script>
-        <script src="~/js/order/shopping-cart.js"></script>
+        
     </environment>
 
     @RenderSection("Scripts", required: false)

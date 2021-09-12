@@ -25,6 +25,7 @@
             <p>Si es la primera vez que solicitas un pedido, por favor crea tu cuenta.</p>
             @using (Html.BeginForm("Register", "User", FormMethod.Post, new { id = "frmRegistrarme" }))
             {
+                @Html.AntiForgeryToken()
                 <div class="form-group">
                     <label for="identification">Cédula</label>
                     <input id="identification" name="identification" type="text" class="form-control col-6 effect-8" maxlength="10" />

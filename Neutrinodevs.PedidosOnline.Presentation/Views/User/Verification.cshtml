@@ -11,10 +11,16 @@
                     <h2>Hemos enviado un código de verificación a tu correo electrónico</h2>
                     <div class="text-center mt-4">
                         <p>Ingresa el código recibido para iniciar sesión.</p>
-                        <input type="text" class="form-control input-lg input-token text-center" name="name" value="" maxlength="6" autofocus/>
+                        <input type="text" class="form-control input-lg input-token text-center" name="code" id="code" value="" maxlength="6" autofocus />
+                        <div class="mt-4">
+                            <button class="btn btn-primary btn-lg" id="btnVerify">VERIFICAR</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+@section Scripts{ 
+    <script src="~/js/order/verify.js" type="text/javascript"></script>
+}

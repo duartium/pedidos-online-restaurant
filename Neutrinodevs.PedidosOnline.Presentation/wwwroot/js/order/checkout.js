@@ -54,12 +54,17 @@
         dataType: 'json',
         contentType: 'application/json',
         data: JSON.stringify(user_register),
-        success: function (resp) {
-            console.log(resp);
-            if (resp === '000') {
+        success: function (response) {
+            let resp = response;
+            console.log(response);
+            if (resp.code === '000') {
+                let order_invoice = JSON.parse(localStorage.getItem('order_invoice'));
+                order_invoice.id_client = resp.id_client;
+                localStorage.setItem('order_invoice', JSON.stringify(order_invoice));
+                console.log(order_invoice);
                 window.location = '/User/Verification';
             }
-            else if (resp === '002') {
+            else if (resp.code === '002') {
                 Swal.fire('Notificación', 'Usted ya tiene una cuenta activa, por favor inicie sesión.', 'error');
             } else {
                 Swal.fire('Notificación', 'Lo sentimos, no se pudo completar la solicitud.', 'error');

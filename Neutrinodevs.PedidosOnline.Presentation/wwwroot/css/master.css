@@ -1,8 +1,13 @@
 ﻿body {
     width: 100%;
 }
-back-primary {
+.back-primary {
     background-color: #ff5b0e;
+    color: #fff;
+}
+
+.back-primary:hover {
+    background-color: #f35b0e;
 }
 .color-primary {
     color: #ff5b0e;

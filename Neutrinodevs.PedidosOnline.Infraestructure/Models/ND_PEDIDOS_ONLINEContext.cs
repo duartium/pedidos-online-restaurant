@@ -49,6 +49,11 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
                     .HasMaxLength(150)
                     .IsUnicode(false);
 
+                entity.Property(e => e.CodigoVerificacion)
+                    .HasColumnName("codigo_verificacion")
+                    .HasMaxLength(6)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Direccion)
                     .HasColumnName("direccion")
                     .HasMaxLength(300)
@@ -60,6 +65,12 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.Estado).HasColumnName("estado");
+
+                entity.Property(e => e.Etapa).HasColumnName("etapa");
+
+                entity.Property(e => e.FechaVerificacion)
+                    .HasColumnName("fecha_verificacion")
+                    .HasColumnType("datetime");
 
                 entity.Property(e => e.Identificacion)
                     .IsRequired()

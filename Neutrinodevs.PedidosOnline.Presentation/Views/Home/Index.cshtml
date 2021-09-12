@@ -38,7 +38,7 @@
     });
 
     function setQuantity(quantity) {
-        
+
         let current_quantity = parseInt($(".quantity-product").val());
         let current_price_cart = 0;
         let new_quantity = 0;
@@ -82,7 +82,7 @@
                             <div class="input-group-prepend">
                                 <button type="button" class="btn btn-dark btn-lg" onclick="setQuantity(-1)"><i class="fa fa-minus"></i></button>
                             </div>
-                            <input type="text" class="quantity-product" id="txt_quantity" name="txt_quantity" value="1" maxlength="4" readonly/>
+                            <input type="text" class="quantity-product" id="txt_quantity" name="txt_quantity" value="1" maxlength="4" readonly />
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-dark btn-lg" onclick="setQuantity(1)"><i class="fa fa-plus"></i></button>
                             </div>
@@ -99,3 +99,7 @@
 <div class="container">
     @await Html.PartialAsync("~/Views/Dish/Partial/_Dishes.cshtml", Model)
 </div>
+@section Scripts{
+    <script src="~/js/pushbar.js"></script>
+    <script src="~/js/order/shopping-cart.js"></script>
+}

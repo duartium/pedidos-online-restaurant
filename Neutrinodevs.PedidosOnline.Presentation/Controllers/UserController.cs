@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Neutrinodevs.PedidosOnline.Domain.Constants;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Services;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.User;
 using Neutrinodevs.PedidosOnline.Domain.Models;
 using Neutrinodevs.PedidosOnline.Infraestructure.Repositories;
 using Neutrinodevs.PedidosOnline.Infraestructure.Security;
 using System;
+using System.Text;
 
 namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
 {
@@ -12,10 +15,13 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
     {
         private readonly UserRepository _rpsUser;
         private readonly IEmailService _rpsEmail;
-        public UserController(UserRepository userRepository, IEmailService emailService)
+        private readonly ILogger<UserController> _logger;
+
+        public UserController(UserRepository userRepository, IEmailService emailService, ILogger<UserController> logger)
         {
             _rpsUser = userRepository;
             _rpsEmail = emailService;
+            _logger = logger;
         }
         public IActionResult Index()
         {
@@ -33,25 +39,15 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             if(_rpsUser.ValidateDuplicateUser(user.Identification))
                 return Json("002");
 
-
+            var userRegister = new UserRegisterDto();
             try
             {
                 user.CodeEmailVerification = Password.Generate(6);
-                if (_rpsUser.Save(user))
+                user.Password = Security.GetSHA256(user.Password);
+                int idClient = _rpsUser.Save(user);
+                if (idClient > 0)
                 {
-                    string bodyHtml = "<div style='background-color: #f8f5f1; color: #555; width: 80%; height:360px; margin: 0 auto; border-bottom: 5px solid #325288; font-family: Arial, Helvetica, sans-serif;'>"
-                                + "<div style = 'background-color: #325288; height:70px; padding:3px;'>"
-                                     + "<h2 style = 'color:#fff; text-align:center'>"
-                                        + "Verificación de correo electrónico"
-                                    + "<h2>"
-                                + "</div>"
-                                + "<section style = 'padding: 20px;'>"
-                                    + "<p style='font-size:20px;line-height:1.9rem'>Código de verificación:</p>"
-                                        + "<div style = 'font-size: 22px; border-radius: 25px; background-color:#fff;font-weight:bold;text-align:center;width:80%; margin: 0 auto;'>"
-                                        + $"<p style='padding:5px 5px 15px'>{user.CodeEmailVerification} </p>"
-                                    + "</ div >"
-                                + "</section>"
-                                + "</div>";
+                    string bodyHtml = CString.EMAIL_TEMPLATE.Replace("@code", user.CodeEmailVerification);
 
                     _rpsEmail.Send(new EmailParams
                     {
@@ -61,14 +57,23 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
                         EmailTo = user.Email,
                         Body = bodyHtml
                     });
-                    return Json("001");
+
+                    userRegister.Code = "000";
+                    userRegister.IdClient = idClient;
+                    return Json(userRegister);
                 }
                 else
-                    return Json("001");
+                {
+                    userRegister.Code = "001";
+                    return Json(userRegister);
+                }
+                    
             }
             catch (Exception ex)
             {
-                return Json("001");
+                _logger.LogError(ex.ToString());
+                userRegister.Code = "001";
+                return Json(userRegister);
             }
         }
 
@@ -93,7 +98,22 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             }
             catch (Exception ex)
             {
-                //Utils.WriteLog("Athenticate", ex.Message);
+                _logger.LogError(ex.ToString());
+                return Json("001");
+            }
+        }
+
+        [HttpPost]
+        public JsonResult Verify([FromBody] UserRegisterDto user)
+        {
+            try
+            {
+                _rpsUser.Verify(user);
+                return Json("000");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
                 return Json("001");
             }
         }

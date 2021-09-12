@@ -88,7 +88,18 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
             int match = _context.Clientes.Where(x => x.Estado == 1 && x.IdCliente == user.IdClient
                                     && x.CodigoVerificacion.Equals(user.Code)).Count();
             
-            return (match > 0) ? true : false;
+            if(match > 0)
+            {
+                var client = _context.Clientes.Where(x => x.IdCliente == user.IdClient && x.Estado == 1).FirstOrDefault();
+                if(client != null)
+                {
+                    client.FechaVerificacion = DateTime.Now;
+                    _context.SaveChanges();
+                }
+                return true;
+            }
+            else return false;
+            
         }
 
     }

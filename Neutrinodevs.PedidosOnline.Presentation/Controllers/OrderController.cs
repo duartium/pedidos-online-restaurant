@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Services;
+using Neutrinodevs.PedidosOnline.Domain.DTOs.Order;
+using System;
+using System.Text;
 
 namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
 {
@@ -27,6 +30,19 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             {
                 var orders = _srvOrder.GetAll();
                 return Json(orders);
+            }
+            catch (System.Exception)
+            {
+                return Json("error");
+            }
+        }
+
+        public JsonResult Save([FromBody] FullOrderDto order_invoice)
+        {
+            try
+            {
+                _srvOrder.Save(order_invoice);
+                return Json(new { order_id = 1});
             }
             catch (System.Exception)
             {

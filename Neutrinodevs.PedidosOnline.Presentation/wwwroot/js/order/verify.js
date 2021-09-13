@@ -12,15 +12,18 @@
         code: code
     };
 
+    console.log(invoice);
+    SaveOrder(invoice);
+    return;
     $.ajax({
         url: '/User/Verify',
         type: 'POST',
-        data: JSON.stringify(user),
+        data: JSON.stringify(invoice),
         dataType: 'json',
         contentType: 'application/json',
         success: function (response) {
             if (response == '000') {
-                window.location = '/Order/Processing';
+                SaveOrder(order);
             } else {
                 Swal.fire("Verificación", "El código ingresado no es correcto. Por favor corrija y vuelva a intentar.", "");
             }
@@ -30,3 +33,25 @@
         }
     });
 });
+
+
+function SaveOrder(order_invoice) {
+    $.ajax({
+        url: '/Order/Save',
+        type: 'POST',
+        data: JSON.stringify(order_invoice),
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function (response) {
+            const resp = response;
+            if (resp.code == '000') {
+                window.location = '/Order/Processing?order=' + resp.id_order;
+            } else {
+                Swal.fire("Orden", "Lo sentimos. No se pudo registrar tu orden.", "warning");
+            }
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+}

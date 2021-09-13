@@ -1,11 +1,15 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
+using Neutrinodevs.PedidosOnline.Domain.DTOs.Order;
 using Neutrinodevs.PedidosOnline.Domain.Entities;
 using Neutrinodevs.PedidosOnline.Infraestructure.Hubs.Hubs;
+using Neutrinodevs.PedidosOnline.Infraestructure.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
 {
@@ -13,11 +17,16 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
     {
         private readonly IConfiguration _configuration;
         private readonly IHubContext<OrderHub> _orderHub;
+        private readonly ND_PEDIDOS_ONLINEContext _context;
+        private readonly ILogger<OrderRepository> _logger;
 
-        public OrderRepository(IConfiguration configuration, IHubContext<OrderHub> orderHub)
+        public OrderRepository(IConfiguration configuration, IHubContext<OrderHub> orderHub, 
+                               ND_PEDIDOS_ONLINEContext context,    ILogger<OrderRepository> logger)
         {
             this._configuration = configuration;
             _orderHub = orderHub;
+            _context = context;
+            _logger = logger;
         }
 
         public IEnumerable<Order> GetAll()
@@ -91,6 +100,63 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
         {
             GC.SuppressFinalize(this);
         }
+
+
+        public int Save(FullOrderDto order)
+        {
+            try
+            {
+                int idPedido = -1;
+
+                using (_context.Database.BeginTransaction())
+                {
+                    //generación de secuencial de pedido
+                    int nuevoSecuencial = (int)_context.Secuenciales.Where(x => x.Nombre.Equals("pedido"))
+                                     .Select(x => x.Secuencial).FirstOrDefault() + 1;
+
+                    var pedido = new Pedidos
+                    {
+                        ClienteId = order.id_client,
+                        Fecha = DateTime.Now,
+                        Numero = nuevoSecuencial,
+                        Estado = 1
+                    };
+                    _context.Pedidos.Add(pedido);
+                    _context.SaveChanges();
+                    idPedido = pedido.IdPedido;
+
+                    foreach (var item in order.items)
+                    {
+                        var pedidoDetalle = new PedidoDetalle
+                        {
+                            Cantidad = item.quantity,
+                            NombreProducto = item.name,
+                            ProductoId = item.id,
+                            Total = item.price,
+                            PedidoId = idPedido,
+                            Estado = 1
+                        };
+                    }
+                    _context.Pedidos.Add(pedido);
+                    _context.SaveChanges();
+
+                    //establece el nuevo secuencial
+                    var secuencialRow = _context.Secuenciales.Where(x => x.Nombre.Equals("pedido"))
+                                     .Select(x => x).FirstOrDefault();
+                    secuencialRow.Secuencial = nuevoSecuencial;
+                    _context.SaveChanges();
+
+                    _context.Database.CommitTransaction();
+                }
+                return idPedido;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return -1;
+            }
+        }
+        
 
     }
 }

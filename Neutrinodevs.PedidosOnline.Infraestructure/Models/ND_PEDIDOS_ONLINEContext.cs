@@ -22,6 +22,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
         public virtual DbSet<PedidoDetalle> PedidoDetalle { get; set; }
         public virtual DbSet<Pedidos> Pedidos { get; set; }
         public virtual DbSet<Productos> Productos { get; set; }
+        public virtual DbSet<Secuenciales> Secuenciales { get; set; }
         public virtual DbSet<Usuarios> Usuarios { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -257,6 +258,22 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
                     .HasColumnType("decimal(10, 2)");
 
                 entity.Property(e => e.Tipo).HasColumnName("tipo");
+            });
+
+            modelBuilder.Entity<Secuenciales>(entity =>
+            {
+                entity.HasKey(e => e.IdSecuencial);
+
+                entity.ToTable("SECUENCIALES");
+
+                entity.Property(e => e.IdSecuencial).HasColumnName("id_secuencial");
+
+                entity.Property(e => e.Nombre)
+                    .HasColumnName("nombre")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Secuencial).HasColumnName("secuencial");
             });
 
             modelBuilder.Entity<Usuarios>(entity =>

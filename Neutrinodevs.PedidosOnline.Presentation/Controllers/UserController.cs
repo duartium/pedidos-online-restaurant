@@ -108,8 +108,10 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
         {
             try
             {
-                _rpsUser.Verify(user);
-                return Json("000");
+                if (_rpsUser.Verify(user))
+                    return Json("000");
+                else
+                    return Json("001");
             }
             catch (Exception ex)
             {

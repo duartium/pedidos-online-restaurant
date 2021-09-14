@@ -78,19 +78,13 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
         }
 
         [HttpPost]
-        public JsonResult Login()
-        {
-            return Json("login");
-        }
-
-        [HttpPost]
-        public JsonResult Athenticate(string username, string password)
+        public JsonResult Login(string username, string password)
         {
             try
             {
                 if (String.IsNullOrWhiteSpace(username) || String.IsNullOrWhiteSpace(password))
                 {
-                    //Utils.WriteLog("Athenticate", "Se esperaba el username y password.");
+                    _logger.LogWarning($"Se esperaba {nameof(username)} y {nameof(password)}.");
                     return Json("002");
                 }
 

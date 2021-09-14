@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Neutrinodevs.PedidosOnline.Domain.Entities
+﻿namespace Neutrinodevs.PedidosOnline.Domain.Entities
 {
     public class Order
     {

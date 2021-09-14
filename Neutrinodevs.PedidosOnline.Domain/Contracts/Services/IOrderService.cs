@@ -8,6 +8,7 @@ namespace Neutrinodevs.PedidosOnline.Domain.Contracts.Services
     public interface IOrderService : IDisposable
     {
         IEnumerable<Order> GetAll();
+        FullOrderDto Get(int idOrder);
         int Save(FullOrderDto order);
     }
 }

@@ -13,17 +13,15 @@
     };
 
     console.log(invoice);
-    SaveOrder(invoice);
-    return;
     $.ajax({
         url: '/User/Verify',
         type: 'POST',
-        data: JSON.stringify(invoice),
+        data: JSON.stringify(user),
         dataType: 'json',
         contentType: 'application/json',
         success: function (response) {
             if (response == '000') {
-                SaveOrder(order);
+                SaveOrder(invoice);
             } else {
                 Swal.fire("Verificación", "El código ingresado no es correcto. Por favor corrija y vuelva a intentar.", "");
             }
@@ -45,7 +43,8 @@ function SaveOrder(order_invoice) {
         success: function (response) {
             const resp = response;
             if (resp.code == '000') {
-                window.location = '/Order/Processing?order=' + resp.id_order;
+                window.localStorage.removeItem('order_invoice');
+                window.location = '/Order/Processing?order=' + intParse(resp.id_order);
             } else {
                 Swal.fire("Orden", "Lo sentimos. No se pudo registrar tu orden.", "warning");
             }

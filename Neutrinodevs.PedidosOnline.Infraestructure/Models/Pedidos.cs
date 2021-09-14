@@ -15,6 +15,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
         public DateTime Fecha { get; set; }
         public int Estado { get; set; }
         public int ClienteId { get; set; }
+        public string DeliveryTime { get; set; }
 
         public Clientes Cliente { get; set; }
         public ICollection<PedidoDetalle> PedidoDetalle { get; set; }

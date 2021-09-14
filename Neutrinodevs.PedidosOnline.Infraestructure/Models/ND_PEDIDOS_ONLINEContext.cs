@@ -172,9 +172,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
 
                 entity.ToTable("PEDIDO_DETALLE");
 
-                entity.Property(e => e.IdPedidoDet)
-                    .HasColumnName("id_pedido_det")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.IdPedidoDet).HasColumnName("id_pedido_det");
 
                 entity.Property(e => e.Cantidad).HasColumnName("cantidad");
 
@@ -216,6 +214,11 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
                 entity.Property(e => e.IdPedido).HasColumnName("id_pedido");
 
                 entity.Property(e => e.ClienteId).HasColumnName("cliente_id");
+
+                entity.Property(e => e.DeliveryTime)
+                    .HasColumnName("delivery_time")
+                    .HasMaxLength(8)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Estado).HasColumnName("estado");
 

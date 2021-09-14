@@ -87,6 +87,26 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
             }
         }
 
+        public FullOrderDto Get(int idOrder)
+        {
+            try
+            {
+                var fullOrder = (from ped in _context.Pedidos
+                            join det in _context.PedidoDetalle on ped.IdPedido equals det.PedidoId
+                            where ped.Estado == 1 && det.Estado == 1
+                            select new FullOrderDto
+                            {
+                                
+                            }).FirstOrDefault();
+                return fullOrder;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return null;
+            }
+        }
+
         void OnDependencyChange(object sender, SqlNotificationEventArgs e)
         {
             if(e.Type == SqlNotificationType.Change)
@@ -119,15 +139,17 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                         ClienteId = order.id_client,
                         Fecha = DateTime.Now,
                         Numero = nuevoSecuencial,
+                        DeliveryTime = DateTime.Now.ToString("HH:mm"),
                         Estado = 1
                     };
                     _context.Pedidos.Add(pedido);
                     _context.SaveChanges();
                     idPedido = pedido.IdPedido;
 
+                    PedidoDetalle pedidoDetalle = null;
                     foreach (var item in order.items)
                     {
-                        var pedidoDetalle = new PedidoDetalle
+                        pedidoDetalle = new PedidoDetalle
                         {
                             Cantidad = item.quantity,
                             NombreProducto = item.name,
@@ -137,7 +159,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                             Estado = 1
                         };
                     }
-                    _context.Pedidos.Add(pedido);
+                    _context.PedidoDetalle.Add(pedidoDetalle);
                     _context.SaveChanges();
 
                     //establece el nuevo secuencial

@@ -19,8 +19,9 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             return View();
         }
 
-        public IActionResult Processing()
+        public IActionResult Processing(int id_order)
         {
+
             return View();
         }
 
@@ -41,12 +42,15 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
         {
             try
             {
-                _srvOrder.Save(order_invoice);
-                return Json(new { order_id = 1});
+                int idOrder = _srvOrder.Save(order_invoice);
+                if(idOrder > 0)
+                    return Json(new OrderResponse { IdOrder = idOrder, Code = "000" });
+                else
+                    return Json(new OrderResponse { IdOrder = -1, Code = "001" });
             }
-            catch (System.Exception)
+            catch (Exception)
             {
-                return Json("error");
+                return Json(new OrderResponse { IdOrder = -1, Code = "001" });
             }
         }
 

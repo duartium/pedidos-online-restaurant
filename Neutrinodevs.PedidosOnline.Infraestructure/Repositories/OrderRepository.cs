@@ -87,14 +87,14 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
             }
         }
 
-        public FullOrderDto Get(int idOrder)
+        public FinalOrderDto Get(int idOrder)
         {
             try
             {
                 var fullOrder = (from ped in _context.Pedidos
                             join det in _context.PedidoDetalle on ped.IdPedido equals det.PedidoId
                             where ped.Estado == 1 && det.Estado == 1
-                            select new FullOrderDto
+                            select new FinalOrderDto
                             {
                                 
                             }).FirstOrDefault();

@@ -22,7 +22,7 @@ namespace Neutrinodevs.PedidosOnline.Domain.Services
             GC.SuppressFinalize(this);
         }
 
-        public FullOrderDto Get(int idOrder)
+        public FinalOrderDto Get(int idOrder)
         {
             return _orderRepository.Get(idOrder);
         }

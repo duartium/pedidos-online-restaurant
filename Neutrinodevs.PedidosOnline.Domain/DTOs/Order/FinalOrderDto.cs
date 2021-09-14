@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Neutrinodevs.PedidosOnline.Domain.DTOs.Order
 {
@@ -16,10 +14,16 @@ namespace Neutrinodevs.PedidosOnline.Domain.DTOs.Order
         [JsonProperty("customer_name")]
         public string CustomerName { get; set; }
 
-        [JsonProperty("date")]
-        public string DateTime { get; set; }
+        [JsonProperty("delivery_time")]
+        public string DeliveryTime { get; set; }
 
-        [JsonProperty("total_amount")]
-        public decimal TotalAmount { get; set; }
+        [JsonProperty("items")]
+        public List<Item> items { get; set; }
+
+        [JsonProperty("subtotal")]
+        public decimal subtotal { get; set; }
+
+        [JsonProperty("total")]
+        public decimal total { get; set; }
     }
 }

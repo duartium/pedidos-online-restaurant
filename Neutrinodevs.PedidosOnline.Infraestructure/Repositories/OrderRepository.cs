@@ -92,12 +92,29 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
             try
             {
                 var fullOrder = (from ped in _context.Pedidos
-                            join det in _context.PedidoDetalle on ped.IdPedido equals det.PedidoId
-                            where ped.Estado == 1 && det.Estado == 1
-                            select new FinalOrderDto
-                            {
-                                
-                            }).FirstOrDefault();
+                                 join det in _context.PedidoDetalle on ped.IdPedido equals det.PedidoId
+                                 where ped.Estado == 1 && det.Estado == 1 && ped.IdPedido == idOrder
+                                 select new FinalOrderDto
+                                 {
+                                     IdOrder = ped.IdPedido,
+                                     DeliveryTime = ped.DeliveryTime,
+                                     Number = ped.Numero.ToString().PadLeft(8, '0'),
+                                     Iva = (decimal)ped.Iva,
+                                     Total = (decimal) ped.Total,
+                                     Subtotal = (decimal)ped.Subtotal
+                                 }).FirstOrDefault();
+
+
+                var details = (from det in _context.PedidoDetalle
+                               where det.PedidoId == idOrder && det.Estado == 1
+                               select new Item{ 
+                                    id = det.IdPedidoDet,
+                                    name = det.NombreProducto,
+                                    price = det.Total,
+                                    quantity = det.Cantidad
+                               }).ToList();
+                
+                fullOrder.items = details;
                 return fullOrder;
             }
             catch (Exception ex)
@@ -140,6 +157,9 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                         Fecha = DateTime.Now,
                         Numero = nuevoSecuencial,
                         DeliveryTime = DateTime.Now.ToString("HH:mm"),
+                        Subtotal = order.subtotal,
+                        Iva = order.iva,
+                        Total = order.total,
                         Estado = 1
                     };
                     _context.Pedidos.Add(pedido);

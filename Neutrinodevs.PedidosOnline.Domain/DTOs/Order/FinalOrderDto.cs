@@ -9,7 +9,7 @@ namespace Neutrinodevs.PedidosOnline.Domain.DTOs.Order
         public int IdOrder { get; set; }
 
         [JsonProperty("number")]
-        public int Number { get; set; }
+        public string Number { get; set; }
 
         [JsonProperty("customer_name")]
         public string CustomerName { get; set; }
@@ -21,9 +21,12 @@ namespace Neutrinodevs.PedidosOnline.Domain.DTOs.Order
         public List<Item> items { get; set; }
 
         [JsonProperty("subtotal")]
-        public decimal subtotal { get; set; }
+        public decimal Subtotal { get; set; }
+
+        [JsonProperty("iva")]
+        public decimal Iva { get; set; }
 
         [JsonProperty("total")]
-        public decimal total { get; set; }
+        public decimal Total { get; set; }
     }
 }

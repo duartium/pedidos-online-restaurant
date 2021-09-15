@@ -43,8 +43,9 @@ function SaveOrder(order_invoice) {
         success: function (response) {
             const resp = response;
             if (resp.code == '000') {
-                window.localStorage.removeItem('order_invoice');
-                window.location = '/Order/Processing?order=' + intParse(resp.id_order);
+                localStorage.removeItem('order_invoice');
+                localStorage.removeItem('order');
+                window.location = '/Order/Processing?order=' + parseInt(resp.id_order);
             } else {
                 Swal.fire("Orden", "Lo sentimos. No se pudo registrar tu orden.", "warning");
             }

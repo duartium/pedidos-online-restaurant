@@ -226,7 +226,19 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
                     .HasColumnName("fecha")
                     .HasColumnType("datetime");
 
+                entity.Property(e => e.Iva)
+                    .HasColumnName("iva")
+                    .HasColumnType("decimal(10, 2)");
+
                 entity.Property(e => e.Numero).HasColumnName("numero");
+
+                entity.Property(e => e.Subtotal)
+                    .HasColumnName("subtotal")
+                    .HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.Total)
+                    .HasColumnName("total")
+                    .HasColumnType("decimal(10, 2)");
 
                 entity.HasOne(d => d.Cliente)
                     .WithMany(p => p.Pedidos)

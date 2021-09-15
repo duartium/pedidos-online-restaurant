@@ -21,8 +21,9 @@
         let order_invoice = {
             id_client: 0,
             items: JSON.parse(my_order),
-            subtotal: subtotal,
-            total: total
+            subtotal: parseFloat($("#subtotal").text()),
+            iva: parseFloat($("#iva").text()),
+            total: parseFloat($("#total").text())
         }
         localStorage.setItem('order_invoice', JSON.stringify(order_invoice));
     }

@@ -15,6 +15,7 @@ namespace Neutrinodevs.PedidosOnline.Domain.DTOs.Order
         public int id_client { get; set; }
         public List<Item> items { get; set; }
         public decimal subtotal { get; set; }
+        public decimal iva { get; set; }
         public decimal total { get; set; }
     }
 }

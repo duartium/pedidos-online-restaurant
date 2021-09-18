@@ -166,10 +166,10 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                     _context.SaveChanges();
                     idPedido = pedido.IdPedido;
 
-                    PedidoDetalle pedidoDetalle = null;
+                    var pedidoDetalle = new List<PedidoDetalle>();
                     foreach (var item in order.items)
                     {
-                        pedidoDetalle = new PedidoDetalle
+                        var orderItem = new PedidoDetalle
                         {
                             Cantidad = item.quantity,
                             NombreProducto = item.name,
@@ -178,14 +178,15 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                             PedidoId = idPedido,
                             Estado = 1
                         };
+                        pedidoDetalle.Add(orderItem);
                     }
-                    _context.PedidoDetalle.Add(pedidoDetalle);
+                    _context.PedidoDetalle.AddRange(pedidoDetalle);
                     _context.SaveChanges();
 
                     //establece el nuevo secuencial
-                    var secuencialRow = _context.Secuenciales.Where(x => x.Nombre.Equals("pedido"))
-                                     .Select(x => x).FirstOrDefault();
+                    var secuencialRow = _context.Secuenciales.First(x => x.Nombre.Equals("pedido"));
                     secuencialRow.Secuencial = nuevoSecuencial;
+                    _context.Secuenciales.Update(secuencialRow);
                     _context.SaveChanges();
 
                     _context.Database.CommitTransaction();

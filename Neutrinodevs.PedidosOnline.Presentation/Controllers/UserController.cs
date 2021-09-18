@@ -88,12 +88,15 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
                     return Json("002");
                 }
 
-                return Json("000");
+                string passEncrypt = Security.GetSHA256(password.Trim());
+                var auth = _rpsUser.Login(username.Trim(), passEncrypt);
+
+                return Json(auth);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return Json("001");
+                return Json(new UserAuthenticateDto { Code = "001"});
             }
         }
 

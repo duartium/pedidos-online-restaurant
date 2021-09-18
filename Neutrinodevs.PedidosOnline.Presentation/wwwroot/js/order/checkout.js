@@ -20,8 +20,6 @@
         } else {
             valor.classList.remove('invalid');
         }
-
-
     });
 
 
@@ -76,8 +74,68 @@
     });
 });
 
+
+$("#frmLogin").submit(function (e) {
+    e.preventDefault();
+
+    let current_user = {
+        username: document.querySelector('#username').value,
+        password: document.querySelector('#user_password').value,
+    }
+
+    $.ajax({
+        url: '/User/Login',
+        method: 'POST',
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        data: current_user,
+        success: function (response) {
+            let resp = response;
+            console.log(response);
+            if (resp.code === '000') {
+                let order_invoice = JSON.parse(localStorage.getItem('order_invoice'));
+                order_invoice.id_client = resp.id_client;
+                localStorage.setItem('order_invoice', JSON.stringify(order_invoice));
+                console.log(order_invoice);
+                SaveOrder(order_invoice);
+            }
+            else if (resp.code === '002') {
+                Swal.fire('Notificación', 'Usuario y/o contraseñas incorrectas. Por favor, corrija y vuelva a intentar.', 'error');
+            } else {
+                Swal.fire('Notificación', 'Usuario y/o contraseña son obligatorios.', 'error');
+            }
+        },
+        error: function () {
+            Swal.fire('Notificación', 'Lo sentimos, no se pudo completar la autenticación.', 'error');
+        }
+    });
+});
+
 $(document).ready(function () {
     $("#location").click(function () {
         $("#map-modal").modal()
     });
 });
+
+function SaveOrder(order_invoice) {
+    $.ajax({
+        url: '/Order/Save',
+        type: 'POST',
+        data: JSON.stringify(order_invoice),
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function (response) {
+            const resp = response;
+            if (resp.code == '000') {
+                localStorage.removeItem('order_invoice');
+                localStorage.removeItem('order');
+                window.location = '/Order/Processing?id_order=' + parseInt(resp.id_order);
+            } else {
+                Swal.fire("Orden", "Lo sentimos. No se pudo registrar tu orden.", "warning");
+            }
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+}

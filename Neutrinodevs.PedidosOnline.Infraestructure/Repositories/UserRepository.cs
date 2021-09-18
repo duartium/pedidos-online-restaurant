@@ -65,6 +65,28 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
             }
         }
 
+        public UserAuthenticateDto Login(string user, string password)
+        {
+            try
+            {
+                var auth = new UserAuthenticateDto();
+                int idClient = (from users in _context.Usuarios
+                                join clients in _context.Clientes on users.IdUsuario equals clients.UsuarioId
+                                where users.Estado == 1 && clients.Estado == 1
+                                && users.Email.Equals(user) && users.Password.Equals(password)
+                                select clients.IdCliente).FirstOrDefault();
+                auth.IdClient = idClient;
+
+                auth.Code = idClient > 0 ? "000" : "002";
+                return auth;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return new UserAuthenticateDto { Code = "001", IdClient = -1};
+            }
+        }
+
         public bool ValidateDuplicateUser(string identification)
         {
             try

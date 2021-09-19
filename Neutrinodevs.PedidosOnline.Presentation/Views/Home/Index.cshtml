@@ -11,12 +11,12 @@
             <li><a href="#">Inicio</a></li>
             <li><a href="#">Sobre nosotros</a></li>
             <li>
-                <button class="btn btn-primary" id="btn_shopping_cart">
+                <button class="btn back-primary btn-cart" id="btn_shopping_cart">
                     <i class="fa fa-shopping-cart"></i>
-                    <span id="quantity_cart" class="badge badge-primary">0</span>
+                    <span id="quantity_cart" class="badge">0</span>
                 </button>
             </li>
-            <li><button class="btn btn-success">Ingresar</button></li>
+            <li><button class="btn btn-login" id="login"><i class="fa fa-user" aria-hidden="true"></i></button></li>
         </ul>
         <section></section>
     </nav>
@@ -28,13 +28,14 @@
         var navbar = document.querySelector("nav");
         var span = document.querySelector("span");
 
-        if (window.scrollY > 0) {
-            navbar.classList.toggle("sticky");
+        let scroll_top = window.scrollY;
+        if (scroll_top > 70) {
+            navbar.classList.add("sticky");
             span.style.display = "block";
         } else {
+            navbar.classList.remove("sticky");
             span.style.display = "none";
         }
-
     });
 
     function setQuantity(quantity) {
@@ -99,6 +100,11 @@
 <div class="container">
     @await Html.PartialAsync("~/Views/Dish/Partial/_Dishes.cshtml", Model)
 </div>
+<style>
+    .btn:hover {
+        color: #fff;
+    }
+</style>
 @section Scripts{
     <script src="~/js/pushbar.js"></script>
     <script src="~/js/order/shopping-cart.js"></script>

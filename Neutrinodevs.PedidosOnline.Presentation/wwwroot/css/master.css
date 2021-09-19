@@ -7,7 +7,7 @@
 }
 
 .back-primary:hover {
-    background-color: #f35b0e;
+    /*background-color: #f35b0e;*/
 }
 .color-primary {
     color: #ff5b0e;
@@ -15,7 +15,7 @@
 
 nav {
     min-height: 10vh;
-    background: #000 !important;
+    /*background: #000 !important;*/
     height: 80px;
 }
 .wrap-main {
@@ -30,7 +30,7 @@ footer {
 }
 header {
     height: 55vh;
-    width: 100vw;
+    width: 100%;
     background-image: url('/images/HeaderBackground.jpg');
     background-size: cover;
     background-position: center center;
@@ -50,13 +50,13 @@ header {
     z-index: 1000;
 }
 
-nav {
+/*nav {
     padding: 10px 90px;
     transition: 0.6s;
-}
+}*/
 
 nav button{
-    margin-top: 2rem;
+    margin-top: 1.2rem;
 }
 
 nav .logo{
@@ -92,7 +92,9 @@ nav ul li a{
 }
 
 nav ul li a:hover{
+    text-decoration: none;
     background-color: rgba(0,0,0,0.8);
+    color: #fff;
 }
 .sticky{
     padding:3px 140px;
@@ -248,4 +250,39 @@ input:focus {
 .img-preparing{
     width: 100px;
     height: 100px;
+}
+
+.btn-login{
+    margin-left: 1rem;
+    font-size: 18px;
+    color: #fff;
+    border: 2px solid #fff;
+    transition: 0.4s;
+}
+
+.btn-login:hover {
+    background-color: #fff;
+    color: #333;
+}
+
+.btn-cart {
+    transition: 0.4s;
+    border: 3px #ff5b0e solid;
+    margin-left: 1rem;
+}
+
+.btn-cart:hover {
+    box-sizing: border-box;
+    background-color: #fff;
+    color: #ff5b0e;
+    border: 3px #ff5b0e solid;
+}
+
+.btn-cart span {
+    background-color: #fff;
+    color: #ff5b0e;
+}
+.btn-cart{
+    background-color: #ff5b0e;
+    color: #fff;
 }

@@ -104,7 +104,6 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                                      Subtotal = (decimal)ped.Subtotal
                                  }).FirstOrDefault();
 
-
                 var details = (from det in _context.PedidoDetalle
                                where det.PedidoId == idOrder && det.Estado == 1
                                select new Item{ 

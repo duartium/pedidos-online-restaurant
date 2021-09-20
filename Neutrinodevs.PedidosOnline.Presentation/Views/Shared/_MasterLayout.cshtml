@@ -13,9 +13,10 @@
         <link rel="stylesheet" href="~/css/sweetalert2.min.css">
         <link rel="stylesheet" href="~/css/master.css" />
     </environment>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
     @RenderSection("HeaderScript", required: false)
 </head>
-<body>
+<body class="animate__animated animate__fadeIn">
     @*<partial name="_CookieConsentPartial" />*@
 
     <div class="wrap-main">
@@ -34,7 +35,6 @@
                 <ul class="order-items">
                     <li>El carrito está vacío.</li>
                 </ul>
-
             </div>
         </div>
     </div>
@@ -42,7 +42,7 @@
         <p>&copy; 2021 La Pesca. Reservados todos los derechos.</p>
     </footer>
     <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
+        
         <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
         <script src="~/bootstrap/js/bootstrap.js"></script>
         <script src="~/js/sweetalert2.all.min.js"></script>

@@ -6,7 +6,7 @@
 
 <header>
     <nav class="nav-home">
-        <div class="logo"><span>LA PESCA</span></div>
+        <div class="logo"><span style="display:none">LA PESCA</span></div>
         <ul>
             <li><a href="#">Inicio</a></li>
             <li><a href="#">Sobre nosotros</a></li>
@@ -98,6 +98,18 @@
     </div>
 </div>
 <div class="container">
+    <div class="row mt-4 mx-2">
+        <div class="w-50">
+            <div class="wrap_item_menu2 item_menu2_selected" id="mariscos_menu">
+                <h5><i class="fa fa-cutlery"></i> Mariscos</h5>
+            </div>
+        </div>
+        <div class="w-50">
+            <div class="wrap_item_menu2" id="bebidas_menu">
+                <h5><i class="fa fa-glass"></i> Bebidas</h5>
+            </div>
+        </div>
+    </div>
     @await Html.PartialAsync("~/Views/Dish/Partial/_Dishes.cshtml", Model)
 </div>
 <style>
@@ -108,4 +120,9 @@
 @section Scripts{
     <script src="~/js/pushbar.js"></script>
     <script src="~/js/order/shopping-cart.js"></script>
+    <script src="~/js/home.js"></script>
 }
+<script>
+
+    
+</script>

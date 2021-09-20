@@ -13,7 +13,7 @@ namespace Neutrinodevs.PedidosOnline.Domain.DTOs.Product
         [JsonProperty("price")]
         public decimal Precio { get; set; }
 
-        [JsonIgnore]
+        [JsonProperty("image")]
         public string Imagen { get; set; }
 
         [JsonIgnore]

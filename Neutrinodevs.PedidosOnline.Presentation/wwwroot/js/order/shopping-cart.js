@@ -7,7 +7,6 @@ $(".card").click(function () {
     $("#txt_quantity").val('1');
     let dish = $(this).data('dish');
     current_item_price = parseFloat(dish.price).toFixed(2);
-    console.log(current_item_price);
     $("#product-modal").data('id', dish.id);
     $("#product-title").text(dish.name);
     $("#modal-price").text(current_item_price);
@@ -25,7 +24,6 @@ $("#add-cart").click(function () {
     }
     let quantity_cart = parseInt($("#quantity_cart").text());
     quantity_cart += product_order.quantity;
-    console.log(quantity_cart);
     $("#quantity_cart").text(quantity_cart.toString());
 
     saveLocalStorage(product_order);
@@ -40,12 +38,10 @@ const saveLocalStorage = (product) => {
     if (order) {
         let items = JSON.parse(order);
         items.push(product);
-        console.log(items);
         localStorage.setItem("order", JSON.stringify(items));
     } else {
         let items = [];
         items.push(product);
-        console.log(items);
         localStorage.setItem("order", JSON.stringify(items));
     }
     

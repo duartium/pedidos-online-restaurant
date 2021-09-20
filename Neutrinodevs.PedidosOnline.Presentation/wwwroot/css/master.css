@@ -286,3 +286,42 @@ input:focus {
     background-color: #ff5b0e;
     color: #fff;
 }
+
+@-webkit-keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.animate__fadeIn {
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn;
+}
+.wrap_item_menu2 {
+    padding: 10px;
+    cursor: pointer;
+    text-align: center;
+    transition: 0.4s;
+    border-bottom: 3px #fff solid;
+}
+.wrap_item_menu2:hover{
+    background-color: #000;
+    color:#fff;
+}
+.item_menu2_selected {
+    border-bottom: 3px #000 solid;
+}

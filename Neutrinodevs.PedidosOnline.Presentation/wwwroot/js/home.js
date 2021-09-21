@@ -48,9 +48,8 @@ const getDrinks = () => {
 const setProducts = (products) => {
     let content = '';
     Array.from(JSON.parse(products)).forEach(item => {
-        console.log(item.image);
         content += '<div class="col-md-6 col-lg-4 col-sm-12">';
-        content += `<div class="card m-2 card-product" data-target="#product-modal" data-dish="${JSON.stringify(item)}">`;
+        content += `<div class="card m-2 card-product" data-target="#product-modal" data-dish='${JSON.stringify(item)}'>`;
         content += `<img src="/images/products/${item.image}"/>`;
         content += `<div class="card-body"><strong>${item.name}</strong><br /><span>$${item.price.toFixed(2)}</span></div>`;
         content += '<div class="overlay"><h5 class="text"><i class="fa fa-plus-circle"></i> Agregar al carrito</h5 ></div></div></div>';

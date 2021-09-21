@@ -3,7 +3,7 @@
     overlay: true
 });
 
-$(".card").click(function () {
+$(document).on("click", ".card", function () {
     $("#txt_quantity").val('1');
     let dish = $(this).data('dish');
     current_item_price = parseFloat(dish.price).toFixed(2);
@@ -119,8 +119,6 @@ $("#btn_empty_cart").click(function () {
             $("#subtotal-cart").text(parseFloat(0).toFixed(2));
             $("#quantity_cart").text(0);
             disabledCartButtons(true);
-
-            //window.location = '';
         }
     })
     

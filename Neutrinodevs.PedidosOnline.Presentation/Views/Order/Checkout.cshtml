@@ -8,6 +8,7 @@
     <script>
 
         let map, infoWindow, _pos, marker;
+        
 
         var options = {
             enableHighAccuracy: true,
@@ -17,8 +18,7 @@
 
         function success(pos) {
             _pos = pos.coords;
-            console.log('Latitude : ' + _pos.latitude);
-            console.log('Longitude: ' + _pos.longitude);
+            console.log(_pos);
             console.log('More or less ' + _pos.accuracy + ' meters.');
         };
 
@@ -35,7 +35,8 @@
         }
 
         function initMap() {
-            let current_position = { lat: _pos.latitude, lng: _pos.longitude };
+            let current_position = { lat: parseFloat(_pos.latitude.toFixed(5)), lng: parseFloat(_pos.longitude.toFixed(5)) };
+            console.log(current_position);
             map = new google.maps.Map(document.getElementById("map"), {
                 center: current_position,
                 zoom: 15,
@@ -55,10 +56,31 @@
             marker.setPosition(current_position);
             map.setCenter(current_position);
         }
+
         const ok = () => {
             var markerLatLng = marker.getPosition();
-            console.log(markerLatLng.lat());
-            console.log(markerLatLng.lng());
+            let position = { lat: markerLatLng.lat(), lng: markerLatLng.lng() };
+            console.log(position);
+            showInfo(position);
+        }
+
+        function showInfo(latlng) {
+            const geocoder = new google.maps.Geocoder();
+            console.log(latlng);
+            geocoder.geocode({
+                'latLng': latlng
+            }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    if (results[1]) {
+                        // here assign the data to asp lables
+                        console.log(results[1].formatted_address);
+                    } else {
+                        alert('No results found');
+                    }
+                } else {
+                    alert('Geocoder failed due to: ' + status);
+                }
+            });
         }
         
     </script>

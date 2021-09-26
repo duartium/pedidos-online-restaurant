@@ -6,6 +6,10 @@
     color: #fff;
 }
 
+.back-black {
+    background-color: #000;
+}
+
 .back-primary:hover {
     /*background-color: #f35b0e;*/
 }
@@ -197,10 +201,8 @@ card{
 .order-items a:hover {
     cursor:pointer;
 }
-
 .title-item-cart{
     font-size: 14px;
-    
 }
 .price-item-cart{
     color: #808080;
@@ -209,7 +211,7 @@ card{
     border: 1px solid #212529;
 }
 .bg-black{
-    background-color:#000;
+    background-color:#000 !important;
 }
 .header-page{
     height: 30% !important;
@@ -254,7 +256,7 @@ input:focus {
 
 .btn-login{
     margin-left: 1rem;
-    font-size: 18px;
+    font-size: 19px;
     color: #fff;
     border: 2px solid #fff;
     transition: 0.4s;
@@ -263,10 +265,15 @@ input:focus {
 .btn-login:hover {
     background-color: #fff;
     color: #333;
+    border: 2px #ff5b0e solid;
+}
+.btn-login:hover i{
+    color: #ff5b0e;
 }
 
 .btn-cart {
     transition: 0.4s;
+    background-color: #ff5b0e;
     border: 3px #ff5b0e solid;
     margin-left: 1rem;
 }
@@ -282,7 +289,13 @@ input:focus {
     background-color: #fff;
     color: #ff5b0e;
 }
-.btn-cart{
+.btn-cart:hover i{
+    color: #ff5b0e;
+}
+.btn-cart:hover i{
+    color: #ff5b0e;
+}
+.btn-cart:hover span{
     background-color: #ff5b0e;
     color: #fff;
 }
@@ -324,4 +337,12 @@ input:focus {
 }
 .item_menu2_selected {
     border-bottom: 3px #000 solid;
+}
+
+.min-h-80{
+    min-height: 80vh !important;
+}
+.about-text{
+    font-size: 20px;
+    text-align: justify;
 }

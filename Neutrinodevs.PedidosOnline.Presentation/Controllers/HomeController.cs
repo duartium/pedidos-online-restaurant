@@ -17,5 +17,11 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             var dishes = _rpsDish.GetAll();
             return View(dishes);
         }
+
+        public IActionResult About()
+        {
+            return View();
+        }
     }
+
 }

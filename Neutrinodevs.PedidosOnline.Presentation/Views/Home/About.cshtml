@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "About";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+@await Html.PartialAsync("~/Views/Shared/_Navbar.cshtml")
+<div class="container min-h-80 mt-3">
+    <h1>¿Quiénes somos?</h1>
+    <div class="row my-4">
+        <div class="col-md-6 col-lg-6">
+            <img src="~/images/local_comercial.png"  alt="" style="width: 100%; background-repeat: no-repeat; background-size: cover;"/>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <p class="about-text">
+                Somos un Restaurante-Bar, especializado en el servicio de comida gourmet de mariscos y catering para eventos. Reconocido y posicionado en la ciudad de Babahoyo, tradición gastronómica con más de 20 años.
+            </p>
+            <p class="about-text">Ven a disfrutar una deliciosa comida de mar o a pescar una buena compañía con tus mejores bebidas ¡Chúpate hasta las espinas!</p>
+            <h5><i class="fa fa-map-marker"></i> Dirección</h5>
+            <p class="about-text">Martín Icaza entre 10 de agosto y 5 de Junio</p>
+            <h5><i class="fa fa-map-marker"></i> Horarios</h5>
+            <p>Abierto todos los días de 12H00 - 22:00 / Domingos hasta las 15H00.</p>
+            <h5><i class="fa fa-map-marker"></i> Teléfonos</h5>
+            <p>0994467731 - 052 733112</p>
+        </div>
+    </div>
+</div>

@@ -7,17 +7,18 @@
 <header>
     <nav class="nav-home">
         <div class="logo"><span style="display:none">LA PESCA</span></div>
-        <ul>
-            <li><a href="#">Inicio</a></li>
-            <li><a href="#">Sobre nosotros</a></li>
+        <ul class="">
+            <li><a href='@Url.Action("Index", "Home")'>Inicio</a></li>
+            <li><a href='@Url.Action("About", "Home")'>Sobre nosotros</a></li>
             <li>
                 <button class="btn back-primary btn-cart" id="btn_shopping_cart">
                     <i class="fa fa-shopping-cart"></i>
                     <span id="quantity_cart" class="badge">0</span>
                 </button>
             </li>
-            <li><button class="btn btn-login" id="login"><i class="fa fa-user" aria-hidden="true"></i></button></li>
+            <li><button class="btn btn-login px-3 py-1" id="login"><i class="fa fa-user" aria-hidden="true"></i></button></li>
         </ul>
+        
         <section></section>
     </nav>
 </header>
@@ -122,7 +123,3 @@
     <script src="~/js/order/shopping-cart.js"></script>
     <script src="~/js/home.js"></script>
 }
-<script>
-
-    
-</script>

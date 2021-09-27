@@ -57,3 +57,65 @@ const setProducts = (products) => {
     $("#products").html(content).fadeIn();
 
 }
+
+document.getElementById("login").addEventListener("click", function (event) {
+    $('#login-modal').modal();
+});
+
+const frmLogin = $('#frmSession').validate({
+    rules: {
+        username: {
+            required: true,
+            minlength: 4
+        },
+        user_password: {
+            required: true,
+            minlength: 6
+        }
+    }
+});
+
+document.getElementById("frmSession").addEventListener("submit", function (e) {
+    e.preventDefault();
+    console.log(frmLogin.valid());
+    if (!frmLogin.valid()) return;
+
+    let user = {
+        username: document.querySelector('#username').value,
+        password: document.querySelector('#user_password').value,
+    }
+
+    //login(user);
+    console.log(user);
+    console.log('valido');
+});
+
+
+const login = (user) => {
+
+    $.ajax({
+        url: '/User/Login',
+        method: 'POST',
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        data: user,
+        success: function (response) {
+            let resp = response;
+            console.log(response);
+            if (resp.code === '000') {
+                let order_invoice = JSON.parse(localStorage.getItem('order_invoice'));
+                order_invoice.id_client = resp.id_client;
+                localStorage.setItem('order_invoice', JSON.stringify(order_invoice));
+                console.log(order_invoice);
+            }
+            else if (resp.code === '002') {
+                Swal.fire('Notificación', 'Usuario y/o contraseñas incorrectas. Por favor, corrija y vuelva a intentar.', 'error');
+            } else {
+                Swal.fire('Notificación', 'Usuario y/o contraseña son obligatorios.', 'error');
+            }
+        },
+        error: function () {
+            Swal.fire('Notificación', 'Lo sentimos, no se pudo completar la autenticación.', 'error');
+        }
+    });
+}

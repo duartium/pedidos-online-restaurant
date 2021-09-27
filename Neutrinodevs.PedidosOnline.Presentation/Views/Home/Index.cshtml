@@ -18,7 +18,7 @@
             </li>
             <li><button class="btn btn-login px-3 py-1" id="login"><i class="fa fa-user" aria-hidden="true"></i></button></li>
         </ul>
-        
+
         <section></section>
     </nav>
 </header>
@@ -62,7 +62,7 @@
 
     }
 </script>
-<!-- Modal -->
+<!-- Product modal -->
 <div class="modal fade" id="product-modal" tabindex="-1" role="dialog" aria-labelledby="product-modalTitle" aria-hidden="true" data-id="">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -98,6 +98,37 @@
         </div>
     </div>
 </div>
+
+<!-- Login modal -->
+<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header back-black">
+                <h5 class="modal-title text-white" id="loginModalLabel">Inicio de sesión</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-white">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("Login", "User", FormMethod.Post, new { id = "frmSession", @class="p-2"}))
+                {
+                    <div class="form-group">
+                        <label for="username">Usuario</label>
+                        <input id="username" name="username" type="text" class="form-control" maxlength="50" />
+                    </div>
+                    <div class="form-group">
+                        <label for="passsword">Contraseña</label>
+                        <input id="user_password" name="user_password" type="password" class="form-control" maxlength="20" />
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn back-primary btn-block mt-2">INGRESAR</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container">
     <div class="row mt-4 mx-2">
         <div class="w-50">

@@ -226,6 +226,10 @@ input {
     transition: background-color 0.5s ease-out;
 }
 
+.input-login {
+    padding: 3rem !important;
+}
+
 .invalid {
     font-weight: 400 !important;
     border: 2px solid #ff5b0e !important;

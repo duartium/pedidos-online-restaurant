@@ -85,9 +85,7 @@ document.getElementById("frmSession").addEventListener("submit", function (e) {
         password: document.querySelector('#user_password').value,
     }
 
-    //login(user);
-    console.log(user);
-    console.log('valido');
+    login(user);
 });
 
 
@@ -103,10 +101,7 @@ const login = (user) => {
             let resp = response;
             console.log(response);
             if (resp.code === '000') {
-                let order_invoice = JSON.parse(localStorage.getItem('order_invoice'));
-                order_invoice.id_client = resp.id_client;
-                localStorage.setItem('order_invoice', JSON.stringify(order_invoice));
-                console.log(order_invoice);
+                window.location = '/Dashboard';
             }
             else if (resp.code === '002') {
                 Swal.fire('Notificación', 'Usuario y/o contraseñas incorrectas. Por favor, corrija y vuelva a intentar.', 'error');

@@ -22,6 +22,11 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
         {
             return View();
         }
+
+        public IActionResult EndSession()
+        {
+            return View();
+        }
     }
 
 }

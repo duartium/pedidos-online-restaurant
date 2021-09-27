@@ -12,10 +12,11 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
 
         public int IdUsuario { get; set; }
         public string Nombres { get; set; }
+        public string Username { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public int? TipoUsuario { get; set; }
-        public int? Estado { get; set; }
+        public int TipoUsuario { get; set; }
+        public int Estado { get; set; }
 
         public ICollection<Clientes> Clientes { get; set; }
     }

@@ -12,6 +12,7 @@ using Neutrinodevs.PedidosOnline.Domain.Services;
 using Neutrinodevs.PedidosOnline.Infraestructure.Hubs.Hubs;
 using Neutrinodevs.PedidosOnline.Infraestructure.Models;
 using Neutrinodevs.PedidosOnline.Infraestructure.Repositories;
+using System;
 
 namespace Neutrinodevs.PedidosOnline.Presentation
 {
@@ -63,6 +64,10 @@ namespace Neutrinodevs.PedidosOnline.Presentation
 
             services.AddSignalR();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddDistributedMemoryCache();
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(10);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,6 +86,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseSession();
             
             app.UseMvc(path => {
                 path.MapRoute(

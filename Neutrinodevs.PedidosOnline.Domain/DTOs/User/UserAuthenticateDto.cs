@@ -9,6 +9,9 @@ namespace Neutrinodevs.PedidosOnline.Domain.DTOs.User
 
         [JsonProperty("id_client")]
         public int IdClient { get; set; }
+
+        [JsonProperty("id_user")]
+        public int IdUser { get; set; }
     }
 
 }

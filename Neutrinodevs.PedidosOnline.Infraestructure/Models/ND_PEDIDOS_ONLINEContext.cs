@@ -18,6 +18,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
         public virtual DbSet<Clientes> Clientes { get; set; }
         public virtual DbSet<ComprobanteDetalle> ComprobanteDetalle { get; set; }
         public virtual DbSet<ComprobanteVenta> ComprobanteVenta { get; set; }
+        public virtual DbSet<Empleados> Empleados { get; set; }
         public virtual DbSet<Mesas> Mesas { get; set; }
         public virtual DbSet<PedidoDetalle> PedidoDetalle { get; set; }
         public virtual DbSet<Pedidos> Pedidos { get; set; }
@@ -148,6 +149,35 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
                 entity.Property(e => e.Total)
                     .HasColumnName("total")
                     .HasColumnType("decimal(12, 2)");
+            });
+
+            modelBuilder.Entity<Empleados>(entity =>
+            {
+                entity.HasKey(e => e.IdEmpleado);
+
+                entity.ToTable("EMPLEADOS");
+
+                entity.Property(e => e.IdEmpleado).HasColumnName("id_empleado");
+
+                entity.Property(e => e.Estado).HasColumnName("estado");
+
+                entity.Property(e => e.EstadoActividad).HasColumnName("estado_actividad");
+
+                entity.Property(e => e.FechaCreacion)
+                    .HasColumnName("fecha_creacion")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.FechaEliminacion)
+                    .HasColumnName("fecha_eliminacion")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.Identificacion)
+                    .IsRequired()
+                    .HasColumnName("identificacion")
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TipoEmpleado).HasColumnName("tipo_empleado");
             });
 
             modelBuilder.Entity<Mesas>(entity =>
@@ -307,16 +337,23 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
                 entity.Property(e => e.Estado).HasColumnName("estado");
 
                 entity.Property(e => e.Nombres)
+                    .IsRequired()
                     .HasColumnName("nombres")
                     .HasMaxLength(150)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Password)
+                    .IsRequired()
                     .HasColumnName("password")
                     .HasMaxLength(300)
                     .IsUnicode(false);
 
                 entity.Property(e => e.TipoUsuario).HasColumnName("tipo_usuario");
+
+                entity.Property(e => e.Username)
+                    .HasColumnName("username")
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
             });
         }
     }

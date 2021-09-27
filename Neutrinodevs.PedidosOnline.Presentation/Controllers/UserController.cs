@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Neutrinodevs.PedidosOnline.Domain.Constants;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Services;
@@ -6,6 +7,7 @@ using Neutrinodevs.PedidosOnline.Domain.DTOs.User;
 using Neutrinodevs.PedidosOnline.Domain.Models;
 using Neutrinodevs.PedidosOnline.Infraestructure.Repositories;
 using Neutrinodevs.PedidosOnline.Infraestructure.Security;
+using Newtonsoft.Json;
 using System;
 using System.Text;
 
@@ -90,6 +92,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
 
                 string passEncrypt = Security.GetSHA256(password.Trim());
                 var auth = _rpsUser.Login(username.Trim(), passEncrypt);
+                HttpContext.Session.SetString("auth_user", JsonConvert.SerializeObject(auth));
 
                 return Json(auth);
             }

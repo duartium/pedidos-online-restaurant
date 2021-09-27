@@ -70,14 +70,40 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
             try
             {
                 var auth = new UserAuthenticateDto();
-                int idClient = (from users in _context.Usuarios
-                                join clients in _context.Clientes on users.IdUsuario equals clients.UsuarioId
-                                where users.Estado == 1 && clients.Estado == 1
-                                && users.Email.Equals(user) && users.Password.Equals(password)
-                                select clients.IdCliente).FirstOrDefault();
-                auth.IdClient = idClient;
+                var current_user = _context.Usuarios.Where(x => x.Estado == 1
+                                                     && x.Username.Equals(user)
+                                                     && x.Password.Equals(password)).Select(x => x).FirstOrDefault();
 
-                auth.Code = idClient > 0 ? "000" : "002";
+                if (current_user == null)
+                    throw new NullReferenceException("Usuario no existe");
+
+                switch(current_user.TipoUsuario)
+                {
+                    case (int)TipoUsuario.Cliente:
+                        
+                        int idClient = (from users in _context.Usuarios
+                                  join clients in _context.Clientes on users.IdUsuario equals clients.UsuarioId
+                                  where users.Estado == 1 && clients.Estado == 1
+                                  && users.IdUsuario == current_user.IdUsuario
+                                  select clients.IdCliente).FirstOrDefault();
+                        auth.IdClient = idClient;
+                        auth.Code = idClient > 0 ? "000" : "002";
+
+                        break;
+
+                    case (int)TipoUsuario.Repartidor:
+
+                        //int idUser = (from users in _context.Usuarios
+                        //                join empleados in _context.Empleados on users.IdUsuario equals empleados.Id
+                        //                where users.Estado == 1 && clients.Estado == 1
+                        //                && users.IdUsuario == current_user.IdUsuario
+                        //                select clients.IdCliente).FirstOrDefault();
+                        //auth.IdUser = idUser;
+                        //auth.Code = idUser > 0 ? "000" : "002";
+
+                        break;
+                }
+                
                 return auth;
             }
             catch (Exception ex)

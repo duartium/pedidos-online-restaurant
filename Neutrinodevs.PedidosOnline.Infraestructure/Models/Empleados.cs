@@ -12,5 +12,8 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
         public int Estado { get; set; }
         public DateTime? FechaCreacion { get; set; }
         public DateTime? FechaEliminacion { get; set; }
+        public int? UsuarioId { get; set; }
+
+        public Usuarios Usuario { get; set; }
     }
 }

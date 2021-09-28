@@ -8,6 +8,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
         public Usuarios()
         {
             Clientes = new HashSet<Clientes>();
+            Empleados = new HashSet<Empleados>();
         }
 
         public int IdUsuario { get; set; }
@@ -19,5 +20,6 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
         public int Estado { get; set; }
 
         public ICollection<Clientes> Clientes { get; set; }
+        public ICollection<Empleados> Empleados { get; set; }
     }
 }

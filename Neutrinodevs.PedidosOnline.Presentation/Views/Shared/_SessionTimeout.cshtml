@@ -3,10 +3,10 @@
     ViewData["Title"] = "Fin de sesión";
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
 }
-
-<div class="container my-2">
-    <h2>Fin de la sesión</h2>
+@await Html.PartialAsync("~/Views/Shared/_Navbar.cshtml")
+<div class="container my-2 p-4" style="min-height: 75vh">
+    <h2 class="mt-5">Fin de la sesión</h2>
     <h5>Se agotó el tiempo de tu sesión, por favor ingresa nuevamente con tus credenciales.</h5>
-    <button class="btn back-primary">Ir al inicio</button>
+    <a class="btn back-primary mt-3" href='@Url.Action("Index", "Home")'>Ir al inicio</a>
 </div>
 

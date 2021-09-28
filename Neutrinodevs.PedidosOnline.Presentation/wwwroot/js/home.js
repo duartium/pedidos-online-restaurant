@@ -103,9 +103,9 @@ const login = (user) => {
             if (resp.code === '000') {
                 window.location = '/Dashboard';
             }
-            else if (resp.code === '002') {
+            else if (resp.code === '002')
                 Swal.fire('Notificación', 'Usuario y/o contraseñas incorrectas. Por favor, corrija y vuelva a intentar.', 'error');
-            } else {
+            else {
                 Swal.fire('Notificación', 'Usuario y/o contraseña son obligatorios.', 'error');
             }
         },

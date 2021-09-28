@@ -23,8 +23,8 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
         public IActionResult Index()
         {
             string auth_user = HttpContext.Session.GetString("auth_user");
-            if (String.IsNullOrWhiteSpace(auth_user))
-                RedirectToAction("~/Views/Shared/_SessionTimeout.cshtml");
+            if (auth_user == null)
+                return View("~/Views/Shared/_SessionTimeout.cshtml");
 
             var current_user = JsonConvert.DeserializeObject<UserAuthenticateDto>(auth_user);
             return View(current_user);

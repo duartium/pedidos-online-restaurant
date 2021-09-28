@@ -93,18 +93,23 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
 
                     case (int)TipoUsuario.Repartidor:
 
-                        //int idUser = (from users in _context.Usuarios
-                        //                join empleados in _context.Empleados on users.IdUsuario equals empleados.Id
-                        //                where users.Estado == 1 && clients.Estado == 1
-                        //                && users.IdUsuario == current_user.IdUsuario
-                        //                select clients.IdCliente).FirstOrDefault();
-                        //auth.IdUser = idUser;
-                        //auth.Code = idUser > 0 ? "000" : "002";
+                        int idRepartidor = (from users in _context.Usuarios
+                                            join empleados in _context.Empleados on users.IdUsuario equals empleados.UsuarioId
+                                            where users.Estado == 1 && empleados.Estado == 1
+                                            && users.IdUsuario == current_user.IdUsuario
+                                            select empleados.IdEmpleado).FirstOrDefault();
+                        auth.IdUser = idRepartidor;
+                        auth.Code = idRepartidor > 0 ? "000" : "002";
 
                         break;
                 }
                 
                 return auth;
+            }
+            catch (NullReferenceException ex)
+            {
+                _logger.LogError(ex.ToString());
+                return new UserAuthenticateDto { Code = "002" };
             }
             catch (Exception ex)
             {

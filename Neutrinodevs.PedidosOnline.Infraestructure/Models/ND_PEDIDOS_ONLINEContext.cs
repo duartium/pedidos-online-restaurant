@@ -178,6 +178,13 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.TipoEmpleado).HasColumnName("tipo_empleado");
+
+                entity.Property(e => e.UsuarioId).HasColumnName("usuario_id");
+
+                entity.HasOne(d => d.Usuario)
+                    .WithMany(p => p.Empleados)
+                    .HasForeignKey(d => d.UsuarioId)
+                    .HasConstraintName("FK_EMPLEADOS_USUARIOS");
             });
 
             modelBuilder.Entity<Mesas>(entity =>

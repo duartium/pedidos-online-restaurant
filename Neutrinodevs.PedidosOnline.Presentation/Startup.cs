@@ -77,7 +77,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddFile("Log-{Date}.txt");
+            loggerFactory.AddFile("Logs/Log-{Date}.txt");
 
             if (env.IsDevelopment())
             {

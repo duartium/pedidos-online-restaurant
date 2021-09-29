@@ -259,13 +259,14 @@ html.fullscreen-bg #wrapper {
     align-items: center;
     justify-content: center;
     background-color: #0f182e;
-    height: 70px;
+    height: 80px;
+    width: 200px;
     background-color: #0f182e;
     box-shadow: 2px 0 4.7px 0.3px rgba(117, 117, 117, 0.1);
 }
 .navbar-default .brand a{
   color:#55a8fd;
-  font-size: 24px;
+  font-size: 20px;
   font-family: "CircularStd", sans-serif;
   font-weight: 600;
   padding: 18px 36.5px;

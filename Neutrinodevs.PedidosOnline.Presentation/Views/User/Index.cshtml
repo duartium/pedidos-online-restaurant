@@ -1,9 +1,39 @@
-﻿
+﻿@model List<Neutrinodevs.PedidosOnline.Domain.Entities.Usuarios> 
 @{
     ViewData["Title"] = "Usuarios";
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    int numRows = 0;
 }
 
 <div style="margin-top: 3rem">
     <h1>Usuarios</h1>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Usuario</th>
+                <th scope="col">Rol</th>
+                <th scope="col">Nombres</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {   
+                numRows++;
+                <tr>
+                    <th scope="row">@numRows</th>
+                    <td>@user.Username</td>
+                    <td>@user.TipoUsuario</td>
+                    <td>@user.Nombres</td>
+                    <td><button class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button></td>
+                    <td><button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
+@section Scripts{
+    <script src="~/datatables.net/jquery.dataTables.min.js"></script>
+}

@@ -1,14 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.User;
 using Neutrinodevs.PedidosOnline.Domain.Enums;
 using Neutrinodevs.PedidosOnline.Infraestructure.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly ND_PEDIDOS_ONLINEContext _context;
         private readonly ILogger<UserRepository> _logger;
@@ -155,5 +157,19 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
             
         }
 
+        public IEnumerable<Domain.Entities.Usuarios> GetAll()
+        {
+            return _context.Usuarios.Where(x => x.Estado == 1 && x.TipoUsuario != (int)TipoUsuario.Cliente)
+                .Select(x => new Domain.Entities.Usuarios 
+                { 
+                    IdUsuario = x.IdUsuario,
+                    Nombres = x.Nombres,
+                    Username = x.Username,
+                    Email = x.Email,
+                    Password = x.Password,
+                    Estado = x.Estado,
+                    TipoUsuario = x.TipoUsuario
+                }).ToList();
+        }
     }
 }

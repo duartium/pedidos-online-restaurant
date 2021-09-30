@@ -1,4 +1,0 @@
-2021-09-14T23:45:39.3984280-05:00 0HMBO09312G7B:0000000E [ERR] System.NullReferenceException: Object reference not set to an instance of an object.
-   at Neutrinodevs.PedidosOnline.Infraestructure.Repositories.OrderRepository.Save(FullOrderDto order) in C:\Users\HP\source\repos\NEUTRINODEVS.PEDIDOSONLINE.LAPESCA\Neutrinodevs.PedidosOnline.Infraestructure\Repositories\OrderRepository.cs:line 154 (4fde995e)
-2021-09-14T23:46:39.1150378-05:00 0HMBO09312G7D:00000003 [ERR] System.NullReferenceException: Object reference not set to an instance of an object.
-   at Neutrinodevs.PedidosOnline.Infraestructure.Repositories.OrderRepository.Save(FullOrderDto order) in C:\Users\HP\source\repos\NEUTRINODEVS.PEDIDOSONLINE.LAPESCA\Neutrinodevs.PedidosOnline.Infraestructure\Repositories\OrderRepository.cs:line 154 (4fde995e)

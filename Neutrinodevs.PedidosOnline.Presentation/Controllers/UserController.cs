@@ -9,7 +9,10 @@ using Neutrinodevs.PedidosOnline.Infraestructure.Repositories;
 using Neutrinodevs.PedidosOnline.Infraestructure.Security;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Text;
+using System.Linq;
+using Neutrinodevs.PedidosOnline.Domain.Enums;
 
 namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
 {
@@ -27,7 +30,22 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            var usersDto = new List<UserMainDto>();
+            var users = _rpsUser.GetAll();
+
+            //TODO: reemplazar con automapper
+            if(users != null)
+            {
+                usersDto = users.ToList().Select(x => 
+                new UserMainDto { 
+                    IdUsuario = x.IdUsuario,
+                    Nombres = x.Nombres,
+                    Username = x.Username,
+                    TipoUsuario = x.TipoUsuario == (int)TipoUsuario.Administrador
+                              ? TipoUsuario.Administrador.ToString() : "Repartidor"
+                }).ToList();
+            }
+            return View(users);
         }
 
         public IActionResult Verification()

@@ -101,7 +101,10 @@ const login = (user) => {
             let resp = response;
             console.log(response);
             if (resp.code === '000') {
-                window.location = '/Dashboard';
+                if(resp.id_user > 0)
+                    window.location = '/Delivery';
+                else if (resp.id_client > 0)
+                    window.location = '/Dashboard';
             }
             else if (resp.code === '002')
                 Swal.fire('Notificación', 'Usuario y/o contraseñas incorrectas. Por favor, corrija y vuelva a intentar.', 'error');

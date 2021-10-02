@@ -30,7 +30,9 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                                 FechaEliminacion = emp.FechaEliminacion,
                                 Identificacion = emp.Identificacion,
                                 TipoEmpleado = emp.TipoEmpleado,
-                                UsuarioId = emp.UsuarioId
+                                UsuarioId = emp.UsuarioId,
+                                Nombres = emp.Nombres,
+                                Apellidos = emp.Apellidos
                              }).ToList();
             return employess;
         }

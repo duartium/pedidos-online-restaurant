@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Employee;
 using System;
@@ -13,16 +14,27 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
     {
         private readonly IEmployeeRepository _rpsEmployee;
         private readonly IMapper _mapper;
-        public EmployeeController(IEmployeeRepository employeeRepository, IMapper mapper)
+        private readonly ILogger<EmployeeController> _logger;
+
+        public EmployeeController(IEmployeeRepository employeeRepository, IMapper mapper, ILogger<EmployeeController> logger)
         {
             _rpsEmployee = employeeRepository;
             _mapper = mapper;
+            _logger = logger;
         }
         public IActionResult Index()
         {
-            var employees = _rpsEmployee.GetAll();
-            var epmloyeesDto = _mapper.Map<EmployeeDto>(employees.ToList());
-            return View();
+            try
+            {
+                var employees = _rpsEmployee.GetAll();
+                var epmloyeesDto = _mapper.Map<List<EmployeeDto>>(employees.ToList());
+                return View(epmloyeesDto);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return View();
+            }
         }
     }
 }

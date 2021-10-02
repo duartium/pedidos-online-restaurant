@@ -6,6 +6,8 @@ namespace Neutrinodevs.PedidosOnline.Domain.Entities
     {
         public int IdEmpleado { get; set; }
         public string Identificacion { get; set; }
+        public string Nombres { get; set; }
+        public string Apellidos { get; set; }
         public int TipoEmpleado { get; set; }
         public int? EstadoActividad { get; set; }
         public int Estado { get; set; }

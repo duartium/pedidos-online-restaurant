@@ -1,0 +1,56 @@
+﻿@model List<Neutrinodevs.PedidosOnline.Domain.DTOs.Employee.EmployeeDto> 
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    int numRows = 0;
+}
+
+<div style="margin-top: 3rem; padding: 3rem" class="panel panel-default">
+    <h1 style="padding-bottom: 3rem;">Empleados</h1>
+    <div class="row">
+
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover table-striped" id="tbl_employees">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Identificación</th>
+                    <th scope="col">Nombres</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Usuario</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var employee in Model)
+                {
+                    numRows++;
+                <tr>
+                    <th scope="row">@numRows</th>
+                    <td>@employee.Identification</td>
+                    <td>@employee.FullName</td>
+                    <td>@employee.EmployeeType</td>
+                    <td>@employee.Usuario</td>
+                    <td><button class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></button></td>
+                    <td><button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button></td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+        $("#tbl_employees").dataTable({
+            "language": {
+                "url": "/datatables.net/datatables-es_es.json"
+            }
+        });
+    });
+</script>
+@section Scripts{
+    <script src="~/datatables.net/jquery.dataTables.min.js"></script>
+}

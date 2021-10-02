@@ -8,7 +8,10 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Helpers
     {
         public MappingProfile()
         {
-            CreateMap<Employee, EmployeeDto>();
+            CreateMap<Employee, EmployeeDto>()
+                .ForMember(dest => dest.IdEmployee, dto => dto.MapFrom(source => source.IdEmpleado))
+                .ForMember(dest => dest.Identification, dto => dto.MapFrom(source => source.Identificacion))
+                .ForMember(dest => dest.FullName, dto => dto.MapFrom(source => source.Nombres + " " + source.Apellidos));
         }
     }
 }

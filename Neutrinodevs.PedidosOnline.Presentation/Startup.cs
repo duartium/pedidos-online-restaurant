@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Services;
 using Neutrinodevs.PedidosOnline.Domain.Services;
+using Neutrinodevs.PedidosOnline.Infraestructure.Helpers;
 using Neutrinodevs.PedidosOnline.Infraestructure.Hubs.Hubs;
 using Neutrinodevs.PedidosOnline.Infraestructure.Models;
 using Neutrinodevs.PedidosOnline.Infraestructure.Repositories;
@@ -60,7 +62,13 @@ namespace Neutrinodevs.PedidosOnline.Presentation
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<DishRepository, DishRepository>();
             services.AddScoped<IOrderService, OrderService>();
-            
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
+            var mapperConfig = new MapperConfiguration(m => {
+                m.AddProfile(new MappingProfile());
+            });
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
 
             services.AddSignalR();
             services.AddDistributedMemoryCache();
@@ -70,6 +78,9 @@ namespace Neutrinodevs.PedidosOnline.Presentation
                 options.Cookie.IsEssential = true;
             });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+           
+
             
             
         }

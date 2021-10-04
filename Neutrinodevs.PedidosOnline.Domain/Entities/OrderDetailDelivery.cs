@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
-namespace Neutrinodevs.PedidosOnline.Presentation.Models
+namespace Neutrinodevs.PedidosOnline.Domain.Entities
 {
-    public partial class PedidoDetalle
+    public class OrderDetailDelivery
     {
         public int IdPedidoDet { get; set; }
         public string NombreProducto { get; set; }
@@ -13,7 +14,5 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Models
         public int PedidoId { get; set; }
         public int ProductoId { get; set; }
 
-        public Pedidos Pedido { get; set; }
-        public Productos Producto { get; set; }
     }
 }

@@ -346,6 +346,7 @@ input:focus {
 .min-h-80{
     min-height: 80vh !important;
 }
+
 .about-text{
     font-size: 20px;
     text-align: justify;

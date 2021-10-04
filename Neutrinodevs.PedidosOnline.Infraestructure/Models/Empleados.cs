@@ -12,7 +12,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
         public int TipoEmpleado { get; set; }
         public int? EstadoActividad { get; set; }
         public int Estado { get; set; }
-        public DateTime? FechaCreacion { get; set; }
+        public DateTime FechaCreacion { get; set; }
         public DateTime? FechaEliminacion { get; set; }
         public int? UsuarioId { get; set; }
 

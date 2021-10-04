@@ -159,6 +159,12 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
 
                 entity.Property(e => e.IdEmpleado).HasColumnName("id_empleado");
 
+                entity.Property(e => e.Apellidos)
+                    .IsRequired()
+                    .HasColumnName("apellidos")
+                    .HasMaxLength(150)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Estado).HasColumnName("estado");
 
                 entity.Property(e => e.EstadoActividad).HasColumnName("estado_actividad");
@@ -175,6 +181,12 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
                     .IsRequired()
                     .HasColumnName("identificacion")
                     .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Nombres)
+                    .IsRequired()
+                    .HasColumnName("nombres")
+                    .HasMaxLength(100)
                     .IsUnicode(false);
 
                 entity.Property(e => e.TipoEmpleado).HasColumnName("tipo_empleado");
@@ -251,6 +263,8 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
                 entity.Property(e => e.IdPedido).HasColumnName("id_pedido");
 
                 entity.Property(e => e.ClienteId).HasColumnName("cliente_id");
+
+                entity.Property(e => e.DeliveryId).HasColumnName("delivery_id");
 
                 entity.Property(e => e.DeliveryTime)
                     .HasColumnName("delivery_time")

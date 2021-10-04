@@ -63,6 +63,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation
             services.AddScoped<DishRepository, DishRepository>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IDeliveryRepository, DeliveryRepository>();
 
             var mapperConfig = new MapperConfiguration(m => {
                 m.AddProfile(new MappingProfile());

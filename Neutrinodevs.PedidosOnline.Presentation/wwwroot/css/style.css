@@ -983,3 +983,7 @@ ul.notifications > li > .more:hover, ul.notifications > li > .more:focus {
 /* toastr notification */
 
 /*========================Thank you=================*/
+
+.min-h-75 {
+    min-height: 75vh !important;
+}

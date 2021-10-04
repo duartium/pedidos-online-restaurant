@@ -7,6 +7,8 @@ using Neutrinodevs.PedidosOnline.Domain.DTOs.Delivery;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Order;
+using Newtonsoft.Json;
+using System;
 
 namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
 {
@@ -19,6 +21,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
             _context = context;
         }
         public IEnumerable<OrderDeliveryDTO> GetAll()
+        
         {
             List<OrderDeliveryDTO> orders = null;
             //TODO: Filtro de detalles con estado activo en pedido
@@ -31,17 +34,13 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                                            {
                                                IdOrder = pedido.IdPedido,
                                                Number = pedido.Numero.ToString(),
-
                                                Address = pedido.Cliente.Direccion,
                                                DeliveryTime = pedido.DeliveryTime,
                                                CustomerName = pedido.Cliente.Nombres + " " + pedido.Cliente.Apellidos,
                                                CellphoneNumber = pedido.Cliente.Telefono,
                                                Subtotal = decimal.Parse(pedido.Subtotal.ToString(), CultureInfo.InvariantCulture),
                                                Total = decimal.Parse(pedido.Total.ToString(), CultureInfo.InvariantCulture),
-                                               items = pedido.PedidoDetalle.Select(det => new Item
-                                               {
-
-                                               }).ToList()
+                                               JsonProducts = JsonConvert.SerializeObject(pedido.PedidoDetalle)
                                            })
                                            .ToList();
             return orders;                         

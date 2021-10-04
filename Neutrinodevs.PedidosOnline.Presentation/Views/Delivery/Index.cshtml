@@ -4,7 +4,22 @@
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
     int numRows = 0;
 }
-
+@section HeaderScripts{
+    <script>
+        const setOrder = (id_order) => {
+            $.ajax({
+                url: '/Order/AssignDelivery/' + id_order,
+                type: 'POST',
+                success: function (response) {
+                    console.log(response);
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        }
+    </script>
+}
 <div style="margin-top: 3rem; padding: 3rem;" class="panel panel-default min-h-75">
     <h1 style="padding-bottom: 3rem;">Pedidos</h1>
     <div class="row">
@@ -28,15 +43,15 @@
                             @foreach (var order in Model)
                             {
                                 numRows++;
-                            <tr>
-                                <th scope="row">@numRows</th>
-                                <td>@order.Number</td>
-                                <td>@order.CustomerName</td>
-                                <td>@order.CellphoneNumber</td>
-                                <td>@order.Address</td>
-                                <td><button class="btn btn-info btn-sm">VER DETALLE</button></td>
-                                <td><button class="btn btn-success btn-sm">ASIGNARME</button></td>
-                            </tr>
+                                <tr>
+                                    <th scope="row">@numRows</th>
+                                    <td>@order.Number</td>
+                                    <td>@order.CustomerName</td>
+                                    <td>@order.CellphoneNumber</td>
+                                    <td>@order.Address</td>
+                                    <td><button class="btn btn-info btn-sm see-details" data-product="@order.JsonProducts">VER DETALLE</button></td>
+                                    <td><button class="btn btn-success btn-sm " onclick="setOrder(@order.IdOrder)">ASIGNARME</button></td>
+                                </tr>
                             }
                         </tbody>
                     </table>
@@ -51,3 +66,74 @@
         </div>
     </div>
 </div>
+
+<!-- Product modal -->
+<div class="modal modal-lg fade" id="product-modal" tabindex="-1" role="dialog" aria-labelledby="product-modalTitle" aria-hidden="true" data-id="">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detalle de pedido</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row container">
+                    <div class="col-12">
+                        
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered" id="tbl_delivery">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>PRODUCTO</th>
+                                        <th>CANT.</th>
+                                        <th>TOTAL</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_product">
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const seeDetails = (product) => {
+        let num = 0;
+        let rowProduct = '';
+        $("#tbody_product").html('');
+        product.forEach(elem => {
+            num++;
+            rowProduct += `<tr><td>${num}</td><td>${elem.NombreProducto}</td><td>${elem.Cantidad}</td><td>${elem.Total}</td></tr>`;
+        });
+
+        $("#tbody_product").append(rowProduct);
+        $("#product-modal").modal();
+    }
+
+    $(document).ready(function () {
+        $("#tbl_delivery").dataTable({
+            "language": {
+                "url": "/datatables.net/datatables-es_es.json"
+            }
+        });
+
+        $(".see-details").click(function () {
+            
+            let product = $(this).data("product");
+            console.log(product);
+            seeDetails(product);
+        });
+
+    });
+
+
+</script>
+@section Scripts{
+    <script src="~/datatables.net/jquery.dataTables.min.js"></script>
+}

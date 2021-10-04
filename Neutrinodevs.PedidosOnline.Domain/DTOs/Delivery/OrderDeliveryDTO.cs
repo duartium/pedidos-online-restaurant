@@ -25,7 +25,7 @@ namespace Neutrinodevs.PedidosOnline.Domain.DTOs.Delivery
         public string DeliveryTime { get; set; }
 
         [JsonProperty("items")]
-        public List<Item> items { get; set; }
+        public string JsonProducts { get; set; }
 
         [JsonProperty("subtotal")]
         public decimal Subtotal { get; set; }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Services;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Order;
 using System;
@@ -9,9 +10,12 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderService _srvOrder;
-        public OrderController(IOrderService orderService)
+        private readonly ILogger<OrderController> _logger;
+
+        public OrderController(IOrderService orderService, ILogger<OrderController> logger)
         {
             _srvOrder = orderService;
+            _logger = logger;
         }
 
         public IActionResult Index()
@@ -32,8 +36,9 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
                 var orders = _srvOrder.GetAll();
                 return Json(orders);
             }
-            catch (System.Exception)
+            catch (Exception ex)
             {
+                _logger.LogError(ex.ToString());
                 return Json("error");
             }
         }
@@ -50,6 +55,20 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             }
             catch (Exception)
             {
+                return Json(new OrderResponse { IdOrder = -1, Code = "001" });
+            }
+        }
+
+        public JsonResult AssignDelivery(int id_order)
+        {
+            try
+            {
+
+                return Json(new OrderResponse { IdOrder = -1, Code = "000" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
                 return Json(new OrderResponse { IdOrder = -1, Code = "001" });
             }
         }

@@ -7,5 +7,6 @@ namespace Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories
     {
         int Save(FullOrderDto order);
         FinalOrderDto Get(int idOrder);
+        bool AssignDelivery(int idOrder, int idEmployee);
     }
 }

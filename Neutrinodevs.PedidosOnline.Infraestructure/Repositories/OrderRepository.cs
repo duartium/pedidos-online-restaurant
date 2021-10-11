@@ -199,6 +199,16 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
             }
         }
         
+        public bool AssignDelivery(int idOrder, int idEmployee)
+        {
+            var order = _context.Pedidos.Single(x => x.IdPedido == idOrder);
+            order.DeliveryId = idEmployee;
 
+            var employee = _context.Empleados.Single(x => x.IdEmpleado == idEmployee);
+            employee.EstadoActividad = 2;
+            int value = _context.SaveChanges();
+
+            return value > 0 ? true : false;
+        }
     }
 }

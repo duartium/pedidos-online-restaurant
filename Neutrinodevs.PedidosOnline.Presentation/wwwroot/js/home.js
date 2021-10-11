@@ -101,6 +101,7 @@ const login = (user) => {
             let resp = response;
             console.log(response);
             if (resp.code === '000') {
+                localStorage.setItem('user', JSON.stringify(resp));
                 if(resp.id_user > 0)
                     window.location = '/Delivery';
                 else if (resp.id_client > 0)

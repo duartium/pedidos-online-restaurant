@@ -36,5 +36,10 @@ namespace Neutrinodevs.PedidosOnline.Domain.Services
         {
             return _orderRepository.Save(order);
         }
+
+        public bool AssignDelivery(int idOrder, int idEmployee)
+        {
+            return _orderRepository.AssignDelivery(idOrder, idEmployee);
+        }
     }
 }

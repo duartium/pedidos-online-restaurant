@@ -6,15 +6,32 @@
 }
 @section HeaderScripts{
     <script>
+        
         const setOrder = (id_order) => {
+            let user;
+            let user_storage = localStorage.getItem('user');
+            console.log(user_storage);
+            if (user_storage)
+                user = JSON.parse(user_storage);
+            
             $.ajax({
-                url: '/Order/AssignDelivery/' + id_order,
+                url: '/Order/AssignDelivery',
                 type: 'POST',
+                data: JSON.stringify({ idOrder: id_order, idEmployee: user.id_user }),
+                dataType: 'application/json',
+                contentType: 'application/json',
                 success: function (response) {
-                    console.log(response);
+                    let resp = JSON.parse(response);
+                    console.log(resp);
+                    if (response.code != '000')
+                        swal(response.message, "mensaje", "error");
+                    else
+                        swal(response.message, "mensaje", "success");
                 },
                 error: function (err) {
+                    console.log('error');
                     console.log(err);
+                    swal("Se ha producido un error en la asignación", "mensaje", "error");
                 }
             });
         }
@@ -49,7 +66,7 @@
                                     <td>@order.CustomerName</td>
                                     <td>@order.CellphoneNumber</td>
                                     <td>@order.Address</td>
-                                    <td><button class="btn btn-info btn-sm see-details" data-product="@order.JsonProducts">VER DETALLE</button></td>
+                                    <td><button class="btn btn-info btn-sm see-details" data-product="@order.JsonProducts">VER</button></td>
                                     <td><button class="btn btn-success btn-sm " onclick="setOrder(@order.IdOrder)">ASIGNARME</button></td>
                                 </tr>
                             }
@@ -131,6 +148,7 @@
         });
 
     });
+
 
 
 </script>

@@ -12,4 +12,16 @@
         Repartidor = 3,
         Administrador = 4
     }
+
+    public enum EstadoEmpleado
+    {
+        Disponible = 1,
+        EnProcesoEntrega = 2
+    }
+
+    public enum Estado
+    {
+        Activo = 1,
+        Inactivo = 0
+    }
 }

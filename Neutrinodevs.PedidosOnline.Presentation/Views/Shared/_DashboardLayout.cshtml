@@ -15,7 +15,10 @@
         <link rel="stylesheet" href="~/css/responsive.css">
         <link href="~/css/dataTables.bootstrap.min.css" rel="stylesheet" />
 
+        <!--fontawesome-all.min.js-->
+        <script src="~/js/fontawesome-all.min.js"></script>
         <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/datatables.net/jquery.dataTables.min.js"></script>
     </environment>
     @RenderSection("HeaderScripts", required: false)
 </head>
@@ -152,7 +155,7 @@
         @RenderSection("SignalR", required: false)
         @*<script src="~/aspnet/signalr/dist/browser/signalr.min.js"></script>*@
         <script src="~/js/dashboard/dashboard.js"></script>
-        <script src="~/datatables.net/jquery.dataTables.min.js"></script>
+        
         <script src="~/js/dataTables.bootstrap3.min.js"></script>
     </environment>
     <!--jquery-1.12.4.min.js-->
@@ -177,8 +180,7 @@
     <script src="~/js/d3.min.js"></script>
     <script src="~/js/topojson.js"></script>
     <script src="~/js/datamaps.world.min.js"></script>
-    <!--fontawesome-all.min.js-->
-    <script src="~/js/fontawesome-all.min.js"></script>
+    
 
     <!--Custom JS-->
     <script src="~/js/custom.js"></script>

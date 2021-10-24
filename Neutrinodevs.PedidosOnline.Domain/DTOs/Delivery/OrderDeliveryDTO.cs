@@ -18,7 +18,7 @@ namespace Neutrinodevs.PedidosOnline.Domain.DTOs.Delivery
         [JsonProperty("customer_name")]
         public string CustomerName { get; set; }
 
-        [JsonProperty("customer_name")]
+        [JsonProperty("cellphone_number")]
         public string CellphoneNumber { get; set; }
 
         [JsonProperty("delivery_time")]

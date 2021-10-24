@@ -203,9 +203,11 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
         {
             var order = _context.Pedidos.Single(x => x.IdPedido == idOrder);
             order.DeliveryId = idEmployee;
+            _context.Entry(order).Property(x => x.DeliveryId).IsModified = true;
 
             var employee = _context.Empleados.Single(x => x.IdEmpleado == idEmployee);
             employee.EstadoActividad = 2;
+            _context.Entry(employee).Property(x => x.EstadoActividad).IsModified = true;
             int value = _context.SaveChanges();
 
             return value > 0 ? true : false;

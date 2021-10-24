@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Delivery;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,15 +13,39 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
     public class DeliveryController : Controller
     {
         private readonly IDeliveryRepository _rpsDelivery;
-        public DeliveryController(IDeliveryRepository deliveryRepository)
+        private readonly ILogger<DeliveryController> _logger;
+        public DeliveryController(IDeliveryRepository deliveryRepository, ILogger<DeliveryController> logger)
         {
             _rpsDelivery = deliveryRepository;
+            _logger = logger;
         }
 
         public IActionResult Index()
         {
-            var ordersAvailable = _rpsDelivery.GetAll();
-            return View(ordersAvailable ?? new List<OrderDeliveryDTO>());
+            try
+            {
+                var ordersAvailable = _rpsDelivery.GetAll();
+                return View(ordersAvailable ?? new List<OrderDeliveryDTO>());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return View(new List<OrderDeliveryDTO>());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult GetAll()
+        {
+            try
+            {
+                return Json(JsonConvert.SerializeObject(_rpsDelivery.GetAll() ?? new List<OrderDeliveryDTO>())); 
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return Json("001");
+            }
         }
     }
 }

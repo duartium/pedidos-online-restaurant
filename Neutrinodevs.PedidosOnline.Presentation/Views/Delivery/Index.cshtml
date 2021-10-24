@@ -2,38 +2,64 @@
 @{
     ViewData["Title"] = "Delivery";
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
-    int numRows = 0;
 }
 @section HeaderScripts{
     <script>
-        
+        var tbl_delivery;
+
+        const getDeliveryList = () => {
+            var datos = [];
+            $.ajax({
+                url: '/Delivery/GetAll',
+                async: false,
+                type: 'POST',
+                contentType: 'application/json',
+                success: function (resp) {
+                    datos = JSON.parse(resp);
+                },
+                error: (err) => { console.log(err); return undefined; }
+            });
+            return datos;
+        }
+
+       
         const setOrder = (id_order) => {
             let user;
             let user_storage = localStorage.getItem('user');
             console.log(user_storage);
             if (user_storage)
                 user = JSON.parse(user_storage);
-            
+
+            console.log(JSON.stringify({ idOrder: id_order, idEmployee: user.id_user }));
             $.ajax({
                 url: '/Order/AssignDelivery',
                 type: 'POST',
-                data: JSON.stringify({ idOrder: id_order, idEmployee: user.id_user }),
+                data: JSON.stringify({ IdOrder: id_order, IdEmployee: user.id_user }),
                 dataType: 'application/json',
                 contentType: 'application/json',
                 success: function (response) {
                     let resp = JSON.parse(response);
                     console.log(resp);
-                    if (response.code != '000')
-                        swal(response.message, "mensaje", "error");
+                    if (response.code != '000') {
+                        updateOrdersTable();
+                        Swal.fire(response.message, "mensaje", "error");
+                    }
                     else
-                        swal(response.message, "mensaje", "success");
+                        Swal.fire(response.message, "mensaje", "success");
                 },
                 error: function (err) {
                     console.log('error');
                     console.log(err);
-                    swal("Se ha producido un error en la asignación", "mensaje", "error");
+                    Swal.fire("Se ha producido un error en la asignación", "mensaje", "error");
                 }
             });
+        }
+
+        const updateOrdersTable = () => {
+            let delivery_list = getDeliveryList();
+            delivery_list.shift();
+            console.log(delivery_list);
+            tbl_delivery.clear().rows.add(delivery_list).draw();
         }
     </script>
 }
@@ -43,11 +69,11 @@
         <div class="col-12" style="margin-top:2rem">
             @if (Model.Count > 0)
             {
+                <button class="btn btn-success" onclick="updateOrdersTable()">OK</button>
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered" id="tbl_delivery">
                         <thead>
                             <tr>
-                                <th scope="col">#</th>
                                 <th scope="col">Nº PEDIDO</th>
                                 <th scope="col">CLIENTE</th>
                                 <th scope="col">CONTACTO</th>
@@ -57,19 +83,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var order in Model)
-                            {
-                                numRows++;
-                                <tr>
-                                    <th scope="row">@numRows</th>
-                                    <td>@order.Number</td>
-                                    <td>@order.CustomerName</td>
-                                    <td>@order.CellphoneNumber</td>
-                                    <td>@order.Address</td>
-                                    <td><button class="btn btn-info btn-sm see-details" data-product="@order.JsonProducts">VER</button></td>
-                                    <td><button class="btn btn-success btn-sm " onclick="setOrder(@order.IdOrder)">ASIGNARME</button></td>
-                                </tr>
-                            }
                         </tbody>
                     </table>
                 </div>
@@ -134,10 +147,40 @@
     }
 
     $(document).ready(function () {
-        $("#tbl_delivery").dataTable({
+        let delivery_list = getDeliveryList();
+        console.log(delivery_list);
+        
+        tbl_delivery = $("#tbl_delivery").DataTable({
             "language": {
                 "url": "/datatables.net/datatables-es_es.json"
+            },
+            data: delivery_list,
+            columns: [
+                { data: 'number' },
+                { data: 'customer_name' },
+                { data: 'cellphone_number' },
+                { data: 'address' },
+                { data: 'items' },
+                { data: 'id_order' }
+            ],
+            columnDefs: [
+            {
+                targets: 4,
+                data: 'items',
+                "render": function (items, type, row, meta) {
+                    return '<button class="btn btn-info btn-sm" data-product="'+items+'">Ver</a>';
+                }
+            },
+            { orderable: false, searchable: false, targets: -1 },
+            { orderable: false, searchable: false, targets: 4 }
+            ,{
+                targets: -1,
+                data: 'id_order',
+                "render": function (id_order, type, row, meta) {
+                    return '<button class="btn btn-success btn-sm" onclick="setOrder(' + id_order + ')">Asignarme</a>';
+                }
             }
+            ]
         });
 
         $(".see-details").click(function () {

@@ -30,7 +30,6 @@
             if (user_storage)
                 user = JSON.parse(user_storage);
 
-            console.log(JSON.stringify({ idOrder: id_order, idEmployee: user.id_user }));
             $.ajax({
                 url: '/Order/AssignDelivery',
                 type: 'POST',
@@ -39,7 +38,6 @@
                 contentType: 'application/json',
                 success: function (response) {
                     let resp = JSON.parse(response);
-                    console.log(resp);
                     if (response.code != '000') {
                         updateOrdersTable();
                         Swal.fire(response.message, "mensaje", "error");
@@ -57,32 +55,31 @@
 
         const updateOrdersTable = () => {
             let delivery_list = getDeliveryList();
-            delivery_list.shift();
             console.log(delivery_list);
             tbl_delivery.clear().rows.add(delivery_list).draw();
         }
     </script>
 }
 <div style="margin-top: 3rem; padding: 3rem;" class="panel panel-default min-h-75">
-    <h1 style="padding-bottom: 3rem;">Pedidos</h1>
+    <h1 style="padding-bottom: 3rem;">Nuevos pedidos</h1>
     <div class="row">
-        <div class="col-12" style="margin-top:2rem">
+        <div class="col-12" style="margin-top:2rem; padding:1rem;">
             @if (Model.Count > 0)
             {
-                <button class="btn btn-success" onclick="updateOrdersTable()">OK</button>
                 <div class="table-responsive">
-                    <table class="table table-hover table-bordered" id="tbl_delivery">
-                        <thead>
+                    <table class="table table-hover table-bordered" id="tbl_delivery" style="width:100%">
+                        <thead >
                             <tr>
                                 <th scope="col">Nº PEDIDO</th>
                                 <th scope="col">CLIENTE</th>
                                 <th scope="col">CONTACTO</th>
                                 <th scope="col">DIRECCIÓN</th>
+                                <th scope="col">TOTAL</th>
                                 <th scope="col"></th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody >
                         </tbody>
                     </table>
                 </div>
@@ -98,8 +95,8 @@
 </div>
 
 <!-- Product modal -->
-<div class="modal modal-lg fade" id="product-modal" tabindex="-1" role="dialog" aria-labelledby="product-modalTitle" aria-hidden="true" data-id="">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal fade" id="product-modal" tabindex="-1" role="dialog" aria-labelledby="product-modalTitle" aria-hidden="true" data-id="">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Detalle de pedido</h5>
@@ -107,18 +104,16 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="row container">
+            <div class="modal-body" >
+                <div class="row">
                     <div class="col-12">
-                        
-                        <div class="table-responsive">
-                            <table class="table table-hover table-bordered" id="tbl_delivery">
+                        <div class="table-responsive" style="padding:2rem;">
+                            <table class="table table-hover table-bordered" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>#</th>
                                         <th>PRODUCTO</th>
                                         <th>CANT.</th>
-                                        <th>TOTAL</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbody_product">
@@ -139,7 +134,7 @@
         $("#tbody_product").html('');
         product.forEach(elem => {
             num++;
-            rowProduct += `<tr><td>${num}</td><td>${elem.NombreProducto}</td><td>${elem.Cantidad}</td><td>${elem.Total}</td></tr>`;
+            rowProduct += `<tr><td>${num}</td><td>${elem.NombreProducto}</td><td>${elem.Cantidad}</td></tr>`;
         });
 
         $("#tbody_product").append(rowProduct);
@@ -154,21 +149,23 @@
             "language": {
                 "url": "/datatables.net/datatables-es_es.json"
             },
+            paging: true,
             data: delivery_list,
             columns: [
                 { data: 'number' },
                 { data: 'customer_name' },
                 { data: 'cellphone_number' },
                 { data: 'address' },
+                { data: 'total', render: $.fn.dataTable.render.number(',', '.', 2, '') },
                 { data: 'items' },
                 { data: 'id_order' }
             ],
             columnDefs: [
             {
-                targets: 4,
+                targets: 5,
                 data: 'items',
                 "render": function (items, type, row, meta) {
-                    return '<button class="btn btn-info btn-sm" data-product="'+items+'">Ver</a>';
+                    return '<button class="btn btn-info btn-sm see-details" data-product=\''+items+'\'>Ver</a>';
                 }
             },
             { orderable: false, searchable: false, targets: -1 },
@@ -183,10 +180,8 @@
             ]
         });
 
-        $(".see-details").click(function () {
-            
+        $(document).on('click', '.see-details', function () {
             let product = $(this).data("product");
-            console.log(product);
             seeDetails(product);
         });
 

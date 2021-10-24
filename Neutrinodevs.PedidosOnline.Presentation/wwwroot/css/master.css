@@ -351,3 +351,7 @@ input:focus {
     font-size: 20px;
     text-align: justify;
 }
+
+.modal-body {
+    overflow-x: auto;
+}

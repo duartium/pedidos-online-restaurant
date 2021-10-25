@@ -19,6 +19,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
         public decimal? Subtotal { get; set; }
         public decimal? Iva { get; set; }
         public int? DeliveryId { get; set; }
+        public int? Stage { get; set; }
         public int Estado { get; set; }
 
         public Clientes Cliente { get; set; }

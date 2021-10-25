@@ -34,6 +34,11 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             }
         }
 
+        public IActionResult MyDeliveries()
+        {
+            return View();
+        }
+
         [HttpPost]
         public JsonResult GetAll()
         {
@@ -47,5 +52,20 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
                 return Json("001");
             }
         }
+
+        [HttpPost]
+        public JsonResult GetDeliveries(int idDealer)
+        {
+            try
+            {
+                return Json(JsonConvert.SerializeObject(_rpsDelivery.GetDeliveriesByDealer(idDealer) ?? new List<OrderDeliveryDTO>()));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return Json("001");
+            }
+        }
+
     }
 }

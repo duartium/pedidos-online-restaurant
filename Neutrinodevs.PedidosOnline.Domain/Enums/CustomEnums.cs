@@ -2,7 +2,12 @@
 {
     public enum EtapaPedido
     {
-        Registro = 1
+        PendienteAsignacion = 1,
+        EnPreparacion = 2,
+        EnCamino = 3,
+        Entregado = 4,
+        CanceladoPorCliente = 5,
+        CanceladoPorRepartidor = 6
     }
 
     public enum TipoUsuario

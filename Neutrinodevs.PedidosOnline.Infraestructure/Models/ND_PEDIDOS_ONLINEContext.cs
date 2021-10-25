@@ -283,6 +283,8 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
 
                 entity.Property(e => e.Numero).HasColumnName("numero");
 
+                entity.Property(e => e.Stage).HasColumnName("stage");
+
                 entity.Property(e => e.Subtotal)
                     .HasColumnName("subtotal")
                     .HasColumnType("decimal(10, 2)");

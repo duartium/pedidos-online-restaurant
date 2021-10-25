@@ -49,7 +49,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                         TipoCliente = 1,
                         CodigoVerificacion = userDto.CodeEmailVerification,
                         Estado = 1,
-                        Etapa = (int)EtapaPedido.Registro,
+                        Etapa = (int)EtapaPedido.PendienteAsignacion,
                         UsuarioId = _user.IdUsuario
                     };
                     _context.Clientes.Add(_cliente);

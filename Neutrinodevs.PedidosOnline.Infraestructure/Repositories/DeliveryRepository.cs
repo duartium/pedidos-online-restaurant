@@ -45,5 +45,28 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                                            .ToList();
             return orders;                         
         }
+
+        public IEnumerable<OrderDeliveryDTO> GetDeliveriesByDealer(int idDealer)
+        {
+            List<OrderDeliveryDTO> orders = null;
+            orders = _context.Pedidos.Where(x => x.Estado == 1)
+                                           .Include(cl => cl.Cliente)
+                                           .Include(det => det.PedidoDetalle)
+                                           .Where(ped => ped.Estado == 1 && ped.DeliveryId == idDealer
+                                           && ped.PedidoDetalle.Any(o => o.Estado == 1))
+                                           .Select(pedido => new OrderDeliveryDTO
+                                           {
+                                               IdOrder = pedido.IdPedido,
+                                               Number = pedido.Numero.ToString(),
+                                               Address = pedido.Cliente.Direccion,
+                                               DeliveryTime = pedido.DeliveryTime,
+                                               CustomerName = pedido.Cliente.Nombres + " " + pedido.Cliente.Apellidos,
+                                               CellphoneNumber = pedido.Cliente.Telefono,
+                                               Subtotal = decimal.Parse(pedido.Subtotal.ToString(), CultureInfo.InvariantCulture),
+                                               Total = decimal.Parse(pedido.Total.ToString(), CultureInfo.InvariantCulture),
+                                               JsonProducts = JsonConvert.SerializeObject(pedido.PedidoDetalle)
+                                           }).ToList();
+            return orders;
+        }
     }
 }

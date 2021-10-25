@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Order;
 using Neutrinodevs.PedidosOnline.Domain.Entities;
+using Neutrinodevs.PedidosOnline.Domain.Enums;
 using Neutrinodevs.PedidosOnline.Infraestructure.Hubs.Hubs;
 using Neutrinodevs.PedidosOnline.Infraestructure.Models;
 using System;
@@ -203,14 +204,27 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
         {
             var order = _context.Pedidos.Single(x => x.IdPedido == idOrder);
             order.DeliveryId = idEmployee;
+            order.Stage = (int)EtapaPedido.EnPreparacion;
+            _context.Entry(order).Property(x => x.Stage).IsModified = true;
             _context.Entry(order).Property(x => x.DeliveryId).IsModified = true;
 
             var employee = _context.Empleados.Single(x => x.IdEmpleado == idEmployee);
             employee.EstadoActividad = 2;
             _context.Entry(employee).Property(x => x.EstadoActividad).IsModified = true;
+            
             int value = _context.SaveChanges();
-
-            return value > 0 ? true : false;
+            return (value > 0);
         }
+
+        public bool SetOrderStage(int idOrder)
+        {
+            var order = _context.Pedidos.Single(x => x.IdPedido == idOrder);
+            order.Stage = (int)EtapaPedido.EnCamino;
+            _context.Entry(order).Property(x => x.Stage).IsModified = true;
+
+            int value = _context.SaveChanges();
+            return (value > 0);
+        }
+
     }
 }

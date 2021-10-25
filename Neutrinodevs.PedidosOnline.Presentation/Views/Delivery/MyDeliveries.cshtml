@@ -1,0 +1,166 @@
+﻿@{
+    ViewData["Title"] = "Mis Entregas";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+@section HeaderScripts{
+    <script>
+        var tbl_delivery;
+
+        var user;
+        let user_storage = localStorage.getItem('user');
+        console.log(user_storage);
+        if (user_storage)
+            user = JSON.parse(user_storage);
+
+        const getMyDeliveries = () => {
+            var datos = [];
+            $.ajax({
+                url: '/Delivery/GetDeliveries?idDealer=' + user.id_user,
+                async: false,
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/x-www-form-urlencoded',
+                success: function (resp) {
+                    datos = JSON.parse(resp);
+                },
+                error: (err) => { console.log(err); return undefined; }
+            });
+            return datos;
+        }
+    </script>
+}
+
+<div style="margin-top: 3rem; padding: 3rem;" class="panel panel-default min-h-75">
+    <h1 style="padding-bottom: 3rem;">Mis Entregas Pendientes</h1>
+    <div class="row">
+        <div class="col-12" style="margin-top:2rem; padding:1rem;">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered" id="tbl_my_deliveries" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nº PEDIDO</th>
+                            <th scope="col">CLIENTE</th>
+                            <th scope="col">CONTACTO</th>
+                            <th scope="col">DIRECCIÓN</th>
+                            <th scope="col">TOTAL</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Product modal -->
+<div class="modal fade" id="product-modal" tabindex="-1" role="dialog" aria-labelledby="product-modalTitle" aria-hidden="true" data-id="">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detalle de pedido</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive" style="padding:2rem;">
+                            <table class="table table-hover table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>PRODUCTO</th>
+                                        <th>CANT.</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_product">
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const setStage = (id_order) => {
+        $.ajax({
+            url: '/Order/SetOrderStage',
+            method: 'POST',
+            dataType: 'json',
+            data: { idOrder: id_order },
+            contentType: 'application/x-www-form-urlencoded',
+            success: function (response) {
+                let resp = response;
+                console.log(response);
+                if (resp.code === '000') {
+                    Swal.fire('Notificación', 'El pedido ha cambiado a etapa: EN CAMINO.','success');
+                }
+                else {
+                    Swal.fire('Notificación', resp.message, 'error');
+                }
+            },
+            error: function () {
+                Swal.fire('Notificación', 'Lo sentimos, ocurrió un error al cambiar la etapa del pedido.', 'error');
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        let delivery_list = getMyDeliveries();
+        console.log(delivery_list);
+
+        tbl_my_deliveries = $("#tbl_my_deliveries").DataTable({
+            "language": {
+                "url": "/datatables.net/datatables-es_es.json"
+            },
+            paging: true,
+            data: delivery_list,
+            columns: [
+                { data: 'number' },
+                { data: 'customer_name' },
+                { data: 'cellphone_number' },
+                { data: 'address' },
+                { data: 'total', render: $.fn.dataTable.render.number(',', '.', 2, '') },
+                { data: 'items' },
+                { data: 'id_order' }
+            ],
+            columnDefs: [
+                {
+                    targets: 5,
+                    data: 'items',
+                    "render": function (items, type, row, meta) {
+                        return '<button class="btn btn-info btn-sm see-details" data-product=\'' + items + '\'>Ver</a>';
+                    }
+                },
+                { orderable: false, searchable: false, targets: -1 },
+                { orderable: false, searchable: false, targets: 4 }
+                , {
+                    targets: -1,
+                    data: 'id_order',
+                    "render": function (id_order, type, row, meta) {
+                        return '<button class="btn btn-success btn-sm" onclick="setStage(' + id_order + ')">En camino</a>';
+                    }
+                }
+            ]
+        });
+
+        $(document).on('click', '.see-details', function () {
+            let product = $(this).data("product");
+            seeDetails(product);
+        });
+
+    });
+</script>
+
+@section Scripts{
+    <script src="~/datatables.net/jquery.dataTables.min.js"></script>
+}

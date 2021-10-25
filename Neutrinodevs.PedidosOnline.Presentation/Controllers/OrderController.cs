@@ -84,6 +84,28 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             }
         }
 
+        [HttpPost]
+        [Consumes("application/x-www-form-urlencoded")]
+        public JsonResult SetOrderStage([FromForm]int idOrder)
+        {
+            try
+            {
+                if (idOrder == 0) throw new ArgumentNullException(nameof(idOrder));
+
+                bool transaction = _srvOrder.SetOrderStage(idOrder);
+                return Json(new TransactionResponse
+                {
+                    code = transaction ? "000" : "001",
+                    message = !transaction ? "No se pudo cambiar la estapa del pedido." : String.Empty
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return Json(new TransactionResponse { code = "001" });
+            }
+        }
+
         public IActionResult Checkout()
         {
             return View();

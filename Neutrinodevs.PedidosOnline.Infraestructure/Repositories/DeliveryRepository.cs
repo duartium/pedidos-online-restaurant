@@ -57,6 +57,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                                            .Select(pedido => new OrderDeliveryDTO
                                            {
                                                IdOrder = pedido.IdPedido,
+                                               IdStage = (int)pedido.Stage,
                                                Number = pedido.Numero.ToString(),
                                                Address = pedido.Cliente.Direccion,
                                                DeliveryTime = pedido.DeliveryTime,

@@ -8,6 +8,9 @@ namespace Neutrinodevs.PedidosOnline.Domain.DTOs.Delivery
     {
         [JsonProperty("id_order")]
         public int IdOrder { get; set; }
+        
+        [JsonProperty("id_stage")]
+        public int IdStage { get; set; }
 
         [JsonProperty("number")]
         public string Number { get; set; }

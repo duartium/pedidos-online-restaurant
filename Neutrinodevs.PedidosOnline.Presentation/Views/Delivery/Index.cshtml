@@ -37,15 +37,14 @@
                 contentType: 'application/json',
                 success: function (response) {
                     console.log(response);
-                    if (response.code != '000') {
+                    if (response.code == '000') {
                         updateOrdersTable();
-                        Swal.fire("Mensaje", response.message, "error");
+                        Swal.fire("Mensaje", response.message, "success");
                     }
                     else
-                        Swal.fire(response.message, "mensaje", "success");
+                        Swal.fire("Mensaje", response.message, "error");
                 },
                 error: function (err) {
-                    console.log('error');
                     console.log(err);
                     Swal.fire("Mensaje", "Se ha producido un error en la asignación", "error");
                 }

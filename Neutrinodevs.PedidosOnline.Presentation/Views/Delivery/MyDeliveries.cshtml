@@ -28,6 +28,20 @@
             });
             return datos;
         }
+
+        const seeDetails = (product) => {
+            let num = 0;
+            let rowProduct = '';
+            $("#tbody_product").html('');
+            product.forEach(elem => {
+                num++;
+                rowProduct += `<tr><td>${num}</td><td>${elem.NombreProducto}</td><td>${elem.Cantidad}</td></tr>`;
+            });
+
+            $("#tbody_product").append(rowProduct);
+            $("#product-modal").modal();
+        }
+        
     </script>
 }
 
@@ -91,12 +105,12 @@
 </div>
 
 <script>
-    const setStage = (id_order) => {
+    const setStage = (id_order, id_stage) => {
         $.ajax({
             url: '/Order/SetOrderStage',
             method: 'POST',
             dataType: 'json',
-            data: { idOrder: id_order },
+            data: { idOrder: id_order, idStage: id_stage },
             contentType: 'application/x-www-form-urlencoded',
             success: function (response) {
                 let resp = response;
@@ -147,7 +161,7 @@
                     targets: -1,
                     data: 'id_order',
                     "render": function (id_order, type, row, meta) {
-                        return '<button class="btn btn-success btn-sm" onclick="setStage(' + id_order + ')">En camino</a>';
+                        return '<button class="btn btn-success btn-sm" onclick="setStage(' + id_order + ', 2)">Notificar inicio de recorrido</a>';
                     }
                 }
             ]
@@ -156,6 +170,8 @@
         $(document).on('click', '.see-details', function () {
             let product = $(this).data("product");
             seeDetails(product);
+
+
         });
 
     });

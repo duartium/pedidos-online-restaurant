@@ -71,11 +71,12 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
                 if (assignDeliveryDTO.IdOrder <= 0) throw new ArgumentNullException(nameof(assignDeliveryDTO.IdEmployee));
 
                 bool transaction = _srvOrder.AssignDelivery(assignDeliveryDTO.IdOrder, assignDeliveryDTO.IdEmployee);
-                
-                return Json(new TransactionResponse { 
-                    code = transaction ? "000" : "001", 
-                    message = !transaction ? "No se pudo realizar la asignación." : String.Empty
-                });
+                var json = new TransactionResponse
+                {
+                    code = transaction ? "000" : "001",
+                    message = !transaction ? "No se pudo realizar la asignación." : "La orden ha sido asignada a usted."
+                };
+                return Json(json);
             }
             catch (Exception ex)
             {
@@ -86,13 +87,13 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
 
         [HttpPost]
         [Consumes("application/x-www-form-urlencoded")]
-        public JsonResult SetOrderStage([FromForm]int idOrder)
+        public JsonResult SetOrderStage([FromForm]int idOrder, int idStage)
         {
             try
             {
                 if (idOrder == 0) throw new ArgumentNullException(nameof(idOrder));
 
-                bool transaction = _srvOrder.SetOrderStage(idOrder);
+                bool transaction = _srvOrder.SetOrderStage(idOrder, idStage);
                 return Json(new TransactionResponse
                 {
                     code = transaction ? "000" : "001",

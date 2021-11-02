@@ -216,10 +216,10 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
             return (value > 0);
         }
 
-        public bool SetOrderStage(int idOrder)
+        public bool SetOrderStage(int idOrder, int idStage)
         {
             var order = _context.Pedidos.Single(x => x.IdPedido == idOrder);
-            order.Stage = (int)EtapaPedido.EnCamino;
+            order.Stage = idStage;
             _context.Entry(order).Property(x => x.Stage).IsModified = true;
 
             int value = _context.SaveChanges();

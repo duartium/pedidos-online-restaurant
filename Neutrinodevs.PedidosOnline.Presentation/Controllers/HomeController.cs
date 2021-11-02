@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Neutrinodevs.PedidosOnline.Domain.DTOs.Product;
 using Neutrinodevs.PedidosOnline.Infraestructure.Repositories;
+using System.Collections.Generic;
 
 namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
 {
@@ -15,7 +17,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
         {
             ViewData["Title"] = "LA PESCA";
             var dishes = _rpsDish.GetAll();
-            return View(dishes);
+            return View(dishes ?? new List<ProductDTO>());
         }
 
         public IActionResult About()

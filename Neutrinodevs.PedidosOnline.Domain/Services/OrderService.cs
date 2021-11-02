@@ -42,9 +42,9 @@ namespace Neutrinodevs.PedidosOnline.Domain.Services
             return _orderRepository.AssignDelivery(idOrder, idEmployee);
         }
 
-        public bool SetOrderStage(int idOrder)
+        public bool SetOrderStage(int idOrder, int idStage)
         {
-            return _orderRepository.SetOrderStage(idOrder);
+            return _orderRepository.SetOrderStage(idOrder, idStage);
         }
 
         

@@ -33,13 +33,13 @@
                 url: '/Order/AssignDelivery',
                 type: 'POST',
                 data: JSON.stringify({ IdOrder: id_order, IdEmployee: user.id_user }),
-                dataType: 'application/json',
+                dataType: 'json',
                 contentType: 'application/json',
                 success: function (response) {
-                    let resp = JSON.parse(response);
+                    console.log(response);
                     if (response.code != '000') {
                         updateOrdersTable();
-                        Swal.fire(response.message, "mensaje", "error");
+                        Swal.fire("Mensaje", response.message, "error");
                     }
                     else
                         Swal.fire(response.message, "mensaje", "success");
@@ -47,7 +47,7 @@
                 error: function (err) {
                     console.log('error');
                     console.log(err);
-                    Swal.fire("Se ha producido un error en la asignación", "mensaje", "error");
+                    Swal.fire("Mensaje", "Se ha producido un error en la asignación", "error");
                 }
             });
         }

@@ -1,7 +1,9 @@
-﻿using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
+﻿using Neutrinodevs.PedidosOnline.Domain.Constants;
+using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Services;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Order;
 using Neutrinodevs.PedidosOnline.Domain.Entities;
+using Neutrinodevs.PedidosOnline.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,10 +13,12 @@ namespace Neutrinodevs.PedidosOnline.Domain.Services
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IEmailService _srvEmail;
 
-        public OrderService(IOrderRepository orderRepository)
+        public OrderService(IOrderRepository orderRepository, IEmailService emailService)
         {
             this._orderRepository = orderRepository;
+            _srvEmail = emailService;
         }
 
         public void Dispose()
@@ -49,7 +53,22 @@ namespace Neutrinodevs.PedidosOnline.Domain.Services
 
         public bool FinishOrder(int idOrder, int idStage)
         {
-            return _orderRepository.FinishOrder(idOrder, idStage);
+
+            bool resp = _orderRepository.FinishOrder(idOrder, idStage);
+
+            //string clientEmail = 
+            //string bodyHtml = CString.RECIBO_TEMPLATE.Replace("@code", user.CodeEmailVerification);
+
+            //_srvEmail.Send(new EmailParams
+            //{
+            //    SenderEmail = "delivery.lapesca@gmail.com",
+            //    SenderName = "La Pesca",
+            //    Subject = "Recibo de su pedido.",
+            //    EmailTo = user.Email,
+            //    Body = bodyHtml
+            //});
+
+            return resp;   
         }
     }
 }

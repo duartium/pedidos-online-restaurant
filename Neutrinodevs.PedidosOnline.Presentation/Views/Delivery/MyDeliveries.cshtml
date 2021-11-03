@@ -119,10 +119,15 @@
             contentType: 'application/x-www-form-urlencoded',
             success: function (response) {
                 let resp = response;
-                
+                console.log(resp);
                 if (resp.code === '000') {
                     updateOrdersTable();
-                    Swal.fire('Notificación', 'Se ha notificado al cliente que estás en camino.', 'success');
+                    if (id_stage == 3) {
+                        Swal.fire('Notificación', 'Se ha notificado al cliente que estás en camino.', 'success');
+                    } else if (id_stage == 4) {
+                        
+                        Swal.fire('Notificación', 'Has finalizado la entrega.', 'success');
+                    }
                 }
                 else {
                     Swal.fire('Notificación', resp.message, 'error');

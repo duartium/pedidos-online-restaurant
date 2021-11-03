@@ -49,7 +49,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
         public IEnumerable<OrderDeliveryDTO> GetDeliveriesByDealer(int idDealer)
         {
             List<OrderDeliveryDTO> orders = null;
-            orders = _context.Pedidos.Where(x => x.Estado == 1)
+            orders = _context.Pedidos.Where(x => x.Estado == 1 && x.Stage >= 2 && x.Stage <= 3)
                                            .Include(cl => cl.Cliente)
                                            .Include(det => det.PedidoDetalle)
                                            .Where(ped => ped.Estado == 1 && ped.DeliveryId == idDealer
@@ -69,5 +69,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                                            }).ToList();
             return orders;
         }
+
+
     }
 }

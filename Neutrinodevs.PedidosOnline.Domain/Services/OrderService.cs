@@ -47,6 +47,9 @@ namespace Neutrinodevs.PedidosOnline.Domain.Services
             return _orderRepository.SetOrderStage(idOrder, idStage);
         }
 
-        
+        public bool FinishOrder(int idOrder, int idStage)
+        {
+            return _orderRepository.FinishOrder(idOrder, idStage);
+        }
     }
 }

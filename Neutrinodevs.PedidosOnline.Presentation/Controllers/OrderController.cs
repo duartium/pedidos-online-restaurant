@@ -93,7 +93,19 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             {
                 if (idOrder == 0) throw new ArgumentNullException(nameof(idOrder));
 
-                bool transaction = _srvOrder.SetOrderStage(idOrder, idStage);
+                bool transaction = false;
+                if (idStage == 3)
+                {
+                    transaction = _srvOrder.SetOrderStage(idOrder, idStage);
+                }else if(idStage == 4)
+                {
+                    transaction = _srvOrder.FinishOrder(idOrder, idStage);
+                }
+                else
+                {
+                    return Json(new TransactionResponse { code = "001" , message = "Etapa inválida."});
+                }
+                
                 return Json(new TransactionResponse
                 {
                     code = transaction ? "000" : "001",

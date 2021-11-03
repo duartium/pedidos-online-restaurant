@@ -10,6 +10,7 @@ using Neutrinodevs.PedidosOnline.Infraestructure.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 
 namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
@@ -226,5 +227,62 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
             return (value > 0);
         }
 
+        public bool FinishOrder(int idOrder, int idStage)
+        {
+            int result = 0;
+            using (_context.Database.BeginTransaction())
+            {
+                //se cambia a etapa: Entregado
+                var order = _context.Pedidos.Single(x => x.IdPedido == idOrder);
+                order.Stage = idStage;
+
+                _context.Entry(order).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                _context.SaveChanges();
+
+                //se genera un nuevo secuancial
+                var secuencialRow = _context.Secuenciales.Where(x => x.Nombre.Equals("factura"))
+                    .Select(x => x).FirstOrDefault();
+
+                int nuevoSecuencial = (int)secuencialRow.Secuencial + 1;
+                secuencialRow.Secuencial = nuevoSecuencial;
+                _context.Update(secuencialRow);
+                _context.SaveChanges();
+
+                var comprobante = new ComprobanteVenta
+                {
+                    Fecha = DateTime.Now.ToUniversalTime(),
+                    Estado = (int)Estado.Activo,
+                    Numero = nuevoSecuencial,
+                    Subtotal = (decimal)order.Subtotal,
+                    Iva = order.Iva,
+                    Total = (decimal)order.Total
+                };
+                _context.ComprobanteVenta.Add(comprobante);
+                _context.SaveChanges();
+
+                //se obtiene los ids de los detalles del pedido
+                List<int> ids = _context.PedidoDetalle.Where(x => x.Estado == 1 && x.PedidoId == idOrder)
+                    .Select(x => x.IdPedidoDet).ToList();
+
+                //se asigna los items del pedido al comprobante de venta
+                var detallesComprobante = new List<ComprobanteDetalle>();
+                foreach (var idItem in ids)
+                {
+                    var detalle = new ComprobanteDetalle
+                    {
+                        ComprobanteId = comprobante.IdComprobante,
+                        ItemId = idItem,
+                        Estado = (int)Estado.Activo
+                    };
+                    detallesComprobante.Add(detalle);
+                }
+                _context.ComprobanteDetalle.AddRange(detallesComprobante);
+                result = _context.SaveChanges();
+
+                _context.Database.CommitTransaction();
+            }
+
+            return (result > 0);
+        }
     }
 }

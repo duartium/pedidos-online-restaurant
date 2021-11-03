@@ -6,7 +6,6 @@ using Neutrinodevs.PedidosOnline.Domain.Entities;
 using Neutrinodevs.PedidosOnline.Domain.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Neutrinodevs.PedidosOnline.Domain.Services
 {
@@ -56,17 +55,20 @@ namespace Neutrinodevs.PedidosOnline.Domain.Services
 
             bool resp = _orderRepository.FinishOrder(idOrder, idStage);
 
-            //string clientEmail = 
-            //string bodyHtml = CString.RECIBO_TEMPLATE.Replace("@code", user.CodeEmailVerification);
+            var orderResume = _orderRepository.GetOrderResume(idOrder);
 
-            //_srvEmail.Send(new EmailParams
-            //{
-            //    SenderEmail = "delivery.lapesca@gmail.com",
-            //    SenderName = "La Pesca",
-            //    Subject = "Recibo de su pedido.",
-            //    EmailTo = user.Email,
-            //    Body = bodyHtml
-            //});
+            string bodyHtml = CString.RECIBO_TEMPLATE.Replace("@total", orderResume.Total.ToString())
+                .Replace("@subtotal", orderResume.Subtotal.ToString())
+                .Replace("@iva", orderResume.Iva.ToString());
+
+            _srvEmail.Send(new EmailParams
+            {
+                SenderEmail = "delivery.lapesca@gmail.com",
+                SenderName = "La Pesca",
+                Subject = "Recibo de su pedido.",
+                EmailTo = orderResume.CustomerEmail,
+                Body = bodyHtml
+            });
 
             return resp;   
         }

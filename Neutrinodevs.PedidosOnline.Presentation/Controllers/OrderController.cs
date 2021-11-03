@@ -95,17 +95,11 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
 
                 bool transaction = false;
                 if (idStage == 3)
-                {
                     transaction = _srvOrder.SetOrderStage(idOrder, idStage);
-                }else if(idStage == 4)
-                {
+                else if(idStage == 4)
                     transaction = _srvOrder.FinishOrder(idOrder, idStage);
-                }
-                else
-                {
-                    return Json(new TransactionResponse { code = "001" , message = "Etapa inválida."});
-                }
                 
+
                 return Json(new TransactionResponse
                 {
                     code = transaction ? "000" : "001",

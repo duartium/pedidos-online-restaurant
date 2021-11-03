@@ -284,5 +284,18 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
 
             return (result > 0);
         }
+
+        public OrderResumeDTO GetOrderResume(int idOrder)
+        {
+            var orderResume = _context.Pedidos.Where(x => x.Estado == 1 && x.IdPedido == idOrder)
+                .Select(x => new OrderResumeDTO { 
+                    CustomerEmail = x.Cliente.Email,
+                    Subtotal = (decimal)x.Subtotal,
+                    Total = (decimal)x.Total,
+                    Iva = (decimal)x.Iva
+                }).FirstOrDefault();
+            return orderResume;
+        }
+
     }
 }

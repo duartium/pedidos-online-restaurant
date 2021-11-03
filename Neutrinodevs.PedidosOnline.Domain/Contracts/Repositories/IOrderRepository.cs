@@ -9,6 +9,7 @@ namespace Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories
         FinalOrderDto Get(int idOrder);
         bool AssignDelivery(int idOrder, int idEmployee);
         bool SetOrderStage(int idOrder, int idStage);
-        bool FinishOrder(int idOrder, int idStage); 
+        bool FinishOrder(int idOrder, int idStage);
+        OrderResumeDTO GetOrderResume(int idOrder);
     }
 }

@@ -1,0 +1,82 @@
+﻿
+@{
+    ViewData["Title"] = "CancellationRequest";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div style="margin-top: 3rem; padding: 3rem;" class="panel panel-default min-h-75">
+    <h1 style="padding-bottom: 3rem;">Solicitud de Cancelación de Pedido</h1>
+    <div class="row">
+        <div class="col-12" style="margin-top:2rem; padding:1rem;">
+            @using (Html.BeginForm("Cancell", "Order", FormMethod.Post, new { id = "frmCancelOrder" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-group">
+                    <label for="reason">Motivo de Cancelación</label>
+                    <input id="reason" name="reason" type="text" class="form-control focus" />
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-danger">CANCELAR PEDIDO</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('input:first').focus();
+
+
+        $("#frmCancelOrder").submit(function (e) {
+            e.preventDefault();
+
+            let url = new URL(window.location.href);
+            let searchParams = new URLSearchParams(url.search);
+
+            console.log();
+            console.log();
+
+            let cancel = {
+                IdOrder: searchParams.get('order'),
+                IdStage: searchParams.get('stage'),
+                Reason: $("#reason").val()
+            };
+            
+            if (cancel.IdOrder == undefined || cancel.IdStage == undefined) {
+                Swal.fire("Mensaje", "Parámetros inválidos. Solicitud incorrecta.", "error");
+                return;
+            }
+
+            if (cancel.Reason.length == 0) {
+                Swal.fire("Mensaje", "Ingrese el motivo de la cancelación para continuar.", "warning");
+                return;
+            }
+
+            $.ajax({
+                url: '/Order/CancelOrder',
+                type: 'POST',
+                data: JSON.stringify(cancel),
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (response) {
+                    const resp = response;
+                    if (resp.code == '000') {
+                        Swal.fire("Mensaje", "Se ha procesado la cancelación de la entrega.", "success");
+                        window.location = '/Delivery/MyDeliveries';
+                    } else {
+                        Swal.fire("Orden", "Lo sentimos. No se pudo procesar la cancelación.", "warning");
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+
+
+        });
+
+    });
+
+
+</script>

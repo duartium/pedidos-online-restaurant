@@ -72,5 +72,10 @@ namespace Neutrinodevs.PedidosOnline.Domain.Services
 
             return resp;   
         }
+
+        public bool Cancel(CancelOrder cancel)
+        {
+            return _orderRepository.Cancel(cancel);
+        }
     }
 }

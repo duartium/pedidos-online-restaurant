@@ -5,12 +5,12 @@ using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Order;
 using Neutrinodevs.PedidosOnline.Domain.Entities;
 using Neutrinodevs.PedidosOnline.Domain.Enums;
+using Neutrinodevs.PedidosOnline.Domain.Models;
 using Neutrinodevs.PedidosOnline.Infraestructure.Hubs.Hubs;
 using Neutrinodevs.PedidosOnline.Infraestructure.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Globalization;
 using System.Linq;
 
 namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
@@ -297,5 +297,24 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
             return orderResume;
         }
 
+        public bool Cancel(CancelOrder cancel)
+        {
+            int resp = 0;
+            using (var trans = _context.Database.BeginTransaction())
+            {
+                var order = _context.Pedidos.Where(x => x.Estado == 1 && x.IdPedido == cancel.IdOrder).FirstOrDefault();
+                order.MotivoRechazo = cancel.Reason;
+                order.Stage = cancel.IdStage;
+                _context.Update(order);
+                resp = _context.SaveChanges();
+
+                if (resp > 0)
+                    trans.Commit();
+                else
+                    trans.Rollback();
+            }
+
+            return (resp > 0);
+        }
     }
 }

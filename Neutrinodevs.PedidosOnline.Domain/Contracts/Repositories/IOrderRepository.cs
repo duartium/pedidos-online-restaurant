@@ -1,5 +1,6 @@
 ﻿using Neutrinodevs.PedidosOnline.Domain.DTOs.Order;
 using Neutrinodevs.PedidosOnline.Domain.Entities;
+using Neutrinodevs.PedidosOnline.Domain.Models;
 
 namespace Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories
 {
@@ -11,5 +12,6 @@ namespace Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories
         bool SetOrderStage(int idOrder, int idStage);
         bool FinishOrder(int idOrder, int idStage);
         OrderResumeDTO GetOrderResume(int idOrder);
+        bool Cancel(CancelOrder cancel);
     }
 }

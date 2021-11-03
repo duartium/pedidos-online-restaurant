@@ -281,7 +281,15 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
                     .HasColumnName("iva")
                     .HasColumnType("decimal(10, 2)");
 
+                entity.Property(e => e.MotivoRechazo)
+                    .HasColumnName("motivo_rechazo")
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Numero).HasColumnName("numero");
+
+                entity.Property(e => e.Observaciones)
+                    .HasColumnName("observaciones")
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Stage).HasColumnName("stage");
 

@@ -50,7 +50,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             try
             {
                 int idOrder = _srvOrder.Save(order_invoice);
-                if(idOrder > 0)
+                if (idOrder > 0)
                     return Json(new OrderResponse { IdOrder = idOrder, Code = "000" });
                 else
                     return Json(new OrderResponse { IdOrder = -1, Code = "001" });
@@ -62,7 +62,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
         }
 
         [HttpPost]
-        public JsonResult AssignDelivery([FromBody] AssignDeliveryDTO assignDeliveryDTO) 
+        public JsonResult AssignDelivery([FromBody] AssignDeliveryDTO assignDeliveryDTO)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
 
         [HttpPost]
         [Consumes("application/x-www-form-urlencoded")]
-        public JsonResult SetOrderStage([FromForm]int idOrder, int idStage)
+        public JsonResult SetOrderStage([FromForm] int idOrder, int idStage)
         {
             try
             {
@@ -96,9 +96,9 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
                 bool transaction = false;
                 if (idStage == 3)
                     transaction = _srvOrder.SetOrderStage(idOrder, idStage);
-                else if(idStage == 4)
+                else if (idStage == 4)
                     transaction = _srvOrder.FinishOrder(idOrder, idStage);
-                
+
 
                 return Json(new TransactionResponse
                 {
@@ -116,6 +116,36 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
         public IActionResult Checkout()
         {
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult CancellationRequest(int order, int stage)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult CancelOrder([FromBody] CancelOrder cancel)
+        {
+            try
+            {
+                if (cancel == null) throw new ArgumentNullException(nameof(cancel));
+                if (cancel.IdOrder <= 0) throw new ArgumentNullException(nameof(cancel.IdOrder));
+                if (cancel.IdStage <= 0) throw new ArgumentNullException(nameof(cancel.IdStage));
+
+                bool transaction = _srvOrder.Cancel(cancel);
+                var json = new TransactionResponse
+                {
+                    code = transaction ? "000" : "001",
+                    message = !transaction ? "No se pudo procesar la cancelación." : "Entrega cancelada."
+                };
+                return Json(json);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return Json(new TransactionResponse { code = "001" });
+            }
         }
 
     }

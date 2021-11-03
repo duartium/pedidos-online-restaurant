@@ -21,6 +21,8 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
         public int? DeliveryId { get; set; }
         public int? Stage { get; set; }
         public int Estado { get; set; }
+        public string MotivoRechazo { get; set; }
+        public string Observaciones { get; set; }
 
         public Clientes Cliente { get; set; }
         public ICollection<PedidoDetalle> PedidoDetalle { get; set; }

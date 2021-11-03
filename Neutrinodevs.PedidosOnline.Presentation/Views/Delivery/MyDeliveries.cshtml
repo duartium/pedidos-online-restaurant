@@ -58,13 +58,14 @@
                 <table class="table table-hover table-bordered" id="tbl_my_deliveries" style="width:100%">
                     <thead>
                         <tr>
-                            <th scope="col">Nº PEDIDO</th>
-                            <th scope="col">CLIENTE</th>
-                            <th scope="col">CONTACTO</th>
-                            <th scope="col">DIRECCIÓN</th>
-                            <th scope="col">TOTAL</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
+                            <th></th>
+                            <th>Nº PEDIDO</th>
+                            <th>CLIENTE</th>
+                            <th>CONTACTO</th>
+                            <th>DIRECCIÓN</th>
+                            <th>TOTAL</th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -140,6 +141,20 @@
         });
     }
 
+    const cancelOrder = (id_order) => {
+
+        Swal.fire({
+            title: '¿Estás seguro de cancelar la entrega?',
+            showDenyButton: true,
+            confirmButtonText: 'Yes',
+            denyButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location = `/Order/CancellationRequest?order=${id_order}&stage=6`;
+            }
+        })
+    };
+
     $(document).ready(function () {
         let delivery_list = getMyDeliveries();
 
@@ -150,6 +165,7 @@
             paging: true,
             data: delivery_list,
             columns: [
+                { data: null },
                 { data: 'number' },
                 { data: 'customer_name' },
                 { data: 'cellphone_number' },
@@ -160,14 +176,14 @@
             ],
             columnDefs: [
                 {
-                    targets: 5,
+                    targets: 6,
                     data: 'items',
                     "render": function (items, type, row, meta) {
                         return '<button class="btn btn-info btn-sm see-details" data-product=\'' + items + '\'>Ver</a>';
-                    }
-                },
-                { orderable: false, searchable: false, targets: -1 },
-                { orderable: false, searchable: false, targets: 4 }
+                    },
+                    orderable: false,
+                    searchable: false
+                }
                 , {
                     targets: -1,
                     data: 'id_order',
@@ -177,7 +193,17 @@
                         } else if (row.id_stage == 3){
                             return '<button class="btn btn-success btn-sm" onclick="setStage(' + id_order + ', 4)">NOTIFICAR ENTREGA REALIZADA</a>';
                         }
-                    }
+                    },
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    targets: 0,
+                    "render": function (items, type, row, meta) {
+                        return '<button class="btn btn-danger btn-sm" onclick="cancelOrder('+ row.id_order +')">Cancelar</a>';
+                    },
+                    orderable: false,
+                    searchable: false
                 }
             ]
         });

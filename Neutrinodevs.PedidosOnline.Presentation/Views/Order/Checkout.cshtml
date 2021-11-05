@@ -8,8 +8,6 @@
     <script>
 
         let map, infoWindow, _pos, marker;
-        
-
         var options = {
             enableHighAccuracy: true,
             timeout: 5000,
@@ -97,35 +95,41 @@
                 @Html.AntiForgeryToken()
                 <div class="form-group">
                     <label for="identification">Cédula</label>
-                    <input id="identification" name="identification" type="text" class="form-control col-6 effect-8" maxlength="10" />
+                    <input id="identification" name="identification" type="text" class="form-control col-6 effect-8" maxlength="10" required/>
                 </div>
                 <div class="row">
                     <div class="form-group col-6">
                         <label for="name">Nombres</label>
-                        <input id="name" name="name" class="form-control" />
+                        <input id="name" name="name" class="form-control" required/>
                     </div>
                     <div class="form-group col-6">
                         <label for="last_name">Apellidos</label>
-                        <input id="last_name" name="last_name" type="text" class="form-control" />
+                        <input id="last_name" name="last_name" type="text" class="form-control" required/>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="email">Correo electrónico</label>
-                    <input id="email" name="email" type="email" class="form-control" />
+                <div class="row">
+                    <div class="form-group col-6">
+                        <label for="email">Correo electrónico</label>
+                        <input id="email" name="email" type="email" class="form-control" required/>
+                    </div>
+                    <div class="form-group col-6">
+                        <label for="phone">Celular/Telefono</label>
+                        <input id="phone" name="phone" type="text" class="form-control" required/>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-6">
                         <label for="passsword">Contraseña</label>
-                        <input id="password" name="password" type="password" class="form-control" />
+                        <input id="password" name="password" type="password" class="form-control" required/>
                     </div>
                     <div class="form-group col-6">
                         <label for="passsword2">Confirmar contraseña</label>
-                        <input id="passsword2" name="passsword2" type="password" class="form-control" />
+                        <input id="passsword2" name="passsword2" type="password" class="form-control" required/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="location">Seleccione su ubicación</label>
-                    <input id="location" name="location" type="text" class="form-control" style="cursor:pointer" />
+                    <input id="location" name="location" type="text" class="form-control" style="cursor:pointer" required/>
                 </div>
 
                 <div class="form-group">
@@ -140,11 +144,11 @@
             {
                 <div class="form-group">
                     <label for="username">Usuario</label>
-                    <input id="username" name="username" type="text" class="form-control" />
+                    <input id="username" name="username" type="text" class="form-control" required/>
                 </div>
                 <div class="form-group">
                     <label for="passsword">Contraseña</label>
-                    <input id="user_password" name="user_password" type="password" class="form-control" />
+                    <input id="user_password" name="user_password" type="password" class="form-control" required/>
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-success btn-block">INICIAR SESIÓN Y FINALIZAR COMPRA</button>
@@ -153,6 +157,7 @@
         </div>
     </div>
 </div>
+
 <!-- Modal -->
 <div class="modal fade" id="map-modal" tabindex="-1" role="dialog" aria-labelledby="map-modalTitle" aria-hidden="true" style="min-width:95%;">
     <div class="modal-dialog modal-xl" role="document">

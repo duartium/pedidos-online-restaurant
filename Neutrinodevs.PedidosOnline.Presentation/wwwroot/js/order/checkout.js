@@ -11,32 +11,32 @@
     }
 
 
-    let form_valid = true;
-    Object.entries(user).forEach(([clave, valor]) => {
+    //let form_valid = true;
+    //Object.entries(user).forEach(([clave, valor]) => {
 
-        if (valor.value.length == 0) {
-            valor.classList.add('invalid');
-            if (form_valid) form_valid = false;
-        } else {
-            valor.classList.remove('invalid');
-        }
-    });
+    //    if (valor.value.length == 0) {
+    //        valor.classList.add('invalid');
+    //        if (form_valid) form_valid = false;
+    //    } else {
+    //        valor.classList.remove('invalid');
+    //    }
+    //});
 
 
-    if (user.pass != user.pass2) {
-        if ($("#password").next('span').length < 1) {
-            var message = document.createElement("span");
-            message.innerHTML = "Las contraseñas no son iguales.";
-            message.classList.add("color-primary", "ml-2", "font-weight");
+    //if (user.pass != user.pass2) {
+    //    if ($("#password").next('span').length < 1) {
+    //        var message = document.createElement("span");
+    //        message.innerHTML = "Las contraseñas no son iguales.";
+    //        message.classList.add("color-primary", "ml-2", "font-weight");
 
-            let pass = document.querySelector("#password");
-            pass.after(message);
-        }
-    } else {
-        $("#password").next("span").remove();
-    }
+    //        let pass = document.querySelector("#password");
+    //        pass.after(message);
+    //    }
+    //} else {
+    //    $("#password").next("span").remove();
+    //}
 
-    if (!form_valid) return;
+    //if (!form_valid) return;
 
     let user_register = {
         identification: user.identification.value,
@@ -45,6 +45,11 @@
         email: user.email.value,
         password: user.pass.value
     }
+    console.log($("#frmRegistrarme").valid());
+    if (!$("#frmRegistrarme").valid()) {
+        return;
+    }
+    return;
 
     $.ajax({
         url: '/User/Register',
@@ -83,6 +88,8 @@ $("#frmLogin").submit(function (e) {
         password: document.querySelector('#user_password').value,
     }
 
+    if (!$("#frmLogin").valid()) return;
+
     $.ajax({
         url: '/User/Login',
         method: 'POST',
@@ -114,6 +121,26 @@ $("#frmLogin").submit(function (e) {
 $(document).ready(function () {
     $("#location").click(function () {
         $("#map-modal").modal()
+    });
+
+    $("#frmRegistrarme").validate({
+        rule: {
+            identification: { required: true, minlength: 10, maxlength: 10 },
+            name: { required: true },
+            last_name: { required: true },
+            email: { required: true },
+            phone: { required: true },
+            password: { required: true },
+            passsword2: { required: true },
+            location: { required: true }
+        }
+    });
+
+    $("#frmLogin").validate({
+        rule: {
+            username: { required: true },
+            user_password: { required: true }
+        }
     });
 });
 

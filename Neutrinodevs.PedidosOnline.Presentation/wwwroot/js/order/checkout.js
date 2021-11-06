@@ -10,47 +10,17 @@
         pass2: document.querySelector("#passsword2")
     }
 
-
-    //let form_valid = true;
-    //Object.entries(user).forEach(([clave, valor]) => {
-
-    //    if (valor.value.length == 0) {
-    //        valor.classList.add('invalid');
-    //        if (form_valid) form_valid = false;
-    //    } else {
-    //        valor.classList.remove('invalid');
-    //    }
-    //});
-
-
-    //if (user.pass != user.pass2) {
-    //    if ($("#password").next('span').length < 1) {
-    //        var message = document.createElement("span");
-    //        message.innerHTML = "Las contraseñas no son iguales.";
-    //        message.classList.add("color-primary", "ml-2", "font-weight");
-
-    //        let pass = document.querySelector("#password");
-    //        pass.after(message);
-    //    }
-    //} else {
-    //    $("#password").next("span").remove();
-    //}
-
-    //if (!form_valid) return;
-
     let user_register = {
-        identification: user.identification.value,
-        first_name: user.first_name.value,
-        last_name: user.last_name.value,
+        'identification': user.identification.value,
+        'first_name': user.first_name.value,
+        'last_name': user.last_name.value,
         email: user.email.value,
-        password: user.pass.value
+        password: user.pass.value,
+        address: $("#location").val() + '|' + delivery_position.lat + ';' + delivery_position.lng
     }
-    console.log($("#frmRegistrarme").valid());
-    if (!$("#frmRegistrarme").valid()) {
-        return;
-    }
-    return;
-
+    
+    if (!$("#frmRegistrarme").valid()) return;
+    
     $.ajax({
         url: '/User/Register',
         method: 'POST',
@@ -86,6 +56,7 @@ $("#frmLogin").submit(function (e) {
     let current_user = {
         username: document.querySelector('#username').value,
         password: document.querySelector('#user_password').value,
+        is_client: true
     }
 
     if (!$("#frmLogin").valid()) return;
@@ -107,9 +78,9 @@ $("#frmLogin").submit(function (e) {
                 SaveOrder(order_invoice);
             }
             else if (resp.code === '002') {
-                Swal.fire('Notificación', 'Usuario y/o contraseñas incorrectas. Por favor, corrija y vuelva a intentar.', 'error');
+                Swal.fire('Notificación', 'Usuario o contraseña incorrectas. Por favor, corrija y vuelva a intentar.', 'error');
             } else {
-                Swal.fire('Notificación', 'Usuario y/o contraseña son obligatorios.', 'error');
+                Swal.fire('Notificación', 'Usuario o contraseña son obligatorios.', 'error');
             }
         },
         error: function () {
@@ -125,13 +96,14 @@ $(document).ready(function () {
 
     $("#frmRegistrarme").validate({
         rule: {
-            identification: { required: true, minlength: 10, maxlength: 10 },
-            name: { required: true },
-            last_name: { required: true },
-            email: { required: true },
-            phone: { required: true },
-            password: { required: true },
-            passsword2: { required: true },
+            identification: { required: true, maxlength: 3 },
+            name: { required: true, minlength: 3, maxlength: 3 },
+            last_name: { required: true, minlength: 3 },
+            email: { required: true, minlength: 6 },
+            phone: { required: true, minlength: 10 },
+            password: { required: true, minlength: 6 },
+            passsword2: {
+                required: true, minlength: 6 },
             location: { required: true }
         }
     });
@@ -142,6 +114,11 @@ $(document).ready(function () {
             user_password: { required: true }
         }
     });
+
+    $('#map-modal').on('hidden.bs.modal', function () {
+        ok();
+    })
+
 });
 
 function SaveOrder(order_invoice) {
@@ -156,7 +133,7 @@ function SaveOrder(order_invoice) {
             if (resp.code == '000') {
                 localStorage.removeItem('order_invoice');
                 localStorage.removeItem('order');
-                window.location = '/Order/Processing?id_order=' + parseInt(resp.id_order);
+                window.location = '/Order/Processing?id_order=' + resp.id_order;
             } else {
                 Swal.fire("Orden", "Lo sentimos. No se pudo registrar tu orden.", "warning");
             }

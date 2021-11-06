@@ -67,7 +67,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
             }
         }
 
-        public UserAuthenticateDto Login(string user, string password)
+        public UserAuthenticateDto Login(string user, string password, bool is_client)
         {
             try
             {
@@ -79,7 +79,10 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                 if (current_user == null)
                     throw new NullReferenceException("Usuario no existe");
 
-                switch(current_user.TipoUsuario)
+                if (is_client && current_user.TipoUsuario != (int)TipoUsuario.Cliente)
+                    throw new NullReferenceException("Usuario no es cliente.");
+
+                switch (current_user.TipoUsuario)
                 {
                     case (int)TipoUsuario.Cliente:
                         
@@ -142,19 +145,17 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
         {
             int match = _context.Clientes.Where(x => x.Estado == 1 && x.IdCliente == user.IdClient
                                     && x.CodigoVerificacion.Equals(user.Code)).Count();
+
+            if (match <= 0) return false;
             
-            if(match > 0)
+            var client = _context.Clientes.Where(x => x.IdCliente == user.IdClient && x.Estado == 1).FirstOrDefault();
+            if(client != null)
             {
-                var client = _context.Clientes.Where(x => x.IdCliente == user.IdClient && x.Estado == 1).FirstOrDefault();
-                if(client != null)
-                {
-                    client.FechaVerificacion = DateTime.Now;
-                    _context.SaveChanges();
-                }
-                return true;
+                client.FechaVerificacion = DateTime.Now;
+                _context.Update(client);
+                _context.SaveChanges();
             }
-            else return false;
-            
+            return true;
         }
 
         public IEnumerable<Domain.Entities.Usuarios> GetAll()

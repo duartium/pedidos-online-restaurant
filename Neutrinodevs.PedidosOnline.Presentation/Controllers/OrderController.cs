@@ -27,8 +27,16 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
 
         public IActionResult Processing(int id_order)
         {
-            var currentOrder = _srvOrder.Get(id_order);
-            return View(currentOrder);
+            try
+            {
+                var currentOrder = _srvOrder.Get(id_order);
+                return View(currentOrder ?? new FinalOrderDto());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return Json("error");
+            }
         }
 
         public JsonResult GetAll()

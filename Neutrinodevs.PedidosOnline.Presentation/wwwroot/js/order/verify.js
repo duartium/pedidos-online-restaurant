@@ -45,7 +45,7 @@ function SaveOrder(order_invoice) {
             if (resp.code == '000') {
                 localStorage.removeItem('order_invoice');
                 localStorage.removeItem('order');
-                window.location = '/Order/Processing?order=' + parseInt(resp.id_order);
+                window.location = '/Order/Processing?id_order=' + resp.id_order;
             } else {
                 Swal.fire("Orden", "Lo sentimos. No se pudo registrar tu orden.", "warning");
             }

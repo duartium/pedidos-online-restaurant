@@ -98,7 +98,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
         }
 
         [HttpPost]
-        public JsonResult Login(string username, string password)
+        public JsonResult Login(string username, string password, bool is_client)
         {
             try
             {
@@ -109,7 +109,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
                 }
 
                 string passEncrypt = Security.GetSHA256(password.Trim());
-                var auth = _rpsUser.Login(username.Trim(), passEncrypt);
+                var auth = _rpsUser.Login(username.Trim(), passEncrypt, is_client);
                 HttpContext.Session.SetString("auth_user", JsonConvert.SerializeObject(auth));
 
                 return Json(auth);

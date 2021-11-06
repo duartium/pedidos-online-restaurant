@@ -6,81 +6,82 @@
 @section HeaderScript{
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script>
+            var delivery_position;
+            let map, infoWindow, _pos, marker;
+            var options = {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            };
 
-        let map, infoWindow, _pos, marker;
-        var options = {
-            enableHighAccuracy: true,
-            timeout: 5000,
-            maximumAge: 0
-        };
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(success, error, options);
+            } else {
+                // Browser doesn't support Geolocation
+                console.log('Browser doesnt support Geolocation');
+                //handleLocationError(false, infoWindow, map.getCenter());
+            }
 
-        function success(pos) {
-            _pos = pos.coords;
-            console.log(_pos);
-            console.log('More or less ' + _pos.accuracy + ' meters.');
-        };
 
-        function error(err) {
-            console.warn('ERROR(' + err.code + '): ' + err.message);
-        }
+            function success(pos) {
+                _pos = pos.coords;
+                console.log('EL _pos: ' +JSON.stringify(_pos));
+            };
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(success, error, options);
-        } else {
-            // Browser doesn't support Geolocation
-            console.log('Browser doesnt support Geolocation');
-            //handleLocationError(false, infoWindow, map.getCenter());
-        }
+            function error(err) {
+                console.warn('ERROR(' + err.code + '): ' + err.message);
+            }
 
-        function initMap() {
-            let current_position = { lat: parseFloat(_pos.latitude.toFixed(5)), lng: parseFloat(_pos.longitude.toFixed(5)) };
-            console.log(current_position);
-            map = new google.maps.Map(document.getElementById("map"), {
-                center: current_position,
-                zoom: 15,
-                mapTypeId: 'roadmap'
-            });
-            marker = new google.maps.Marker({
-                position: current_position,
-                map,
-                draggable: true,
-                title: "Mi ubicación actual"
-            });
-            showLocationOnMap(current_position);
-        }
+            
 
-        
-        function showLocationOnMap(current_position) {
-            marker.setPosition(current_position);
-            map.setCenter(current_position);
-        }
+            function initMap() {
+                current_position = { lat: parseFloat(_pos.latitude.toFixed(5)), lng: parseFloat(_pos.longitude.toFixed(5)) };
 
-        const ok = () => {
-            var markerLatLng = marker.getPosition();
-            let position = { lat: markerLatLng.lat(), lng: markerLatLng.lng() };
-            console.log(position);
-            showInfo(position);
-        }
+                map = new google.maps.Map(document.getElementById("map"), {
+                    center: current_position,
+                    zoom: 15,
+                    mapTypeId: 'roadmap'
+                });
+                marker = new google.maps.Marker({
+                    position: current_position,
+                    map,
+                    draggable: true,
+                    title: "Mi ubicación actual"
+                });
+                showLocationOnMap(current_position);
+            }
 
-        function showInfo(latlng) {
-            const geocoder = new google.maps.Geocoder();
-            console.log(latlng);
-            geocoder.geocode({
-                'latLng': latlng
-            }, function (results, status) {
-                if (status == google.maps.GeocoderStatus.OK) {
-                    if (results[1]) {
-                        // here assign the data to asp lables
-                        console.log(results[1].formatted_address);
+
+            function showLocationOnMap(current_position) {
+                marker.setPosition(current_position);
+                map.setCenter(current_position);
+            }
+
+            const ok = () => {
+                var markerLatLng = marker.getPosition();
+                let position = { lat: markerLatLng.lat(), lng: markerLatLng.lng() };
+                delivery_position = position;
+                showInfo(position);
+            }
+
+            function showInfo(latlng) {
+                const geocoder = new google.maps.Geocoder();
+
+                geocoder.geocode({
+                    'latLng': latlng
+                }, function (results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        if (results[1]) {
+                            // here assign the data to asp lables
+                            $("#location").val(results[1].formatted_address);
+                        } else {
+                            alert('No results found');
+                        }
                     } else {
-                        alert('No results found');
+                        alert('Geocoder failed due to: ' + status);
                     }
-                } else {
-                    alert('Geocoder failed due to: ' + status);
-                }
-            });
-        }
-        
+                });
+            }
     </script>
 }
 @await Html.PartialAsync("~/Views/Shared/_Navbar.cshtml")
@@ -95,41 +96,41 @@
                 @Html.AntiForgeryToken()
                 <div class="form-group">
                     <label for="identification">Cédula</label>
-                    <input id="identification" name="identification" type="text" class="form-control col-6 effect-8 numbers" maxlength="10" required/>
+                    <input id="identification" name="identification" type="text" class="form-control col-6 effect-8 numbers" minlength="10" maxlength="10" required/>
                 </div>
                 <div class="row">
                     <div class="form-group col-6">
                         <label for="name">Nombres</label>
-                        <input id="name" name="name" class="form-control letters" required/>
+                        <input id="name" name="name" class="form-control letters" minlength="3" required/>
                     </div>
                     <div class="form-group col-6">
                         <label for="last_name">Apellidos</label >
-                        <input id="last_name" name="last_name" type="text" class="form-control letters" required/>
+                        <input id="last_name" name="last_name" type="text" class="form-control letters" minlength="3" required/>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-6">
                         <label for="email">Correo electrónico</label>
-                        <input id="email" name="email" type="email" class="form-control" required/>
+                        <input id="email" name="email" type="email" class="form-control" minlength="5" required/>
                     </div>
                     <div class="form-group col-6">
                         <label for="phone">Celular/Telefono</label>
-                        <input id="phone" name="phone" type="text" class="form-control numbers" required/>
+                        <input id="phone" name="phone" type="text" class="form-control numbers" minlength="10" maxlength="10" required/>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-6">
                         <label for="passsword">Contraseña</label>
-                        <input id="password" name="password" type="password" class="form-control" required/>
+                        <input id="password" name="password" type="password" class="form-control" minlength="5" required/>
                     </div>
                     <div class="form-group col-6">
                         <label for="passsword2">Confirmar contraseña</label>
-                        <input id="passsword2" name="passsword2" type="password" class="form-control" required/>
+                        <input id="passsword2" name="passsword2" data-rule-equalTo="#password" type="password" class="form-control" minlength="5" required/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="location">Seleccione su ubicación</label>
-                    <input id="location" name="location" type="text" class="form-control" style="cursor:pointer" required/>
+                    <input id="location" name="location" type="text" class="form-control" style="cursor:pointer" readonly required/>
                 </div>
 
                 <div class="form-group">
@@ -189,7 +190,7 @@
     }
 </style>
 @section Scripts{
-    <script async
+    <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3imid37BAw2_Uwsw59RjLw8DRJuGCbEc&callback=initMap">
     </script>
     <script src="~/js/order/checkout.js" type="text/javascript"></script>

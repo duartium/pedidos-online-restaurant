@@ -1,6 +1,8 @@
 ﻿$("#frmRegistrarme").submit(function (e) {
     e.preventDefault();
 
+    $("#loader").fadeIn();
+
     let user = {
         identification: document.querySelector("#identification"),
         first_name: document.querySelector("#name"),
@@ -19,7 +21,10 @@
         address: $("#location").val() + '|' + delivery_position.lat + ';' + delivery_position.lng
     }
     
-    if (!$("#frmRegistrarme").valid()) return;
+    if (!$("#frmRegistrarme").valid()) {
+        $("#loader").fadeOut();
+        return;
+    }
     
     $.ajax({
         url: '/User/Register',
@@ -28,6 +33,7 @@
         contentType: 'application/json',
         data: JSON.stringify(user_register),
         success: function (response) {
+            $("#loader").fadeOut();
             let resp = response;
             console.log(response);
             if (resp.code === '000') {
@@ -44,6 +50,7 @@
             }
         },
         error: function () {
+            $("#loader").fadeOut();
             Swal.fire('Notificación', 'Lo sentimos, no se pudo completar la solicitud.', 'error');
         }
     });
@@ -52,6 +59,7 @@
 
 $("#frmLogin").submit(function (e) {
     e.preventDefault();
+    $("#loader").fadeIn();
 
     let current_user = {
         username: document.querySelector('#username').value,
@@ -59,7 +67,10 @@ $("#frmLogin").submit(function (e) {
         is_client: true
     }
 
-    if (!$("#frmLogin").valid()) return;
+    if (!$("#frmLogin").valid()) {
+        $("#loader").fadeOut();
+        return;
+    } 
 
     $.ajax({
         url: '/User/Login',
@@ -68,6 +79,7 @@ $("#frmLogin").submit(function (e) {
         contentType: 'application/x-www-form-urlencoded',
         data: current_user,
         success: function (response) {
+            $("#loader").fadeOut();
             let resp = response;
             console.log(response);
             if (resp.code === '000') {
@@ -84,6 +96,7 @@ $("#frmLogin").submit(function (e) {
             }
         },
         error: function () {
+            $("#loader").fadeOut();
             Swal.fire('Notificación', 'Lo sentimos, no se pudo completar la autenticación.', 'error');
         }
     });

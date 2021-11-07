@@ -77,9 +77,9 @@ const frmLogin = $('#frmSession').validate({
 
 document.getElementById("frmSession").addEventListener("submit", function (e) {
     e.preventDefault();
-    console.log(frmLogin.valid());
     if (!frmLogin.valid()) return;
 
+    $("#loader").fadeIn();
     let user = {
         username: document.querySelector('#username').value,
         password: document.querySelector('#user_password').value,
@@ -99,6 +99,7 @@ const login = (user) => {
         data: user,
         success: function (response) {
             let resp = response;
+            $("#loader").fadeOut();
             console.log(response);
             if (resp.code === '000') {
                 localStorage.setItem('user', JSON.stringify(resp));
@@ -114,6 +115,7 @@ const login = (user) => {
             }
         },
         error: function () {
+            $("#loader").fadeOut();
             Swal.fire('Notificación', 'Lo sentimos, no se pudo completar la autenticación.', 'error');
         }
     });

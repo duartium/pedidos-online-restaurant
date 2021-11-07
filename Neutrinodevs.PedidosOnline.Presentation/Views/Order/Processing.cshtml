@@ -24,13 +24,13 @@
                                                 <th>PRECIO</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="tbody-invoice">
+                                        <tbody id="tbody-invoice" >
                                             @foreach (var item in Model.items)
                                             {
                                              <tr>
                                                 <td>@item.name</td>
-                                                <td>@item.quantity</td>
-                                                <td>@item.price</td>
+                                                <td >@item.quantity</td>
+                                                <td class="text-right">@item.price</td>
                                              </tr>
                                             }
                                         </tbody>

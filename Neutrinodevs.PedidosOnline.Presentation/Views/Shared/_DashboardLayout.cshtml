@@ -25,6 +25,7 @@
     @RenderSection("HeaderScripts", required: false)
 </head>
 <body>
+    @await Html.PartialAsync("_Preloader")
     <div id="wrapper">
 
         <!-- navbar -->
@@ -135,7 +136,7 @@
                                 <i data-feather="map"></i> <span>Usuarios</span>
                             </a>
                         </li>
-</nav>
+                </nav>
             </div>
 
         </div>
@@ -184,7 +185,7 @@
         <script src="~/js/chartist/js/chartist-tooltip-plugin.js"></script>
         <script src="~/js/chartist/js/chartist-custom.js"></script>*@
 
-    
+
 
     <!--jquery.slimscroll.min.js-->
     <script src="~/js/jquery.slimscroll.min.js"></script>
@@ -196,7 +197,7 @@
     <script src="~/js/d3.min.js"></script>
     <script src="~/js/topojson.js"></script>
     <script src="~/js/datamaps.world.min.js"></script>
-    
+
 
     <!--Custom JS-->
     <script src="~/js/custom.js"></script>

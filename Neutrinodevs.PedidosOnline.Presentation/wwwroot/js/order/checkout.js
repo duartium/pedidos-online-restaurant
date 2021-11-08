@@ -134,6 +134,10 @@ $(document).ready(function () {
 
 });
 
+const notifyPromise = new Promise((resolve, reject) => {
+    connection.invoke("NotifyOrder");
+});
+
 function SaveOrder(order_invoice) {
     $.ajax({
         url: '/Order/Save',
@@ -146,7 +150,13 @@ function SaveOrder(order_invoice) {
             if (resp.code == '000') {
                 localStorage.removeItem('order_invoice');
                 localStorage.removeItem('order');
-                window.location = '/Order/Processing?id_order=' + resp.id_order;
+
+                notifyPromise.then(x => {
+                    window.location = '/Order/Processing?id_order=' + resp.id_order;
+                }).catch((err) => {
+                    console.log('Algo salió mal:' + err);
+                });
+
             } else {
                 Swal.fire("Orden", "Lo sentimos. No se pudo registrar tu orden.", "warning");
             }

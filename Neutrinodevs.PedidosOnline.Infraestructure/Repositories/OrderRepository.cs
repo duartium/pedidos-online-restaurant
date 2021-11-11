@@ -100,10 +100,10 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                                  {
                                      IdOrder = ped.IdPedido,
                                      DeliveryTime = ped.DeliveryTime,
-                                     Number = ped.Numero.ToString().PadLeft(8, '0'),
-                                     Iva = (decimal)ped.Iva,
-                                     Total = (decimal) ped.Total,
-                                     Subtotal = (decimal)ped.Subtotal
+                                     Number = ped.Numero.ToString().PadLeft(6, '0'),
+                                     Iva = Convert.ToDecimal(ped.Iva, System.Globalization.CultureInfo.InvariantCulture),
+                                     Total = Convert.ToDecimal(ped.Total, System.Globalization.CultureInfo.InvariantCulture),
+                                     Subtotal = Convert.ToDecimal(ped.Subtotal, System.Globalization.CultureInfo.InvariantCulture)
                                  }).FirstOrDefault();
 
                 var details = (from det in _context.PedidoDetalle
@@ -111,10 +111,14 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                                select new Item{ 
                                     id = det.IdPedidoDet,
                                     name = det.NombreProducto,
-                                    price = det.Total,
+                                    price = Convert.ToDecimal(det.Total, System.Globalization.CultureInfo.InvariantCulture),
                                     quantity = det.Cantidad
                                }).ToList();
-                
+
+                //fullOrder.DealerName = _context.Empleados.Where(x => x.TipoEmpleado == (int)TipoEmpleado.Repartidor)
+                //    && x.
+                //    .Select(x => $"{x.Nombres} {x.Apellidos}").FirstOrDefault();
+
                 fullOrder.items = details;
                 return fullOrder;
             }
@@ -157,7 +161,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                         ClienteId = order.id_client,
                         Fecha = DateTime.Now,
                         Numero = nuevoSecuencial,
-                        DeliveryTime = DateTime.Now.ToString("HH:mm"),
+                        DeliveryTime = DateTime.Now.AddMinutes(30).ToString("mm:ss"),
                         Subtotal = order.subtotal,
                         Iva = order.iva,
                         Total = order.total,

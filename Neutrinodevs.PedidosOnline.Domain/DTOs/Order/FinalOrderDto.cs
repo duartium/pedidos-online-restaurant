@@ -14,6 +14,9 @@ namespace Neutrinodevs.PedidosOnline.Domain.DTOs.Order
         [JsonProperty("customer_name")]
         public string CustomerName { get; set; }
 
+        [JsonProperty("dealer_name")]
+        public string DealerName { get; set; }
+
         [JsonProperty("delivery_time")]
         public string DeliveryTime { get; set; }
 

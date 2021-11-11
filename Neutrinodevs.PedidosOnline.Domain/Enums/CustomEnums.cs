@@ -18,6 +18,12 @@
         Administrador = 4
     }
 
+    public enum TipoEmpleado
+    {
+        Repartidor = 1,
+        Cajero = 2
+    }
+
     public enum EstadoEmpleado
     {
         Disponible = 1,

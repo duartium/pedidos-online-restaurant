@@ -134,9 +134,15 @@ $(document).ready(function () {
 
 });
 
-const notifyPromise = new Promise((resolve, reject) => {
+const notify = () => {
     connection.invoke("NotifyOrder");
-});
+}
+
+function notifyOrder(callback, id_order) {
+    callback();
+    window.location = '/Order/Processing?id_order=' + id_order;
+}
+
 
 function SaveOrder(order_invoice) {
     $.ajax({
@@ -151,11 +157,7 @@ function SaveOrder(order_invoice) {
                 localStorage.removeItem('order_invoice');
                 localStorage.removeItem('order');
 
-                notifyPromise.then(x => {
-                    window.location = '/Order/Processing?id_order=' + resp.id_order;
-                }).catch((err) => {
-                    console.log('Algo salió mal:' + err);
-                });
+                notifyOrder(notify, resp.id_order);
 
             } else {
                 Swal.fire("Orden", "Lo sentimos. No se pudo registrar tu orden.", "warning");

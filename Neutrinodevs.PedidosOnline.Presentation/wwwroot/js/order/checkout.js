@@ -8,6 +8,7 @@
         first_name: document.querySelector("#name"),
         last_name: document.querySelector("#last_name"),
         email: document.querySelector("#email"),
+        phone: document.querySelector("#phone"),
         pass: document.querySelector("#password"),
         pass2: document.querySelector("#passsword2")
     }
@@ -17,6 +18,7 @@
         'first_name': user.first_name.value,
         'last_name': user.last_name.value,
         email: user.email.value,
+        phone: user.phone.value,
         password: user.pass.value,
         address: $("#location").val() + '|' + delivery_position.lat + ';' + delivery_position.lng
     }
@@ -35,12 +37,10 @@
         success: function (response) {
             $("#loader").fadeOut();
             let resp = response;
-            console.log(response);
             if (resp.code === '000') {
                 let order_invoice = JSON.parse(localStorage.getItem('order_invoice'));
                 order_invoice.id_client = resp.id_client;
                 localStorage.setItem('order_invoice', JSON.stringify(order_invoice));
-                console.log(order_invoice);
                 window.location = '/User/Verification';
             }
             else if (resp.code === '002') {
@@ -81,12 +81,11 @@ $("#frmLogin").submit(function (e) {
         success: function (response) {
             $("#loader").fadeOut();
             let resp = response;
-            console.log(response);
+            
             if (resp.code === '000') {
                 let order_invoice = JSON.parse(localStorage.getItem('order_invoice'));
                 order_invoice.id_client = resp.id_client;
                 localStorage.setItem('order_invoice', JSON.stringify(order_invoice));
-                console.log(order_invoice);
                 SaveOrder(order_invoice);
             }
             else if (resp.code === '002') {

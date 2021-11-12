@@ -45,7 +45,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                         Apellidos = userDto.LastName,
                         Direccion = userDto.Address,
                         Email = userDto.Email,
-                        Telefono = String.Empty,
+                        Telefono = userDto.Phone,
                         TipoCliente = 1,
                         CodigoVerificacion = userDto.CodeEmailVerification,
                         Estado = 1,

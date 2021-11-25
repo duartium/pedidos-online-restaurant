@@ -49,6 +49,14 @@ namespace Neutrinodevs.PedidosOnline.Presentation
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromHours(1);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
 
             services.AddSingleton(Configuration);
             services.AddDbContext<ND_PEDIDOS_ONLINEContext>(options =>
@@ -91,6 +99,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation
         {
             loggerFactory.AddFile("Logs/Log-{Date}.txt");
 
+          
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -103,7 +112,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseSession();
-            
+
             app.UseMvc(path => {
                 path.MapRoute(
                     name: "default",

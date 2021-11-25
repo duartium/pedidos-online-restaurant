@@ -4,137 +4,87 @@
     ViewData["Title"] = "Administración";
 }
 
+@section HeaderScripts{
+    <script>
+        var tbl_order_list;
+
+        const getOrderList = () => {
+            var datos = [];
+            $.ajax({
+                url: '/Dashboard/GetAll',
+                async: false,
+                type: 'POST',
+                contentType: 'application/json',
+                success: function (resp) {
+                    datos = JSON.parse(resp);
+                },
+                error: (err) => { console.log(err); return undefined; }
+            });
+            return datos;
+        }
+
+
+        const setOrder = (id_order) => {
+            let user;
+            let user_storage = localStorage.getItem('user');
+            if (user_storage)
+                user = JSON.parse(user_storage);
+
+            $.ajax({
+                url: '/Order/AssignDelivery',
+                type: 'POST',
+                data: JSON.stringify({ IdOrder: id_order, IdEmployee: user.id_user }),
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (response) {
+                    console.log(response);
+                    if (response.code == '000') {
+                        updateOrdersTable();
+                        Swal.fire("Mensaje", response.message, "success");
+                    }
+                    else
+                        Swal.fire("Mensaje", response.message, "error");
+                },
+                error: function (err) {
+                    console.log(err);
+                    Swal.fire("Mensaje", "Se ha producido un error en la asignación", "error");
+                }
+            });
+        }
+
+        const updateOrdersTable = () => {
+            let delivery_list = getDeliveryList();
+            console.log(delivery_list);
+            tbl_order_list.clear().rows.add(delivery_list).draw();
+        }
+    </script>
+}
+
 <div class="main-content-head">
-    
+
 </div>
 
-<div class="profile-content">
-    <div class="row">
-        <div class="col-sm-3">
-            <div class="profile-state">
-                <div class="icon-box">
-                    <span class="icon-bg icon-bg-1">
-                        <img src="/images/dashboard/user-icon.png" alt="user-icon">
-                    </span>
-                    <h2>total visitors</h2>
-                </div><!--/.icon-box-->
-                <h3>32669</h3>
-                <p>324 new user</p>
-            </div><!--/.profile-state-->
-        </div><!--/.col-->
-        <div class="col-sm-3">
-            <div class="profile-state">
-                <div class="icon-box">
-                    <span class="icon-bg icon-bg-2">
-                        <img src="/images/dashboard/add-cart.png" alt="add-cart">
-                    </span>
-                    <h2>total order placeed</h2>
-                </div><!--/.icon-box-->
-                <h3>15500</h3>
-                <p>10 new</p>
-            </div><!--/.profile-state-->
-        </div><!--/.col-->
-        <div class="col-sm-3">
-            <div class="profile-state">
-                <div class="icon-box">
-                    <span class="icon-bg icon-bg-3">
-                        <img src="/images/dashboard/money-icon.png" alt="money-icon">
-                    </span>
-                    <h2>total profit</h2>
-                </div><!--/.icon-box-->
-                <h3>$43,900</h3>
-                <p>$340 This Week</p>
-            </div><!--/.profile-state-->
-        </div><!--/.col-->
-        <div class="col-sm-3">
-            <div class="profile-state">
-                <div class="icon-box">
-                    <span class="icon-bg icon-bg-4">
-                        <img src="/images/dashboard/plane-icon.png" alt="deliver-icon">
-                    </span>
-                    <h2>delivery peocessing</h2>
-                </div><!--/.icon-box-->
-                <h3>2600</h3>
-                <p>120 This Week</p>
-            </div><!--/.profile-state-->
-        </div><!--/.col-->
-    </div><!--/.row-->
-
-</div><!--/.profile-content-->
-
 <div class="row">
-    <div class="col-md-6 col-sm-6">
+    <div class="col-sm-12">
         <div class="box">
             <div class="box-head">
-                <h2>statistics</h2>
-                <div class="statistics-data">
-                    <div class="stat-income">
-                        <p><span class="income-dot"></span>income</p>
-                        <p><span class="income-dot outcome-dot"></span>outcome</p>
-                    </div><!--/.stat-income-->
-                </div><!--/.statistics-data-->
-            </div><!--/.box-head-->
-            <div class="item">
-                <div id="statistics_data" class="ct-chart"></div>
-            </div><!--/.item-->
-        </div><!--/.box-->
-    </div><!--/.col-->
-    <div class="col-md-6 col-sm-6">
-        <div class="box">
-            <div class="box-head">
-                <h2>global sales by top locations</h2>
-            </div><!--/.box-head-->
-            <div class="item">
-                <div class="map" id="bubbles" style="position:relative;height: 170px;">
-
-                </div>
-                <div class="statistics-data">
-                    <div class="map-area">
-                        <ul>
-                            <li>
-                                <span class="map-dot ps-dot2"></span>north america
-                            </li>
-                            <li>
-                                <span class="map-dot ps-dot3"></span>south america
-                            </li>
-                            <li>
-                                <span class="map-dot ps-dot4"></span>asia
-                            </li>
-                            <li>
-                                <span class="map-dot ps-dot1"></span>africa
-                            </li>
-                        </ul>
-                    </div><!--/.map-area-->
-                </div><!--/.statistics-data-->
-            </div><!--/.item-->
-        </div><!--/.box-->
-    </div><!--/.col-->
-
-</div><!--/.row-->
-
-<div class="row">
-    <div class="col-sm-8">
-        <div class="box">
-            <div class="box-head">
-                <h2>top 5 search item</h2>
+                <h2>Nuevos Pedidos</h2>
             </div><!--/.box-head-->
             <div class="item">
                 <div class="item-responsive ">
-                    <table class="table">
+                    <table class="table table-hover" id="tbl_order_list">
                         <thead>
                             <tr>
-                                <th>ID#</th>
-                                <th>Product Name</th>
-                                <th>Dealer</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Status</th>
+                                <th scope="col">Nº</th>
+                                <th scope="col">FECHA</th>
+                                <th scope="col">TOTAL</th>
+                                <th scope="col">ESTADO</th>
+                                <th scope="col">REPARTIDOR</th>
                             </tr>
-                        </thead><!--/thead-->
+                        </thead>
                         <tbody>
                             <tr>
                                 <td><a href="#">1</a></td>
-                                <td>Samsung Galaxy S8</td>
                                 <td>Shamsu</td>
                                 <td>$25050</td>
                                 <td>185</td>
@@ -144,35 +94,10 @@
                             </tr>
                             <tr>
                                 <td><a href="#">2</a></td>
-                                <td>Samsung Galaxy S8</td>
                                 <td>Shamsu</td>
                                 <td>$25050</td>
                                 <td>185</td>
                                 <td><span class="item-status cancel">Cancel</span></td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">3</a></td>
-                                <td>Samsung Galaxy S8</td>
-                                <td>Shamsu</td>
-                                <td>$25050</td>
-                                <td>185</td>
-                                <td><span class="item-status delivered">Delivered</span></td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">4</a></td>
-                                <td>Samsung Galaxy S8</td>
-                                <td>Shamsu</td>
-                                <td>$25050</td>
-                                <td>185</td>
-                                <td><span class="item-status cancel">Cencel</span></td>
-                            </tr>
-                            <tr>
-                                <td><a href="#">5</a></td>
-                                <td>Samsung Galaxy S8</td>
-                                <td>Shamsu</td>
-                                <td>$25050</td>
-                                <td>185</td>
-                                <td><span class="item-status delivered">Delivered</span></td>
                             </tr>
                         </tbody><!--/tbody-->
                     </table><!--/.table-->
@@ -180,50 +105,54 @@
             </div><!--/.item-->
         </div><!--/.box-->
     </div><!--/.col-->
-    <div class="col-sm-4">
-        <div class="box">
-            <div class="box-head">
-                <h2>product status</h2>
-            </div><!--/.box-head-->
-            <div class="item">
-                <div id="product_status" class="ct-chart"></div>
-                <div class="statistics-data">
-                    <div class="stat-income pl0">
-                        <p><span class="income-dot ps-dot2"></span>margin</p>
-                        <p class="ml10"><span class="income-dot ps-dot3"></span>profit</p>
-                        <p class="ml10"><span class="income-dot ps-dot4"></span>lost</p>
-                        <p><span class="income-dot ps-dot1"></span>others</p>
-                    </div><!--/.stat-income-->
-                </div><!--/.statistics-data-->
-            </div><!--/.item-->
-        </div><!--/.box-->
-    </div><!--/.col-->
-
 </div><!--/.row-->
-
-<div class="row">
-    <div class="col-sm-12">
-        <div class="box">
-            <div class="box-head">
-                <h2>yearly expense</h2>
-                <div class="year-info">
-                    <div class="year-info-content">
-                        <div class="year-color year-color-1"></div>
-                        <h4>2015</h4>
-                    </div><!--/.year-info-content-->
-                    <div class="year-info-content">
-                        <div class="year-color year-color-2"></div>
-                        <h4>2016</h4>
-                    </div><!--/.year-info-content-->
-                    <div class="year-info-content">
-                        <div class="year-color year-color-3"></div>
-                        <h4>2017</h4>
-                    </div><!--/.year-info-content-->
-                </div><!--/.yaer-info-->
-            </div><!--/.box-head-->
-            <div id="yarly_expence" class="ct-chart"></div>
-        </div><!--/.box-->
-
-    </div><!--/.col-->
-
-</div><!--/.row-->
+<script>
+    $(document).ready(function () {
+        let delivery_list = getOrderList();
+        console.log(delivery_list);
+        tbl_delivery = $("#tbl_order_list").DataTable({
+            "language": {
+                "url": "/datatables.net/datatables-es_es.json"
+            },
+            paging: true,
+            data: delivery_list,
+            order: [],
+            columns: [
+                { data: 'number' },
+                { data: 'customer_name' },
+                { data: 'cellphone_number' },
+                { data: 'address' },
+                { data: 'total', render: $.fn.dataTable.render.number(',', '.', 2, '') },
+                { data: 'items' },
+                { data: 'id_order' }
+            ],
+            columnDefs: [
+                {
+                    targets: 5,
+                    data: 'items',
+                    "render": function (items, type, row, meta) {
+                        return '<button class="btn btn-info btn-sm see-details" data-product=\'' + items + '\'>Ver</a>';
+                    }
+                },
+                { orderable: false, searchable: false, targets: -1 },
+                { orderable: false, searchable: false, targets: 5 }
+                , {
+                    targets: -1,
+                    data: 'id_order',
+                    "render": function (id_order, type, row, meta) {
+                        return '<button class="btn btn-success btn-sm" onclick="setOrder(' + id_order + ')">Asignarme</a>';
+                    }
+                }
+            ]
+        });
+</script>
+@section Scripts{
+    <script src="~/datatables.net/jquery.dataTables.min.js"></script>
+    <script src="~/aspnet/signalr/dist/browser/signalr.min.js"></script>
+    <script>
+        connection.on("ReceiveNotifyOrder", function () {
+            console.log('RECIBIDO');
+            updateOrdersTable();
+        });
+    </script>
+}

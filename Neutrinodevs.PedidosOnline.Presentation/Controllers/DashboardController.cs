@@ -23,7 +23,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
         public IActionResult Index()
         {
             string auth_user = HttpContext.Session.GetString("auth_user");
-            if (auth_user == null)
+             if (auth_user == null)
                 return View("~/Views/Shared/_SessionTimeout.cshtml");
 
             var current_user = JsonConvert.DeserializeObject<UserAuthenticateDto>(auth_user);

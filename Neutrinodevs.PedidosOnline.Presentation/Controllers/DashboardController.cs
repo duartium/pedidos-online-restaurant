@@ -1,33 +1,49 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Neutrinodevs.PedidosOnline.Domain.DTOs.User;
+using Neutrinodevs.PedidosOnline.Domain.Contracts.Services;
+using Neutrinodevs.PedidosOnline.Domain.Entities;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
 {
     public class DashboardController : Controller
     {
         private readonly ILogger<DashboardController> _logger;
+        private readonly IOrderService _srvOrder;
 
-        public DashboardController(ILogger<DashboardController> logger)
+        public DashboardController(ILogger<DashboardController> logger, IOrderService orderService)
         {
             _logger = logger;
+            _srvOrder = orderService;
         }
 
         public IActionResult Index()
         {
-            string auth_user = HttpContext.Session.GetString("auth_user");
-             if (auth_user == null)
-                return View("~/Views/Shared/_SessionTimeout.cshtml");
+            //string auth_user = HttpContext.Session.GetString("auth_user");
+            //if (auth_user == null)
+            //    return View("~/Views/Shared/_SessionTimeout.cshtml");
 
-            var current_user = JsonConvert.DeserializeObject<UserAuthenticateDto>(auth_user);
-            return View(current_user);
+            //var current_user = JsonConvert.DeserializeObject<UserAuthenticateDto>(auth_user);
+
+            return View();
         }
+
+
+        [HttpPost]
+        public IActionResult GetAll()
+        {
+            try
+            {
+                var orders = _srvOrder.GetAll() ?? new List<Order>(); ;
+                return Ok(JsonConvert.SerializeObject(orders));
+            }
+            catch (System.Exception  ex)
+            {
+                _logger.LogError(ex.ToString());
+                return Conflict(new List<Order>());
+            }
+        }
+
     }
 }

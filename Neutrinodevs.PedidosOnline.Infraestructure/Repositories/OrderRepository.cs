@@ -12,6 +12,8 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Neutrinodevs.PedidosOnline.Domain.Constants;
 
 namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
 {
@@ -31,62 +33,89 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
             _logger = logger;
         }
 
+        //public IEnumerable<Order> GetAll()
+        //{
+        //    try
+        //    {
+        //        List<Order> lsOrders = null;
+        //        Order oOrder = null;
+        //        SqlDependency dependency = null;
+
+        //        string connString = _configuration.GetConnectionString("pedidos_online");
+        //        using (SqlConnection conn = new SqlConnection(connString))
+        //        {
+        //            try
+        //            {
+        //                conn.Open();
+        //                SqlCommand cmd = new SqlCommand("ND_SP_PRODUCTOS_MANT", conn);
+        //                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+        //                #region SQL Dependency
+
+        //                dependency = new SqlDependency(cmd);
+        //                dependency.OnChange += new OnChangeEventHandler(OnDependencyChange);
+        //                SqlDependency.Start(connString);
+
+        //                #endregion
+        //                //TODO: mapping de datos de cotización
+
+        //                SqlDataReader dr = cmd.ExecuteReader();
+        //                if (dr.HasRows)
+        //                {
+        //                    lsOrders = new List<Order>();
+        //                    while (dr.Read())
+        //                    {
+        //                        oOrder = new Order
+        //                        {
+        //                            IdOrder = dr.IsDBNull(dr.GetOrdinal("id_producto")) ? -1 : dr.GetInt32(dr.GetOrdinal("id_producto")),
+        //                            CustomerName = dr.IsDBNull(dr.GetOrdinal("nombre")) ? "" : dr.GetString(dr.GetOrdinal("nombre")),
+        //                            TotalAmount = dr.IsDBNull(dr.GetOrdinal("precio")) ? decimal.Zero : dr.GetDecimal(dr.GetOrdinal("precio")),
+        //                            DateTime = "2021/08/02 00:00:00"
+        //                        };
+        //                        lsOrders.Add(oOrder);
+        //                    }
+        //                }
+        //                return lsOrders;
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                throw new Exception(ex.Message);
+        //            }
+        //        }
+
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return null;
+        //    }
+        //}
+
         public IEnumerable<Order> GetAll()
         {
-            try
-            {
-                List<Order> lsOrders = null;
-                Order oOrder = null;
-                SqlDependency dependency = null;
+            //var orders = (from ped in _context.Pedidos
+            //              join det in _context.PedidoDetalle
+            //              on ped.IdPedido equals det.PedidoId
+            //              where ped.Estado == 1 && det.Estado == 1
+            //              group new { det, ped } by new { det.PedidoId } into finalProduct
+            //              orderby finalProduct.Key descending
+            //              select new OrderReviewDto { 
+            //                   IdOrder = finalProduct.Key.PedidoId,
+            //                   Number = finalProduct.First().ped.Numero,
+            //                   TotalAmount = finalProduct.Sum(x => x.det.Total)
+            //              }).ToList();
 
-                string connString = _configuration.GetConnectionString("pedidos_online");
-                using (SqlConnection conn = new SqlConnection(connString))
-                {
-                    try
-                    {
-                        conn.Open();
-                        SqlCommand cmd = new SqlCommand("ND_SP_PRODUCTOS_MANT", conn);
-                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-                        #region SQL Dependency
-                        
-                        dependency = new SqlDependency(cmd);
-                        dependency.OnChange += new OnChangeEventHandler(OnDependencyChange);
-                        SqlDependency.Start(connString);
-
-                        #endregion
-                        //TODO: mapping de datos de cotización
-
-                        SqlDataReader dr = cmd.ExecuteReader();
-                        if (dr.HasRows)
-                        {
-                            lsOrders = new List<Order>();
-                            while (dr.Read())
-                            {
-                                oOrder = new Order
-                                {
-                                    IdOrder = dr.IsDBNull(dr.GetOrdinal("id_producto")) ? -1 : dr.GetInt32(dr.GetOrdinal("id_producto")),
-                                    CustomerName = dr.IsDBNull(dr.GetOrdinal("nombre")) ? "" : dr.GetString(dr.GetOrdinal("nombre")),
-                                    TotalAmount = dr.IsDBNull(dr.GetOrdinal("precio")) ? decimal.Zero : dr.GetDecimal(dr.GetOrdinal("precio")),
-                                    DateTime = "2021/08/02 00:00:00"
-                                };
-                                lsOrders.Add(oOrder);
-                            }
-                        }
-                        return lsOrders;
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception(ex.Message);
-                    }
-                }
-
-
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
+            var orders = _context.Pedidos.Where(x => x.Estado == 1)
+                .Select(x => new Order{ 
+                    IdOrder = x.IdPedido,
+                    TotalAmount = Convert.ToDecimal(x.Total, System.Globalization.CultureInfo.InvariantCulture),
+                    DateTime = x.Fecha.ToString("dd-MM-yyyy HH:mm"),
+                    Number = x.Numero.ToString().PadLeft(7, '0'),
+                    IdStage = (int)x.Stage,
+                    Stage = CValues.Stages[(int)x.Stage -1]
+                }).OrderByDescending(x => x.IdOrder)
+                .ToList();
+            return orders;
         }
 
         public FinalOrderDto Get(int idOrder)
@@ -165,6 +194,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                         Subtotal = order.subtotal,
                         Iva = order.iva,
                         Total = order.total,
+                        Stage = 1,
                         Estado = 1
                     };
                     _context.Pedidos.Add(pedido);

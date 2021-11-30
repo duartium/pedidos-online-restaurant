@@ -43,7 +43,7 @@ header {
 
 .nav-home {
     position: fixed;
-    width: 100%;
+    width: 100vw;
     height: 100px;
     top: 0;
     left: 0;
@@ -52,6 +52,9 @@ header {
     background-color: rgba(0,0,0,0);
     transition: 0.6s;
     z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 /*nav {
@@ -67,6 +70,7 @@ nav .logo{
     padding: 22px 20px;
     height: 80px;
     float: left;
+    text-align: center;
     font-size: 24px;
     font-weight: bold;
     text-transform: uppercase;
@@ -103,7 +107,7 @@ nav ul li a:hover{
 .sticky{
     padding:3px 140px;
     background: #000;
-    height: 80px;
+    height: 100px;
 }
 nav.sticky .logo,
 nav.sticky ul li a {
@@ -383,3 +387,118 @@ nav ul li a {
 .card {
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px !important;
 }
+
+.logo-hide {
+    display: none;
+}
+.menu-pesca {
+}
+
+.logo-pesca {
+    margin: 0;
+    width: 150px;
+    height: 100px;
+    padding: 7px;
+}
+
+.menu-items{
+
+}
+
+.btn-menu {
+    font-size: 35px;
+    padding-left:20px;
+    display:none;
+}
+.btn-menu i{
+    color: #fff;
+}
+ul.show{
+    top: 100px;
+    left: 0px;
+}
+
+/*Media Queries*/
+@media (max-width: 700px) {
+    header{
+        background: none;
+        height: 20vh;
+        /*background-color: black;*/
+    }
+
+    .nav-home{
+        background-color: #000;
+    }
+
+    .logo-hide{
+        display:block;
+    }
+
+    .logo-pesca{
+        width:120px;
+        height:80px;
+        align-items: center;
+    }
+    .logo {
+        display: flex;
+        align-items: center;
+    }
+
+    .btn-menu{
+        display: inline-flex;
+    }
+    .menu-items{
+        position: fixed;
+        width: 100vw;
+        height: calc(100% - 65px);
+        /*background-color: rgba(255, 255, 255, .9);*/
+        background-color: #fff;
+        top: -100vh;
+        text-align: center;
+        color: white;
+        transition: all .4s;
+        flex-direction: column;
+    }
+    .sticky {
+        padding: 0px 30px 0px 0px; 
+        text-align: center;
+    }
+
+    .menu-items li{
+        line-height: 30px;
+        border-bottom: 1px solid #808080;
+    }
+    .menu-items a {
+        font-size: 20px;
+        color: #ff5b0e;
+        font-weight: bold;
+    }
+    
+    .btn-login {
+        background-color: #fff;
+        color: #333;
+        border: 2px #ff5b0e solid;
+    }
+
+    .btn-login i{
+        color: #ff5b0e;
+    }
+
+    .menu-items button{
+        margin: 0 auto;
+    }
+
+    .menu-items li[data-button-item]{
+        padding: 20px;
+    }
+    nav.sticky .logo,
+    nav.sticky ul li a {
+        color: #ff5b0e;
+    }
+    .option-buttons{
+        text-align: center !important;
+    }
+
+}
+
+

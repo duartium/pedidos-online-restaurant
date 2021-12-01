@@ -94,41 +94,43 @@
             @using (Html.BeginForm("Register", "User", FormMethod.Post, new { id = "frmRegistrarme", @class = "pr-4" }))
             {
                 @Html.AntiForgeryToken()
-                <div class="form-group">
-                    <label for="identification">Cédula</label>
-                    <input id="identification" name="identification" type="text" class="form-control col-6 effect-8 numbers" minlength="10" maxlength="10" required />
+                <div class="row">
+                    <div class="form-group col-xs-12 col-md-6 ">
+                        <label for="identification">Cédula</label>
+                        <input id="identification" name="identification" type="text" class="form-control effect-8 numbers" minlength="10" maxlength="10" required />
+                    </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-6">
+                    <div class="form-group col-xs-12 col-md-6">
                         <label for="name">Nombres</label>
                         <input id="name" name="name" class="form-control letters" minlength="3" required />
                     </div>
-                    <div class="form-group col-6">
+                    <div class="form-group col-xs-12 col-md-6">
                         <label for="last_name">Apellidos</label>
                         <input id="last_name" name="last_name" type="text" class="form-control letters" minlength="3" required />
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-6">
+                    <div class="form-group col-xs-12 col-md-6">
                         <label for="email">Correo electrónico</label>
                         <input id="email" name="email" type="email" class="form-control" minlength="5" required />
                     </div>
-                    <div class="form-group col-6">
+                    <div class="form-group col-xs-12 col-md-6">
                         <label for="phone">Celular/Telefono</label>
                         <input id="phone" name="phone" type="text" class="form-control numbers" minlength="10" maxlength="10" required />
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-6">
+                    <div class="form-group col-xs-12 col-md-6">
                         <label for="passsword">Contraseña</label>
                         <input id="password" name="password" type="password" class="form-control" minlength="5" required />
                     </div>
-                    <div class="form-group col-6">
+                    <div class="form-group col-xs-12 col-md-6">
                         <label for="passsword2">Confirmar contraseña</label>
                         <input id="passsword2" name="passsword2" data-rule-equalTo="#password" type="password" class="form-control" minlength="5" required />
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group col-xs-12">
                     <label for="location">Seleccione su ubicación</label>
                     <input id="location" name="location" type="text" class="form-control" style="cursor:pointer" readonly required />
                 </div>
@@ -138,18 +140,22 @@
                 </div>
             }
         </div>
-        <div class="col-lg-5 col-md-5 col-sm-12 pl-4" style="border-left: 1px solid #808080">
+        <div class="col-lg-5 col-md-5 col-sm-12 mi-cuenta" style="border-left: 1px solid #808080">
             <h3>Ingresar a mi cuenta</h3>
             <p>Si ya tienes una cuenta, inicia sesión para procesar tu pedido.</p>
             @using (Html.BeginForm("Login", "User", FormMethod.Post, new { id = "frmLogin" }))
             {
-                <div class="form-group">
-                    <label for="username">Usuario</label>
-                    <input id="username" name="username" type="text" class="form-control alphanumeric" required />
+                <div class="row">
+                    <div class="form-group col-xs-12 col-md-12">
+                        <label for="username">Usuario</label>
+                        <input id="username" name="username" type="text" class="form-control alphanumeric" maxlength="20" required />
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="passsword">Contraseña</label>
-                    <input id="user_password" name="user_password" type="password" class="form-control" required />
+                <div class="row">
+                    <div class="form-group col-xs-12 col-md-12">
+                        <label for="passsword">Contraseña</label>
+                        <input id="user_password" name="user_password" type="password" class="form-control" maxlength="50" required />
+                    </div>
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-success btn-block">INICIAR SESIÓN Y FINALIZAR COMPRA</button>

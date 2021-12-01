@@ -1,8 +1,6 @@
 ﻿$("#frmRegistrarme").submit(function (e) {
     e.preventDefault();
 
-    $("#loader").fadeIn();
-
     let user = {
         identification: document.querySelector("#identification"),
         first_name: document.querySelector("#name"),
@@ -13,21 +11,26 @@
         pass2: document.querySelector("#passsword2")
     }
 
-    let user_register = {
-        'identification': user.identification.value,
-        'first_name': user.first_name.value,
-        'last_name': user.last_name.value,
-        email: user.email.value,
-        phone: user.phone.value,
-        password: user.pass.value,
-        address: $("#location").val() + '|' + delivery_position.lat + ';' + delivery_position.lng
+    try {
+        let user_register = {
+            'identification': user.identification.value,
+            'first_name': user.first_name.value,
+            'last_name': user.last_name.value,
+            email: user.email.value,
+            phone: user.phone.value,
+            password: user.pass.value,
+            address: $("#location").val() + '|' + delivery_position.lat + ';' + delivery_position.lng
+        }
+    } catch (e) {
+        console.error(e);
     }
     
     if (!$("#frmRegistrarme").valid()) {
-        $("#loader").fadeOut();
         return;
     }
-    
+
+    $("#loader").fadeIn();
+
     $.ajax({
         url: '/User/Register',
         method: 'POST',
@@ -59,7 +62,6 @@
 
 $("#frmLogin").submit(function (e) {
     e.preventDefault();
-    $("#loader").fadeIn();
 
     let current_user = {
         username: document.querySelector('#username').value,
@@ -68,9 +70,10 @@ $("#frmLogin").submit(function (e) {
     }
 
     if (!$("#frmLogin").valid()) {
-        $("#loader").fadeOut();
         return;
-    } 
+    }
+
+    $("#loader").fadeIn();
 
     $.ajax({
         url: '/User/Login',

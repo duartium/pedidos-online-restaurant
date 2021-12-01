@@ -418,6 +418,10 @@ ul.show{
     left: 0px;
 }
 
+mi-cuenta {
+    padding-left: 1.5rem !important;
+}
+
 /*Media Queries*/
 @media (max-width: 700px) {
     header{
@@ -497,6 +501,11 @@ ul.show{
     }
     .option-buttons{
         text-align: center !important;
+    }
+
+    .mi-cuenta {
+        padding: 2rem !important;
+        border-top: 1px #212529 solid;
     }
 
 }

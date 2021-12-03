@@ -35,17 +35,18 @@
         function initMap() {
             if (_pos == undefined) {
                 //setear posicion por defecto
-                //current_position = { lat: parseFloat(_pos.latitude.toFixed(5)), lng: parseFloat(_pos.longitude.toFixed(5)) };
+                current_position = { lat: parseFloat("-1.8003685577215554".toFixed(5)), lng: parseFloat("-79.523082290802".toFixed(5)) };
             } else {
                 current_position = { lat: parseFloat(_pos.latitude.toFixed(5)), lng: parseFloat(_pos.longitude.toFixed(5)) };
             }
-            
+
 
             map = new google.maps.Map(document.getElementById("map"), {
                 center: current_position,
                 zoom: 15,
                 mapTypeId: 'roadmap'
             });
+
             marker = new google.maps.Marker({
                 position: current_position,
                 map,
@@ -53,6 +54,11 @@
                 title: "Mi ubicación actual"
             });
             showLocationOnMap(current_position);
+
+
+            google.maps.event.addListener(map, 'click', function (event) {
+                placeMarker(event.latLng);
+            });
         }
 
 
@@ -85,6 +91,17 @@
                     alert('Geocoder failed due to: ' + status);
                 }
             });
+        }
+
+
+        function placeMarker(location) {
+
+            //marker = new google.maps.Marker({
+            //    position: location,
+            //    map: map
+            //});
+            showLocationOnMap(location);
+            console.log(location);
         }
     </script>
 }
@@ -199,12 +216,13 @@
     }
 </style>
 @section Scripts{
-
-    <script src="~/aspnet/signalr/dist/browser/signalr.min.js"></script>
-    <script src="~/js/order/notify.js" type="text/javascript"></script>
-    <script src="~/js/order/checkout.js" type="text/javascript"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>    
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3imid37BAw2_Uwsw59RjLw8DRJuGCbEc&callback=initMap">
     </script>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    
+    <script src="~/aspnet/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/order/notify.js" type="text/javascript"></script>
+    <script src="~/js/order/checkout.js" type="text/javascript"></script>
+
 } 

@@ -24,7 +24,7 @@
     } catch (e) {
         console.error(e);
     }
-    
+    console.log(delivery_position);
     if (!$("#frmRegistrarme").valid()) {
         return;
     }

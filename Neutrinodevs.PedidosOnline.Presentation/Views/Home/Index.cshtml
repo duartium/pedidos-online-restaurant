@@ -31,15 +31,14 @@
 
     window.addEventListener("scroll", function () {
         var navbar = document.querySelector("nav");
-        var span = document.querySelector("span");
-
+        var logo = document.querySelector(".logo-pesca");
         let scroll_top = window.scrollY;
         if (scroll_top > 70) {
             navbar.classList.add("sticky");
-            span.style.display = "block";
+            logo.classList.remove("logo-hide");
         } else {
             navbar.classList.remove("sticky");
-            span.style.display = "none";
+            logo.classList.add("logo-hide");
         }
     });
 

@@ -2,6 +2,10 @@
     ViewData["Title"] = "Mi pedido";
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
 }
+<script>
+    let order_invoice = localStorage.getItem('order_invoice');
+    console.log(order_invoice);
+</script>
 @await Html.PartialAsync("~/Views/Shared/_Navbar.cshtml")
 <div class="container" style="min-height:80vh">
     <div class="row my-5">
@@ -10,7 +14,7 @@
                 <div class="card-body">
                     <h2>Hemos enviado un código de verificación a tu correo electrónico</h2>
                     <div class="text-center mt-4">
-                        <p>Ingresa el código recibido para iniciar sesión.</p>
+                        <p>Ingresa el código recibido para iniciar sesión y confirmar tu pedido.</p>
                         <input type="text" class="form-control input-lg input-token text-center" name="code" id="code" value="" maxlength="6" autofocus />
                         <div class="mt-4">
                             <button class="btn btn-primary btn-lg" id="btnVerify">VERIFICAR</button>
@@ -21,6 +25,8 @@
         </div>
     </div>
 </div>
-@section Scripts{ 
+@section Scripts{
+    <script src="~/aspnet/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/order/notify.js" type="text/javascript"></script>
     <script src="~/js/order/verify.js" type="text/javascript"></script>
 }

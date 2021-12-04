@@ -20,7 +20,7 @@
         phone: user.phone.value,
         username: user.username.value,
         password: user.pass.value,
-        address: $("#location").val() + '|' + delivery_position.lat + ';' + delivery_position.lng
+        address: delivery_position === undefined ? '' : $("#location").val() + '|' + delivery_position.lat + ';' + delivery_position.lng
     }
     console.log(delivery_position);
     console.log(user_register);
@@ -44,6 +44,7 @@
                 let order_invoice = JSON.parse(localStorage.getItem('order_invoice'));
                 order_invoice.id_client = resp.id_client;
                 localStorage.setItem('order_invoice', JSON.stringify(order_invoice));
+
                 window.location = '/User/Verification';
             }
             else if (resp === '002') {

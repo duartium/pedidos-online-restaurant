@@ -1,4 +1,13 @@
-﻿$("#btnVerify").click(function () {
+﻿const notify = () => {
+    connection.invoke("NotifyOrder");
+}
+
+function notifyOrder(callback, id_order) {
+    callback();
+    window.location = '/Order/Processing?id_order=' + id_order;
+}
+
+$("#btnVerify").click(function () {
 
     let code = document.querySelector("#code").value;
     if (code.trim().length < 6) {
@@ -50,7 +59,8 @@ function SaveOrder(order_invoice) {
             if (resp.code == '000') {
                 localStorage.removeItem('order_invoice');
                 localStorage.removeItem('order');
-                window.location = '/Order/Processing?id_order=' + resp.id_order;
+
+                notifyOrder(notify, resp.id_order);
             } else {
                 $("#loader").fadeOut();
                 Swal.fire("Orden", "Lo sentimos. No se pudo registrar tu orden.", "warning");

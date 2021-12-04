@@ -7,24 +7,23 @@
         last_name: document.querySelector("#last_name"),
         email: document.querySelector("#email"),
         phone: document.querySelector("#phone"),
+        username: document.querySelector("#user"),
         pass: document.querySelector("#password"),
         pass2: document.querySelector("#passsword2")
     }
 
-    try {
-        let user_register = {
-            'identification': user.identification.value,
-            'first_name': user.first_name.value,
-            'last_name': user.last_name.value,
-            email: user.email.value,
-            phone: user.phone.value,
-            password: user.pass.value,
-            address: $("#location").val() + '|' + delivery_position.lat + ';' + delivery_position.lng
-        }
-    } catch (e) {
-        console.error(e);
+    let user_register = {
+        identification: user.identification.value,
+        first_name: user.first_name.value,
+        last_name: user.last_name.value,
+        email: user.email.value,
+        phone: user.phone.value,
+        username: user.username.value,
+        password: user.pass.value,
+        address: $("#location").val() + '|' + delivery_position.lat + ';' + delivery_position.lng
     }
     console.log(delivery_position);
+    console.log(user_register);
     if (!$("#frmRegistrarme").valid()) {
         return;
     }
@@ -40,15 +39,19 @@
         success: function (response) {
             $("#loader").fadeOut();
             let resp = response;
+            console.log(resp);
             if (resp.code === '000') {
                 let order_invoice = JSON.parse(localStorage.getItem('order_invoice'));
                 order_invoice.id_client = resp.id_client;
                 localStorage.setItem('order_invoice', JSON.stringify(order_invoice));
                 window.location = '/User/Verification';
             }
-            else if (resp.code === '002') {
+            else if (resp === '002') {
                 Swal.fire('Notificación', 'Usted ya tiene una cuenta activa, por favor inicie sesión.', 'error');
-            } else {
+            } else if (resp === '003') {
+                Swal.fire('Notificación', `El usuario ${user_register.username} ya está en uso, por favor elija otro nombre de usuario.`, 'warning');
+            }
+            else {
                 Swal.fire('Notificación', 'Lo sentimos, no se pudo completar la solicitud.', 'error');
             }
         },
@@ -116,9 +119,9 @@ $(document).ready(function () {
             last_name: { required: true, minlength: 3 },
             email: { required: true, minlength: 6 },
             phone: { required: true, minlength: 10 },
+            user: { required: true, minlength: 6, maxlength:20 },
             password: { required: true, minlength: 6 },
-            passsword2: {
-                required: true, minlength: 6 },
+            passsword2: { required: true, minlength: 6 },
             location: { required: true }
         }
     });

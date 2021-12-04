@@ -1,11 +1,7 @@
 ﻿document.addEventListener("DOMContentLoaded", function (event) {
     
-    
-
-    
     var conn = new signalR.HubConnectionBuilder().withUrl("/OrdersHub").build();
     conn.on("UpdateOrdersTable", function () {
-        console.log('UpdateOrdersTable');
         fillOrdersTable();
     });
 
@@ -25,9 +21,7 @@ function fillOrdersTable() {
         contentType: "application/json; charset-utf-8",
         dateType: "json",
         success: function (resp) {
-            console.log(resp);
             if (resp.length < 0) return;
-
             
             let tbody_orders = document.getElementById('tbody_orders');
 
@@ -43,3 +37,4 @@ function fillOrdersTable() {
         }
     });
 }
+

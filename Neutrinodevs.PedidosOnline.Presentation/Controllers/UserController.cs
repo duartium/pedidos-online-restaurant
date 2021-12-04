@@ -59,6 +59,9 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             if(_rpsUser.ValidateDuplicateUser(user.Identification))
                 return Json("002");
 
+            if (_rpsUser.ValidateDuplicateUsername(user.Username))
+                return Json("003");
+
             var userRegister = new UserRegisterDto();
             try
             {

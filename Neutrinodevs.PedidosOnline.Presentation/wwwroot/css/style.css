@@ -258,10 +258,9 @@ html.fullscreen-bg #wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #0f182e;
     height: 80px;
     width: 200px;
-    background-color: #0f182e;
+    background-color: #000;
     box-shadow: 2px 0 4.7px 0.3px rgba(117, 117, 117, 0.1);
 }
 .navbar-default .brand a{

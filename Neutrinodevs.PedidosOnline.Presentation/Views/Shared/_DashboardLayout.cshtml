@@ -25,6 +25,11 @@
     @RenderSection("HeaderScripts", required: false)
 </head>
 <body>
+    <script>
+        const logout = () => {
+            window.location.href = "/";
+        }
+    </script>
     @await Html.PartialAsync("_Preloader")
     <div id="wrapper">
 
@@ -32,7 +37,7 @@
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="brand">
                 <a href="index.html">
-                    <img src="~/images/logo-la-pesca.png" alt="Logo" />
+                    <img src="~/images/logo-la-pesca.png" width="120" height="60" alt="Logo" />
                 </a>
             </div><!--/.brand -->
             <div class="container-fluid">
@@ -50,7 +55,7 @@
                                 <i class="icon-submenu fa fa-angle-down"></i>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="#"><i class="lnr lnr-exit"></i> <span>Cerrar sesión</span></a></li>
+                                <li><a href="javascript:logout()" id="btn_logout"><i class="lnr lnr-exit"></i> <span>Cerrar sesión</span></a></li>
                             </ul>
                         </li>
                     </ul>

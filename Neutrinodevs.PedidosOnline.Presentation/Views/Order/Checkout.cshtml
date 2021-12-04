@@ -35,7 +35,7 @@
         function initMap() {
             if (_pos == undefined) {
                 //setear posicion por defecto
-                current_position = { lat: parseFloat("-1.8003685577215554".toFixed(5)), lng: parseFloat("-79.523082290802".toFixed(5)) };
+                current_position = { lat: parseFloat(-1.8003685577215554), lng: parseFloat(-79.523082290802) };
             } else {
                 current_position = { lat: parseFloat(_pos.latitude.toFixed(5)), lng: parseFloat(_pos.longitude.toFixed(5)) };
             }
@@ -138,6 +138,12 @@
                     <div class="form-group col-xs-12 col-md-6">
                         <label for="phone">Celular/Telefono</label>
                         <input id="phone" name="phone" type="text" class="form-control numbers" minlength="10" maxlength="10" required />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-xs-12 col-md-12">
+                        <label for="user">Usuario</label>
+                        <input id="user" name="user" type="text" class="form-control" minlength="6" maxlength="20" required />
                     </div>
                 </div>
                 <div class="row">

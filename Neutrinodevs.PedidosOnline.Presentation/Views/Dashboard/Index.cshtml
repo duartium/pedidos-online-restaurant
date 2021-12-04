@@ -27,7 +27,6 @@
 
         const updateOrdersTable = () => {
             getOrderList();
-            console.log(order_list);
             tbl_order_list.clear().rows.add(order_list).draw();
         }
     </script>
@@ -64,7 +63,6 @@
     $(document).ready(function () {
         getOrderList();
         //let order_list = getOrderList();
-        console.log(order_list);
         tbl_order_list = $("#tbl_order_list").DataTable({
             "language": {
                 "url": "/datatables.net/datatables-es_es.json"

@@ -33,6 +33,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                         Email = userDto.Email,
                         Estado = 1,
                         TipoUsuario = 1,
+                        Username = userDto.Username,
                         Password = userDto.Password
                     };
                     _context.Usuarios.Add(_user);
@@ -132,6 +133,24 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                             where client.Estado == 1
                             && client.Identificacion == identification
                             select client).Count();
+                return (count <= 0) ? false : true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return false;
+            }
+        }
+
+        public bool ValidateDuplicateUsername(string username)
+        {
+            try
+            {
+                int count = -1;
+                count = (from user in _context.Usuarios
+                         where user.Estado == 1
+                         && user.Username == username
+                         select user).Count();
                 return (count <= 0) ? false : true;
             }
             catch (Exception ex)

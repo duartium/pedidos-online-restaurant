@@ -82,9 +82,7 @@ const setPendingOrder = () => {
 const removeProdFromCart = (id_item, element, num_products) => {
     let order = localStorage.getItem('order');
     let items = JSON.parse(order);
-    console.log(items);
     let new_items = items.filter(x => x.uid != id_item);
-    console.log(new_items);
 
     let quantity_cart = parseInt($("#quantity_cart").text());
     quantity_cart -= num_products;

@@ -430,6 +430,11 @@ mi-cuenta {
         /*background-color: black;*/
     }
 
+    h1 {
+        font-size: 2.2em;
+        text-align:center;
+    }
+
     .nav-home{
         background-color: #000;
     }

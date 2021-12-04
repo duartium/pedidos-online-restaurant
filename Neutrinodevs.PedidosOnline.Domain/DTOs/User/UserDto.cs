@@ -28,6 +28,9 @@ namespace Neutrinodevs.PedidosOnline.Domain.DTOs.User
         [JsonProperty("client_type")]
         public int ClientType { get; set; }
 
+        [JsonProperty("username")]
+        public string Username { get; set; }
+
         [JsonProperty("password")]
         public string Password { get; set; }
         

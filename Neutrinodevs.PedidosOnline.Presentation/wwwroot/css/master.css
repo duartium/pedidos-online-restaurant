@@ -435,7 +435,22 @@ mi-cuenta {
         text-align:center;
     }
 
-    .nav-home{
+    .input-token{
+        width:100%;
+    }
+    strong{
+        display: block;
+        padding: 0.3rem 0;
+    }
+    .ml-5{
+        margin-left:0 !important;
+    }
+
+    h2 {
+        font-size: 1.6em;
+    }
+
+    .nav-home {
         background-color: #000;
     }
 

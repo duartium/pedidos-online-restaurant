@@ -6,7 +6,9 @@
         return;
     }
 
+    $("#loader").fadeIn();
     let invoice = JSON.parse(localStorage.getItem('order_invoice'));
+    console.log(invoice);
     let user = {
         id_client: invoice.id_client,
         code: code
@@ -20,13 +22,16 @@
         dataType: 'json',
         contentType: 'application/json',
         success: function (response) {
+            
             if (response == '000') {
                 SaveOrder(invoice);
             } else {
+                $("#loader").fadeOut();
                 Swal.fire("Verificación", "El código ingresado no es correcto. Por favor corrija y vuelva a intentar.", "");
             }
         },
         error: function (error) {
+            $("#loader").fadeOut();
             console.log(error);
         }
     });
@@ -47,6 +52,7 @@ function SaveOrder(order_invoice) {
                 localStorage.removeItem('order');
                 window.location = '/Order/Processing?id_order=' + resp.id_order;
             } else {
+                $("#loader").fadeOut();
                 Swal.fire("Orden", "Lo sentimos. No se pudo registrar tu orden.", "warning");
             }
         },

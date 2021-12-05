@@ -9,7 +9,7 @@
 
         var user;
         let user_storage = localStorage.getItem('user');
-        
+
         if (user_storage)
             user = JSON.parse(user_storage);
 
@@ -46,16 +46,15 @@
             let delivery_list = getMyDeliveries();
             tbl_my_deliveries.clear().rows.add(delivery_list).draw();
         }
-        
+
     </script>
 }
 
 <div style="margin-top: 3rem; padding: 3rem;" class="panel panel-default min-h-75">
     <h1 style="padding-bottom: 3rem;">Mis Entregas Pendientes</h1>
     <div class="row">
-        <div class="col-12" style="margin-top:2rem; padding:1rem;">
-            <div class="table-responsive">
-                <table class="table table-hover table-bordered" id="tbl_my_deliveries" style="width:100%">
+        <div class="col-12 col-xs-12 table-responsive" style="margin-top:2rem; padding:1rem;">
+                <table class="table table-hover table-striped" id="tbl_my_deliveries" style="width:100%">
                     <thead>
                         <tr>
                             <th></th>
@@ -71,7 +70,6 @@
                     <tbody>
                     </tbody>
                 </table>
-            </div>
         </div>
     </div>
 </div>
@@ -112,7 +110,8 @@
 
 <script>
     const setStage = (id_order, id_stage) => {
-        
+        $("#loader").fadeIn();
+
         $.ajax({
             url: '/Order/SetOrderStage',
             method: 'POST',
@@ -123,19 +122,23 @@
                 let resp = response;
                 console.log(resp);
                 if (resp.code === '000') {
+                    connection.invoke("NotifyOrder");
                     updateOrdersTable();
+                    $("#loader").fadeOut();
                     if (id_stage == 3) {
                         Swal.fire('Notificación', 'Se ha notificado al cliente que estás en camino.', 'success');
                     } else if (id_stage == 4) {
-                        
+
                         Swal.fire('Notificación', 'Has finalizado la entrega.', 'success');
                     }
                 }
                 else {
+                    $("#loader").fadeOut();
                     Swal.fire('Notificación', resp.message, 'error');
                 }
             },
             error: function () {
+                $("#loader").fadeOut();
                 Swal.fire('Notificación', 'Lo sentimos, ocurrió un error al cambiar la etapa del pedido.', 'error');
             }
         });
@@ -180,10 +183,17 @@
                     targets: 6,
                     data: 'items',
                     "render": function (items, type, row, meta) {
-                        return '<button class="btn btn-info btn-sm see-details" data-product=\'' + items + '\'>Ver</a>';
+                        return '<button class="btn btn-info btn-sm see-details" data-product=\'' + items + '\'>Ver Detalle</a>';
                     },
                     orderable: false,
                     searchable: false
+                }, {
+                    targets: 4,
+                    data: 'address',
+                    "render": function (address_data, type, row, meta) {
+                        let address_det = address_data.split("|");
+                        return address_det[0] + '<br><a class="btn btn-info btn-sm" style="margin: 0 auto" target="_blank" href="https://maps.google.com/?q=' + address_det[1] + '">Ver Mapa</a>';
+                    }
                 }
                 , {
                     targets: -1,
@@ -191,7 +201,7 @@
                     "render": function (id_order, type, row, meta) {
                         if (row.id_stage == 2) {
                             return '<button class="btn btn-primary btn-sm" onclick="setStage(' + id_order + ', 3)">NOTIFICAR INICIO DE RECORRIDO</a>';
-                        } else if (row.id_stage == 3){
+                        } else if (row.id_stage == 3) {
                             return '<button class="btn btn-success btn-sm" onclick="setStage(' + id_order + ', 4)">NOTIFICAR ENTREGA REALIZADA</a>';
                         }
                     },
@@ -201,7 +211,7 @@
                 {
                     targets: 0,
                     "render": function (items, type, row, meta) {
-                        return '<button class="btn btn-danger btn-sm" onclick="cancelOrder('+ row.id_order +')">Cancelar</a>';
+                        return '<button class="btn btn-danger btn-sm" onclick="cancelOrder(' + row.id_order + ')">Cancelar</a>';
                     },
                     orderable: false,
                     searchable: false
@@ -221,4 +231,6 @@
 
 @section Scripts{
     <script src="~/datatables.net/jquery.dataTables.min.js"></script>
+    <script src="~/aspnet/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/order/notify.js" type="text/javascript"></script>
 }

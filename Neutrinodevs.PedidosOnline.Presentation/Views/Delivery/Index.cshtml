@@ -38,7 +38,8 @@
                 success: function (response) {
                     console.log(response);
                     if (response.code == '000') {
-                        updateOrdersTable();
+                        connection.invoke("NotifyOrder");
+                        //updateOrdersTable();
                         Swal.fire("Mensaje", response.message, "success");
                     }
                     else
@@ -53,7 +54,6 @@
 
         const updateOrdersTable = () => {
             let delivery_list = getDeliveryList();
-            console.log(delivery_list);
             tbl_delivery.clear().rows.add(delivery_list).draw();
         }
     </script>
@@ -141,7 +141,6 @@
 
     $(document).ready(function () {
         let delivery_list = getDeliveryList();
-        console.log(delivery_list);
         tbl_delivery = $("#tbl_delivery").DataTable({
             "language": {
                 "url": "/datatables.net/datatables-es_es.json"
@@ -163,11 +162,19 @@
                     targets: 5,
                     data: 'items',
                     "render": function (items, type, row, meta) {
-                        return '<button class="btn btn-info btn-sm see-details" data-product=\'' + items + '\'>Ver</a>';
+                        return '<button class="btn btn-primary btn-sm see-details" data-product=\'' + items + '\'>Ver Detalle</a>';
                     }
                 },
                 { orderable: false, searchable: false, targets: -1 },
                 { orderable: false, searchable: false, targets: 5 }
+                , {
+                    targets: 3,
+                    data: 'address',
+                    "render": function (address_data, type, row, meta) {
+                        let address_det = address_data.split("|");
+                        return address_det[0] + '<br><a class="btn btn-info btn-sm" style="margin: 0 auto" target="_blank" href="https://maps.google.com/?q=' + address_det[1] +'">Ver Mapa</a>';
+                    }
+                }
                 , {
                     targets: -1,
                     data: 'id_order',

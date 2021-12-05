@@ -20,7 +20,7 @@
         phone: user.phone.value,
         username: user.username.value,
         password: user.pass.value,
-        address: delivery_position === undefined ? '' : $("#location").val() + '|' + delivery_position.lat + ';' + delivery_position.lng
+        address: delivery_position === undefined ? '' : $("#location").val() + '|' + delivery_position.lat + ',' + delivery_position.lng
     }
     console.log(delivery_position);
     console.log(user_register);

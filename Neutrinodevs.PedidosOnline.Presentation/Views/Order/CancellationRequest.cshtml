@@ -34,15 +34,12 @@
             let url = new URL(window.location.href);
             let searchParams = new URLSearchParams(url.search);
 
-            console.log();
-            console.log();
-
             let cancel = {
                 IdOrder: searchParams.get('order'),
                 IdStage: searchParams.get('stage'),
                 Reason: $("#reason").val()
             };
-            
+
             if (cancel.IdOrder == undefined || cancel.IdStage == undefined) {
                 Swal.fire("Mensaje", "Parámetros inválidos. Solicitud incorrecta.", "error");
                 return;
@@ -62,8 +59,14 @@
                 success: function (response) {
                     const resp = response;
                     if (resp.code == '000') {
-                        Swal.fire("Mensaje", "Se ha procesado la cancelación de la entrega.", "success");
-                        window.location = '/Delivery/MyDeliveries';
+                        connection.invoke("NotifyOrder");
+                        Swal.fire({
+                            title: "Mensaje",
+                            text: "Se ha procesado la cancelación de la entrega.",
+                            type: "success"
+                        }).then(function () {
+                                window.location = '/Delivery/MyDeliveries';
+                        });
                     } else {
                         Swal.fire("Orden", "Lo sentimos. No se pudo procesar la cancelación.", "warning");
                     }
@@ -78,5 +81,8 @@
 
     });
 
-
 </script>
+@section Scripts{
+    <script src="~/aspnet/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/order/notify.js" type="text/javascript"></script>
+}

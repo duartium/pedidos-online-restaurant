@@ -10,5 +10,12 @@
             "Cancelado por cliente",
             "Cancelado por repartidor"
         };
+
+        public static readonly string[] Roles = {
+            "Cliente",
+            "Cajero",
+            "Repartidor",
+            "Administrador"
+        };
     }
 }

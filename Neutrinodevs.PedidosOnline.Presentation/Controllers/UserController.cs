@@ -41,11 +41,15 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
                     IdUsuario = x.IdUsuario,
                     Nombres = x.Nombres,
                     Username = x.Username,
-                    TipoUsuario = x.TipoUsuario == (int)TipoUsuario.Administrador
-                              ? TipoUsuario.Administrador.ToString() : "Repartidor"
+                    TipoUsuario = CValues.Roles[x.TipoUsuario -1]
                 }).ToList();
             }
-            return View(users);
+            return View(usersDto);
+        }
+
+        public IActionResult New()
+        {
+            return View();
         }
 
         public IActionResult Verification()

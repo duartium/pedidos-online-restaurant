@@ -18,6 +18,12 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             return View();
         }
 
+        public IActionResult New()
+        {
+            ViewBag.User = new UserAuthenticateDto { IdRole = 4 };
+            return View();
+        }
+
         [HttpPost]
         public JsonResult GetAll()
         {

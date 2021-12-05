@@ -62,6 +62,10 @@ document.getElementById("login").addEventListener("click", function (event) {
     $('#login-modal').modal();
 });
 
+$('#login-modal').on('shown.bs.modal', function () {
+    $("#username").focus();
+})
+
 const frmLogin = $('#frmSession').validate({
     rules: {
         username: {

@@ -24,9 +24,18 @@
                             <label for="price">Precio</label>
                             <input id="price" name="price" type="number" class="form-control numbers" minlength="1" maxlength="8" required />
                         </div>
+                        <div class="form-group col-xs-12 col-md-3">
+                            <label for="price">Categoría</label>
+                            <select id="sel_product_type" class="form-control">
+                                <option value="1">Mariscos</option>
+                                <option value="2">Bebidas</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="form-group col-xs-12 col-md-6">
                             <label for="image">Imagen</label>
-                            <input id="image" name="image" type="file" class="form-control back-primary" minlength="3" required />
+                            <input id="image" name="image" type="file" class="form-control back-primary" minlength="3" required style="cursor:pointer; padding:2.5rem"/>
                         </div>
                     </div>
                     <div class="row text-right">

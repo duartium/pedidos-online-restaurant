@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
+using Neutrinodevs.PedidosOnline.Domain.DTOs.Dish;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Product;
 using Neutrinodevs.PedidosOnline.Infraestructure.Models;
 using Newtonsoft.Json;
@@ -41,7 +43,8 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                             Precio = x.Precio,
                             Id = x.IdProducto
                         })
-                    }).ToList();
+                    }).OrderByDescending(x => x.Id)
+                    .ToList();
                 return dishes;
             }
             catch (Exception ex)
@@ -71,5 +74,34 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                 return null;
             }
         }
+
+        public int Save(DishDto dishDto)
+        {
+            try
+            {
+                int resp = -1;
+                using (var transaction = _context.Database.BeginTransaction())
+                {
+                    var _dish = new Productos {
+                        Nombre = dishDto.Name,
+                        Imagen = dishDto.ImageName,
+                        Precio = dishDto.Price,
+                        Tipo = dishDto.Type,
+                        Estado = 1
+                    };
+                    _context.Productos.Add(_dish);
+                    resp = _context.SaveChanges();
+
+                    transaction.Commit();
+                }
+                return resp;
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex, $"db update error: {ex?.InnerException?.Message}");
+                return -1;
+            }
+        }
+
     }
 }

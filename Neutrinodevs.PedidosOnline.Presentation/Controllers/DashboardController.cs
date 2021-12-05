@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Services;
+using Neutrinodevs.PedidosOnline.Domain.DTOs.User;
 using Neutrinodevs.PedidosOnline.Domain.Entities;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             //    return View("~/Views/Shared/_SessionTimeout.cshtml");
 
             //var current_user = JsonConvert.DeserializeObject<UserAuthenticateDto>(auth_user);
-
+            ViewBag.User = new UserAuthenticateDto { IdRole = 4 };
             return View();
         }
 

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Delivery;
+using Neutrinodevs.PedidosOnline.Domain.DTOs.User;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
         {
             try
             {
+                ViewBag.User = new UserAuthenticateDto { IdRole = 3 };
                 var ordersAvailable = _rpsDelivery.GetAll();
                 return View(ordersAvailable ?? new List<OrderDeliveryDTO>());
             }
@@ -36,6 +38,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
 
         public IActionResult MyDeliveries()
         {
+            ViewBag.User = new UserAuthenticateDto { IdRole = 3 };
             return View();
         }
 

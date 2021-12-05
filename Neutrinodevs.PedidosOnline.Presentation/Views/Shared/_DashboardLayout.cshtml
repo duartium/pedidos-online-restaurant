@@ -4,8 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] | LA PESCA</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <environment include="Development">
+    <link rel="icon" href="~/favicon.ico" type="image/x-icon" />
         @*<link rel="stylesheet" href="~/bootstrap/css/bootstrap.css" />*@
         <link rel="stylesheet" href="~/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
@@ -29,6 +29,7 @@
         const logout = () => {
             window.location.href = "/";
         }
+
     </script>
     @await Html.PartialAsync("_Preloader")
     <div id="wrapper">
@@ -69,48 +70,43 @@
             <div class="sidebar-scroll">
                 <nav>
                     <ul class="nav">
+                        @if (ViewBag.User != null && ViewBag.User.IdRole == 4)
+                        {
+                            <li class="active">
+                                <a href='@Url.Action("Index", "Dashboard")'>
+                                    <i data-feather="home"></i> <span>Dashboard</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href='@Url.Action("Index", "Client")'>
+                                    <i data-feather="clipboard"></i> <span>Clientes</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href='@Url.Action("Index", "Dish")'>
+                                    <i data-feather="anchor"></i> <span>Platos</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href='@Url.Action("Index", "User")'>
+                                    <i data-feather="users"></i> <span>Usuarios</span>
+                                </a>
+                            </li>
+                        } else if (ViewBag.User != null && ViewBag.User.IdRole == 3)
+                        {
+                            <li>
+                                <a href='@Url.Action("MyDeliveries", "Delivery")'>
+                                    <i data-feather="book"></i> <span>Mis entregas</span>
+                                </a>
+                            </li>
 
-                        <li class="active">
-                            <a href='@Url.Action("Index", "Dashboard")'>
-                                <i data-feather="home"></i> <span>Dashboard</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href='@Url.Action("Index", "Client")'>
-                                <i data-feather="package"></i> <span>Clientes</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href='@Url.Action("Index", "Dish")'>
-                                <i data-feather="file-text"></i> <span>Platos</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href='@Url.Action("MyDeliveries", "Delivery")'>
-                                <i data-feather="grid"></i> <span>Mis entregas</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href='@Url.Action("Index", "Delivery")'>
-                                <i data-feather="grid"></i> <span>Nuevos pedidos</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href='@Url.Action("Index", "Invoice")'>
-                                <i data-feather="grid"></i> <span>Ventas</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href='@Url.Action("Index", "User")'>
-                                <i data-feather="map"></i> <span>Usuarios</span>
-                            </a>
-                        </li>
+                            <li>
+                                <a href='@Url.Action("Index", "Delivery")'>
+                                    <i data-feather="book-open"></i> <span>Pedidos</span>
+                                </a>
+                            </li>
+                        }
+                     </ul>
                 </nav>
             </div>
 

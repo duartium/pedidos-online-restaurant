@@ -113,7 +113,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
 
                 string passEncrypt = Security.GetSHA256(password.Trim());
                 var auth = _rpsUser.Login(username.Trim(), passEncrypt, is_client);
-                HttpContext.Session.SetString("auth_user", JsonConvert.SerializeObject(auth));
+                //HttpContext.Session.SetString("auth_user", JsonConvert.SerializeObject(auth));ç
 
                 return Json(auth);
             }

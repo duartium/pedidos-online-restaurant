@@ -987,3 +987,10 @@ ul.notifications > li > .more:hover, ul.notifications > li > .more:focus {
     min-height: 75vh !important;
 }
 .see-details{}
+
+.error {
+    color: #ff5b0e;
+    font-weight: bold;
+    font-size: 12px;
+    padding-left: 5px;
+}

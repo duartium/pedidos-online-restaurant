@@ -30,6 +30,12 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             return View();
         }
 
+        public IActionResult OrdersClient()
+        {
+            ViewBag.User = new UserAuthenticateDto { IdRole = 1 };
+            return View();
+        }
+
 
         [HttpPost]
         public IActionResult GetAll()

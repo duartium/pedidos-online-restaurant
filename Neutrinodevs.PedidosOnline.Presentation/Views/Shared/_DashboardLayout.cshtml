@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] | LA PESCA</title>
     <environment include="Development">
-    <link rel="icon" href="~/favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="~/favicon.ico" type="image/x-icon" />
         @*<link rel="stylesheet" href="~/bootstrap/css/bootstrap.css" />*@
         <link rel="stylesheet" href="~/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
@@ -78,10 +78,10 @@
                                 </a>
                             </li>
                             @*<li>
-                                <a href='@Url.Action("Index", "Client")'>
-                                    <i data-feather="clipboard"></i> <span>Clientes</span>
-                                </a>
-                            </li>*@
+                <a href='@Url.Action("Index", "Client")'>
+                    <i data-feather="clipboard"></i> <span>Clientes</span>
+                </a>
+            </li>*@
                             <li>
                                 <a href='@Url.Action("Index", "Dish")'>
                                     <i data-feather="anchor"></i> <span>Platos</span>
@@ -92,7 +92,8 @@
                                     <i data-feather="users"></i> <span>Usuarios</span>
                                 </a>
                             </li>
-                        } else if (ViewBag.User != null && ViewBag.User.IdRole == 3)
+                        }
+                        else if (ViewBag.User != null && ViewBag.User.IdRole == 3)
                         {
                             <li>
                                 <a href='@Url.Action("MyDeliveries", "Delivery")'>
@@ -106,7 +107,15 @@
                                 </a>
                             </li>
                         }
-                     </ul>
+                        else if (ViewBag.User != null && ViewBag.User.IdRole == 1)
+                        {
+                            <li>
+                                <a href='@Url.Action("OrdersClient", "Dashboard")'>
+                                    <i data-feather="clipboard"></i> <span>Mis Pedidos</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
                 </nav>
             </div>
 
@@ -133,6 +142,7 @@
         </footer>
 
     </div>
+    
 
     <environment include="Development">
 

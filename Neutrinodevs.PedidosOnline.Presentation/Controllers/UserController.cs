@@ -30,6 +30,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
         }
         public IActionResult Index()
         {
+            ViewBag.User = new UserAuthenticateDto { IdRole = 4 };
             var usersDto = new List<UserMainDto>();
             var users = _rpsUser.GetAll();
 
@@ -49,6 +50,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
 
         public IActionResult New()
         {
+            ViewBag.User = new UserAuthenticateDto { IdRole = 4 };
             return View();
         }
 
@@ -104,6 +106,42 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             }
         }
 
+
+        [HttpPost]
+        public JsonResult RegisterEmploye([FromBody] UserDto user)
+        {
+            if (_rpsUser.ValidateDuplicateEmployee(user.Identification))
+                return Json("002");
+
+            if (_rpsUser.ValidateDuplicateUsername(user.Username))
+                return Json("003");
+
+            var userRegister = new UserRegisterDto();
+            try
+            {
+                user.Password = Security.GetSHA256(user.Password);
+                int idClient = _rpsUser.SaveEmployee(user);
+                if (idClient > 0)
+                {
+                    userRegister.Code = "000";
+                    userRegister.IdClient = idClient;
+                    return Json(userRegister);
+                }
+                else
+                {
+                    userRegister.Code = "001";
+                    return Json(userRegister);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                userRegister.Code = "001";
+                return Json(userRegister);
+            }
+        }
+
         [HttpPost]
         public JsonResult Login(string username, string password, bool is_client)
         {
@@ -117,7 +155,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
 
                 string passEncrypt = Security.GetSHA256(password.Trim());
                 var auth = _rpsUser.Login(username.Trim(), passEncrypt, is_client);
-                //HttpContext.Session.SetString("auth_user", JsonConvert.SerializeObject(auth));ç
+                //HttpContext.Session.SetString("auth_user", JsonConvert.SerializeObject(auth));
 
                 return Json(auth);
             }

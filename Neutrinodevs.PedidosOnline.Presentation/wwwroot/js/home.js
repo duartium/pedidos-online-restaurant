@@ -99,18 +99,23 @@ const login = (user) => {
         data: user,
         success: function (response) {
             let resp = response;
-            $("#loader").fadeOut();
             console.log(response);
             if (resp.code === '000') {
                 localStorage.setItem('user', JSON.stringify(resp));
-                if(resp.id_user > 0)
-                    window.location = '/Delivery/MyDeliveries';
-                else if (resp.id_client > 0)
-                    window.location = '/Dashboard';
+                console.log(resp.id_role);
+                if (resp.id_role === 3)
+                    window.location.href = '/Delivery/MyDeliveries';
+                else if (resp.id_role === 4)
+                    window.location.href = '/Dashboard';
+                else if (resp.id_role > 4)
+                    window.location.href = '/Dashboard/OrdersClient';
             }
-            else if (resp.code === '002')
+            else if (resp.code === '002') {
+                $("#loader").fadeOut();
                 Swal.fire('Notificación', 'Usuario y/o contraseñas incorrectas. Por favor, corrija y vuelva a intentar.', 'error');
+            }
             else {
+                $("#loader").fadeOut();
                 Swal.fire('Notificación', 'Usuario y/o contraseña son obligatorios.', 'error');
             }
         },

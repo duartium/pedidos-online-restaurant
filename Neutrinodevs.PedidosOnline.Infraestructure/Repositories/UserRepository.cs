@@ -68,6 +68,51 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
             }
         }
 
+        public int SaveEmployee(UserDto userDto)
+        {
+            try
+            {
+                int resp = -1;
+                using (var transaction = _context.Database.BeginTransaction())
+                {
+                    var _user = new Usuarios
+                    {
+                        Nombres = userDto.FirstName + " " + userDto.LastName,
+                        Email = userDto.Email,
+                        Estado = 1,
+                        TipoUsuario = userDto.ClientType,
+                        Username = userDto.Username,
+                        Password = userDto.Password
+                    };
+                    _context.Usuarios.Add(_user);
+                    _context.SaveChanges();
+
+                    var _employee = new Empleados
+                    {
+                        Identificacion = userDto.Identification,
+                        Nombres = userDto.FirstName,
+                        Apellidos = userDto.LastName,
+                        TipoEmpleado = userDto.ClientType,
+                        Estado = 1,
+                        FechaCreacion = DateTime.Now,
+                        UsuarioId = _user.IdUsuario,
+                        EstadoActividad = 1
+                    };
+                    _context.Empleados.Add(_employee);
+                    _context.SaveChanges();
+                    resp = _employee.IdEmpleado;
+
+                    transaction.Commit();
+                }
+                return resp;
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex, $"db update error: {ex?.InnerException?.Message}");
+                return -1;
+            }
+        }
+
         public UserAuthenticateDto Login(string user, string password, bool is_client)
         {
             try
@@ -76,6 +121,8 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                 var current_user = _context.Usuarios.Where(x => x.Estado == 1
                                                      && x.Username.Equals(user)
                                                      && x.Password.Equals(password)).Select(x => x).FirstOrDefault();
+
+                auth.IdRole = current_user.TipoUsuario;
 
                 if (current_user == null)
                     throw new NullReferenceException("Usuario no existe");
@@ -106,7 +153,17 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                                             select empleados.IdEmpleado).FirstOrDefault();
                         auth.IdUser = idRepartidor;
                         auth.Code = idRepartidor > 0 ? "000" : "002";
+                        break;
 
+                    case (int)TipoUsuario.Administrador:
+
+                        int idAdmin = (from users in _context.Usuarios
+                                            join empleados in _context.Empleados on users.IdUsuario equals empleados.UsuarioId
+                                            where users.Estado == 1 && empleados.Estado == 1
+                                            && users.IdUsuario == current_user.IdUsuario
+                                            select empleados.IdEmpleado).FirstOrDefault();
+                        auth.IdUser = idAdmin;
+                        auth.Code = idAdmin > 0 ? "000" : "002";
                         break;
                 }
                 
@@ -133,6 +190,24 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                             where client.Estado == 1
                             && client.Identificacion == identification
                             select client).Count();
+                return (count <= 0) ? false : true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return false;
+            }
+        }
+
+        public bool ValidateDuplicateEmployee(string identification)
+        {
+            try
+            {
+                int count = -1;
+                count = (from employee in _context.Empleados
+                         where employee.Estado == 1
+                         && employee.Identificacion == identification
+                         select employee).Count();
                 return (count <= 0) ? false : true;
             }
             catch (Exception ex)

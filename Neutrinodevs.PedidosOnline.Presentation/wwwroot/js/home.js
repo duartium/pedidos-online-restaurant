@@ -107,7 +107,7 @@ const login = (user) => {
                     window.location.href = '/Delivery/MyDeliveries';
                 else if (resp.id_role === 4)
                     window.location.href = '/Dashboard';
-                else if (resp.id_role > 4)
+                else if (resp.id_role > 1)
                     window.location.href = '/Dashboard/OrdersClient';
             }
             else if (resp.code === '002') {

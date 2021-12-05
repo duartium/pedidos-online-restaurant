@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Neutrinodevs.PedidosOnline.Domain.DTOs.User;
 using Neutrinodevs.PedidosOnline.Infraestructure.Repositories;
 using Newtonsoft.Json;
 
@@ -13,6 +14,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
         }
         public IActionResult Index()
         {
+            ViewBag.User = new UserAuthenticateDto { IdRole = 4 };
             return View();
         }
 

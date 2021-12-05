@@ -1,26 +1,130 @@
-﻿
-@{
-    ViewData["Title"] = "Index";
+﻿@{
+    ViewData["Title"] = "Platos";
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
+@section HeaderScripts{
+    <script>
+        var tbl_dishes;
+        var dishes_list;
 
-<div class="container table table-responsive">
-    <table class="table table-bordered table-striped" id="tbl_productos">
-        <thead>
-            <tr>
-                <td># Orden</td>
-                <td>Nombre de Cliente</td>
-                <td>Fecha</td>
-                <td>Valor</td>
-            </tr>
-        </thead>
-        <tbody id="tbody_orders">
-        </tbody>
-    </table>
+        const getData = (resp) => {
+            dishes_list = JSON.parse(resp);
+        }
+
+        const getDishes = () => {
+            $.ajax({
+                url: '/Dish/GetAll',
+                async: false,
+                type: 'POST',
+                contentType: "application/json; charset=utf-8",
+                success: getData,
+                error: function (err) {
+                    console.log(err.responseText);
+                }
+            });
+        }
+
+        const updateOrdersTable = () => {
+            getDishes();
+            tbl_dishes_list.clear().rows.add(dishes_list).draw();
+        }
+    </script>
+}
+<style>
+    .show-image {}
+</style>
+<div class="row" style="margin-top:2rem">
+    <div class="col-sm-12">
+        <div class="box">
+            <div class="box-head">
+                <h1>Productos</h1>
+                <div class="row">
+                    <div class="col-xs-12 col-md-12" style="margin-top: 2rem">
+                        <a href="/Dish/New" class="btn btn-success">Nuevo</a>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="item-responsive ">
+                    <table class="table table-striped" id="tbl_dishes">
+                        <thead>
+                            <tr>
+                                <td></td>
+                                <td>Nombre de Producto</td>
+                                <td>Precio</td>
+                                <td></td>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody_dishes">
+                        </tbody>
+                    </table>
+                </div><!--/.table-responsive-->
+            </div><!--/.item-->
+        </div><!--/.box-->
+    </div><!--/.col-->
+</div><!--/.row-->
+<!-- Product modal -->
+<div class="modal fade" id="product-modal" tabindex="-1" role="dialog" aria-labelledby="product-modalTitle" aria-hidden="true" data-id="">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="product-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                  <img src="" id="img-product" width="500" height="333" />
+            </div>
+        </div>
+    </div>
 </div>
 <script>
+    
 
+    $(document).ready(function () {
+
+        $(document).on("click", ".show-image", function () {
+            let image_name = $(this).data("image");
+            
+            $("#img-product").removeAttr("src");
+            $("#img-product").attr('src', "/images/products/" + image_name);
+            $("#product-modal").modal();
+        });
+        
+        
+
+        getDishes();
+
+        tbl_dishes = $("#tbl_dishes").DataTable({
+            "language": {
+                "url": "/datatables.net/datatables-es_es.json"
+            },
+            paging: true,
+            data: dishes_list,
+            order: [],
+            columns: [
+                { data: 'id' },
+                { data: 'name' },
+                { data: 'price', render: $.fn.dataTable.render.number(',', '.', 2, '') },
+                { data: 'image' },
+            ],
+            "columnDefs": [
+                { "targets": 0, "visible": false, "searchable": false },
+                {
+                    targets: 3,
+                    data: 'image',
+                    "render": function (item, type, row, meta) {
+                        return '<button class="btn btn-info btn-sm show-image" data-image="'+item+'">Ver Imagen</a>';
+                    },
+                    searchable: false
+                },
+            ]
+        });
+    });
 </script>
+
 @section Scripts {
-    <script src="~/aspnet/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/datatables.net/jquery.dataTables.min.js"></script>
+    <script src="~/js/dish/dish.js"></script>
 }

@@ -84,6 +84,15 @@ const removeProdFromCart = (id_item, element, num_products) => {
     let items = JSON.parse(order);
     let new_items = items.filter(x => x.uid != id_item);
 
+    let subtotal = 0;
+    new_items.forEach(x => {
+        subtotal += parseFloat(x.price);
+    });
+    $("#subtotal-cart").text(subtotal.toFixed(2));
+
+    if (subtotal == 0)
+        disabledCartButtons(true);
+
     let quantity_cart = parseInt($("#quantity_cart").text());
     quantity_cart -= num_products;
     $("#quantity_cart").text(quantity_cart.toString());

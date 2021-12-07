@@ -15,5 +15,6 @@ namespace Neutrinodevs.PedidosOnline.Domain.Contracts.Services
         bool SetOrderStage(int idOrder, int idStage);
         bool FinishOrder(int idOrder, int idStage);
         bool Cancel(CancelOrder cancel);
+        int GetStage(int idOrder);
     }
 }

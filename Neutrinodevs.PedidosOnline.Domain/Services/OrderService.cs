@@ -77,5 +77,10 @@ namespace Neutrinodevs.PedidosOnline.Domain.Services
         {
             return _orderRepository.Cancel(cancel);
         }
+
+        public int GetStage(int idOrder)
+        {
+            return _orderRepository.GetStage(idOrder);
+        }
     }
 }

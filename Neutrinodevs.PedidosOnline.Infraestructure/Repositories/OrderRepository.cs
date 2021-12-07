@@ -350,5 +350,12 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
 
             return (resp > 0);
         }
+
+        public int GetStage(int idOrder)
+        {
+            return _context.Pedidos.Where(x => x.Estado == 1 && x.IdPedido == idOrder)
+                .Select(x => (int)x.Stage).FirstOrDefault();
+        }
+
     }
 }

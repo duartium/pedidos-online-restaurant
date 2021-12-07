@@ -30,7 +30,10 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             try
             {
                 var currentOrder = _srvOrder.Get(id_order);
-                return View(currentOrder ?? new FinalOrderDto());
+                if (currentOrder == null) 
+                    return RedirectToAction("Index", "Home");
+                
+                return View(currentOrder);
             }
             catch (Exception ex)
             {
@@ -53,6 +56,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             }
         }
 
+        [HttpPost]
         public JsonResult Save([FromBody] FullOrderDto order_invoice)
         {
             try
@@ -66,6 +70,21 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             catch (Exception)
             {
                 return Json(new OrderResponse { IdOrder = -1, Code = "001" });
+            }
+        }
+
+        [HttpPost]
+        [Consumes("application/x-www-form-urlencoded")]
+        public JsonResult GetStage([FromForm] int idOrder)
+        {
+            try
+            {
+                int stage = _srvOrder.GetStage(idOrder);
+                return Json(stage);
+            }
+            catch (Exception)
+            {
+                return Json("999");
             }
         }
 

@@ -1,6 +1,6 @@
-﻿@model Neutrinodevs.PedidosOnline.Domain.DTOs.Order.FinalOrderDto 
+﻿@model Neutrinodevs.PedidosOnline.Domain.DTOs.Order.FinalOrderDto
 @{
-    ViewData["Title"] = "OrderProcess";
+    ViewData["Title"] = "Mi Pedido";
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
 }
 @await Html.PartialAsync("~/Views/Shared/_Navbar.cshtml")
@@ -9,62 +9,119 @@
         <div class="offset-lg-1 offset-md-1 col-lg-10 col-md-10 col-sm-12 col-xs-12">
             <div class="card p-3">
                 <div class="card-body">
-                    <h2>Estamos preparando tu pedido</h2>
-                    <p>Nuestro repartidor encargado, se pondrá en contacto contigo al llegar a tu ubicación.</p>
-                    <strong class="mr-5">Nº pedido: @Model.Number<span id="delivery-time"></span></strong><strong class="ml-5">Llegada estimada: @Model.DeliveryTime</strong> <span id="delivery-time"></span>
-                    <section class="mt-4">
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div id="wrap_order_detail table-responsive ">
-                                    <table class="table table-hover table-sm" id="tbl_order">
-                                        <thead class="bg-black text-white">
-                                            <tr>
-                                                <th>PRODUCTO</th>
-                                                <th>CANTIDAD</th>
-                                                <th>PRECIO</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tbody-invoice" >
-                                            @foreach (var item in Model.items)
-                                            {
-                                             <tr>
-                                                <td>@item.name</td>
-                                                <td >@item.quantity</td>
-                                                <td class="text-right">@item.price</td>
-                                             </tr>
-                                            }
-                                        </tbody>
-                                    </table>
+                    <h2 id="title">Estamos preparando tu pedido</h2>
+                    <p id="description">Nuestro repartidor encargado, se pondrá en contacto contigo al llegar a tu ubicación.</p>
+                    <div id="order-info">
+                        <strong class="mr-5">Nº pedido: @Model.Number<span id="delivery-time"></span></strong><strong class="ml-5">Llegada estimada: @Model.DeliveryTime</strong> <span id="delivery-time"></span>
+                        <section class="mt-4">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div id="wrap_order_detail table-responsive ">
+                                        <table class="table table-hover table-sm" id="tbl_order">
+                                            <thead class="bg-black text-white">
+                                                <tr>
+                                                    <th>PRODUCTO</th>
+                                                    <th>CANTIDAD</th>
+                                                    <th>PRECIO</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbody-invoice">
+                                                @foreach (var item in Model.items)
+                                                {
+                                                    <tr>
+                                                        <td>@item.name</td>
+                                                        <td>@item.quantity</td>
+                                                        <td class="text-right">@item.price</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="offset-lg-6 col-lg-6  offset-md-6 col-md-6 col-sm-6 col-xs-12">
-                                <div id="wrap_order_detail table-responsive">
-                                    <table class="table" id="tbl_order">
-                                        <tbody class='text-right'>
-                                            <tr>
-                                                <th>SUBTOTAL</th>
-                                                <td id="subtotal">@Model.Subtotal</td>
-                                            </tr>
-                                            <tr>
-                                                <th>IVA</th>
-                                                <td id="iva">@Model.Iva</td>
-                                            </tr>
-                                            <tr>
-                                                <th>TOTAL</th>
-                                                <td id="total">@Model.Total</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                            <div class="row">
+                                <div class="offset-lg-6 col-lg-6  offset-md-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div id="wrap_order_detail table-responsive">
+                                        <table class="table" id="tbl_order">
+                                            <tbody class='text-right'>
+                                                <tr>
+                                                    <th>SUBTOTAL</th>
+                                                    <td id="subtotal">@Model.Subtotal</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>IVA</th>
+                                                    <td id="iva">@Model.Iva</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>TOTAL</th>
+                                                    <td id="total">@Model.Total</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </section>
-                    <p>Preparamos tu pedido con los más altos estándares de seguridad e higiene.</p>
+                        </section>
+                        <p>Preparamos tu pedido con los más altos estándares de seguridad e higiene.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    $("#btnOk").click(function () {
+        UpdateStage();
+    });
+    const urlParams = new URLSearchParams(window.location.search);
+    const ir_order = urlParams.get('id_order');
+
+    const UpdateStage = () => {
+
+        $.ajax({
+            url: '/Order/GetStage',
+            method: 'POST',
+            dataType: 'json',
+            contentType: 'application/x-www-form-urlencoded',
+            data: { idOrder: ir_order},
+            success: function (response) {
+                let resp = response;
+                if (resp == 0) {
+                    console.warn('Etapa de pedido invalido');
+                }
+                else if (resp == 3) {
+                    $("#title").text("El repartidor se encuentra en camino");
+                } else if (resp == 4) {
+                    $("#title").text("Pedido Entregado!");
+                    $("#description").text("¡Gracias! Esperamos disfrutes tu pedido. Hemos enviado el recibo a tu correo electrónico.");
+                    $("#order-info").empty();
+                    $("#order-info").append("<button type='button' class='btn back-primary' id='logout'>Cerrar Sesión</button>");
+                }
+                else if (resp > 4) {
+                    $("#title").text("Lo sentimos...");
+                    $("#description").text("El pedido ha sido cancelado. El repartidor tuvo problemas para entregar tu pedido.");
+                    $("#order-info").remove();
+                }
+            },
+            error: function () {
+                $("#loader").fadeOut();
+                Swal.fire('Notificación', 'Lo sentimos, no se pudo completar la autenticación.', 'error');
+            }
+        });
+
+    }
+
+    $(document).on("click", "#logout", function () {
+        window.location.href = "/";
+    });
+</script>
+@section Scripts{
+    <script src="~/aspnet/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/order/notify.js" type="text/javascript"></script>
+    <script>
+        connection.on("ReceiveNotifyOrder", function () {
+            UpdateStage();
+        });
+    </script>
+}

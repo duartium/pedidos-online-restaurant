@@ -190,7 +190,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                         ClienteId = order.id_client,
                         Fecha = DateTime.Now,
                         Numero = nuevoSecuencial,
-                        DeliveryTime = DateTime.Now.AddMinutes(30).ToString("mm:ss"),
+                        DeliveryTime = DateTime.Now.AddMinutes(30).ToString("HH:mm"),
                         Subtotal = order.subtotal,
                         Iva = order.iva,
                         Total = order.total,

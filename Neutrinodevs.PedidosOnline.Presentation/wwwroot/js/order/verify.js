@@ -4,7 +4,7 @@
 
 function notifyOrder(callback, id_order) {
     callback();
-    window.location = '/Order/Processing?id_order=' + id_order;
+    window.location = base_url+'/Order/Processing?id_order=' + id_order;
 }
 
 $("#btnVerify").click(function () {
@@ -25,7 +25,7 @@ $("#btnVerify").click(function () {
 
     console.log(invoice);
     $.ajax({
-        url: '/User/Verify',
+        url: base_url+'/User/Verify',
         type: 'POST',
         data: JSON.stringify(user),
         dataType: 'json',
@@ -49,7 +49,7 @@ $("#btnVerify").click(function () {
 
 function SaveOrder(order_invoice) {
     $.ajax({
-        url: '/Order/Save',
+        url: base_url+'/Order/Save',
         type: 'POST',
         data: JSON.stringify(order_invoice),
         dataType: 'json',

@@ -14,9 +14,14 @@
         <link rel="stylesheet" href="~/css/master.css" />
     </environment>
     <script src="~/lib/jquery/dist/jquery.js"></script>
+
+    <script>
+        var base_url = '@Url.Content("~/")';
+    </script>
     @RenderSection("HeaderScript", required: false)
 </head>
 <body class="animate__animated animate__fadeIn">
+    
     @await Html.PartialAsync("_Preloader")
     @*<partial name="_CookieConsentPartial" />*@
 

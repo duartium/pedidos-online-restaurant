@@ -31,7 +31,7 @@
     $("#loader").fadeIn();
 
     $.ajax({
-        url: '/User/Register',
+        url: base_url+'/User/Register',
         method: 'POST',
         dataType: 'json',
         contentType: 'application/json',
@@ -45,7 +45,7 @@
                 order_invoice.id_client = resp.id_client;
                 localStorage.setItem('order_invoice', JSON.stringify(order_invoice));
 
-                window.location = '/User/Verification';
+                window.location = base_url+'/User/Verification';
             }
             else if (resp === '002') {
                 Swal.fire('Notificación', 'Usted ya tiene una cuenta activa, por favor inicie sesión.', 'error');
@@ -80,7 +80,7 @@ $("#frmLogin").submit(function (e) {
     $("#loader").fadeIn();
 
     $.ajax({
-        url: '/User/Login',
+        url: base_url+'/User/Login',
         method: 'POST',
         dataType: 'json',
         contentType: 'application/x-www-form-urlencoded',
@@ -146,13 +146,13 @@ const notify = () => {
 
 function notifyOrder(callback, id_order) {
     callback();
-    window.location = '/Order/Processing?id_order=' + id_order;
+    window.location = base_url+'/Order/Processing?id_order=' + id_order;
 }
 
-
+console.log(base_url);
 function SaveOrder(order_invoice) {
     $.ajax({
-        url: '/Order/Save',
+        url: base_url+'/Order/Save',
         type: 'POST',
         data: JSON.stringify(order_invoice),
         dataType: 'json',

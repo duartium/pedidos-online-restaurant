@@ -19,7 +19,7 @@ Array.from(document.getElementsByClassName("wrap_item_menu2")).forEach(element =
 
 const getDishes = () => {
     $.ajax({
-        url: '/Dish/GetAll',
+        url: base_url+'/Dish/GetAll',
         type: 'POST',
         contentType: 'application/json',
         success: function (response) {
@@ -33,7 +33,7 @@ const getDishes = () => {
 
 const getDrinks = () => {
     $.ajax({
-        url: '/Dish/GetDrinks',
+        url: base_url+'/Dish/GetDrinks',
         type: 'POST',
         contentType: 'application/json',
         success: function (response) {
@@ -50,7 +50,7 @@ const setProducts = (products) => {
     Array.from(JSON.parse(products)).forEach(item => {
         content += '<div class="col-md-6 col-lg-4 col-sm-12">';
         content += `<div class="card m-2 card-product" data-target="#product-modal" data-dish='${JSON.stringify(item)}'>`;
-        content += `<img src="/images/products/${item.image}"/>`;
+        content += `<img src="${base_url}/images/products/${item.image}"/>`;
         content += `<div class="card-body"><strong>${item.name}</strong><br /><span>$${item.price.toFixed(2)}</span></div>`;
         content += '<div class="overlay"><h5 class="text"><i class="fa fa-plus-circle"></i> Agregar al carrito</h5 ></div></div></div>';
     });
@@ -96,7 +96,7 @@ document.getElementById("frmSession").addEventListener("submit", function (e) {
 const login = (user) => {
 
     $.ajax({
-        url: '/User/Login',
+        url: base_url+'/User/Login',
         method: 'POST',
         dataType: 'json',
         contentType: 'application/x-www-form-urlencoded',
@@ -108,11 +108,11 @@ const login = (user) => {
                 localStorage.setItem('user', JSON.stringify(resp));
                 console.log(resp.id_role);
                 if (resp.id_role === 3)
-                    window.location.href = '/Delivery/MyDeliveries';
+                    window.location.href = base_url+'/Delivery/MyDeliveries';
                 else if (resp.id_role === 4)
-                    window.location.href = '/Dashboard';
+                    window.location.href = base_url+'/Dashboard';
                 else if (resp.id_role > 1)
-                    window.location.href = '/Dashboard/OrdersClient';
+                    window.location.href = base_url+'/Dashboard/OrdersClient';
             }
             else if (resp.code === '002') {
                 $("#loader").fadeOut();

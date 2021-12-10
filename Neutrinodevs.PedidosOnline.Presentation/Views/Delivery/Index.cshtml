@@ -10,7 +10,7 @@
         const getDeliveryList = () => {
             var datos = [];
             $.ajax({
-                url: '/Delivery/GetAll',
+                url: base_url+'/Delivery/GetAll',
                 async: false,
                 type: 'POST',
                 contentType: 'application/json',
@@ -30,7 +30,7 @@
                 user = JSON.parse(user_storage);
 
             $.ajax({
-                url: '/Order/AssignDelivery',
+                url: base_url+'/Order/AssignDelivery',
                 type: 'POST',
                 data: JSON.stringify({ IdOrder: id_order, IdEmployee: user.id_user }),
                 dataType: 'json',
@@ -143,7 +143,7 @@
         let delivery_list = getDeliveryList();
         tbl_delivery = $("#tbl_delivery").DataTable({
             "language": {
-                "url": "/datatables.net/datatables-es_es.json"
+                "url": base_url+"/datatables.net/datatables-es_es.json"
             },
             paging: true,
             data: delivery_list,

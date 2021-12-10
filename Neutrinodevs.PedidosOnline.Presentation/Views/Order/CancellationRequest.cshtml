@@ -51,7 +51,7 @@
             }
 
             $.ajax({
-                url: '/Order/CancelOrder',
+                url: base_url+'/Order/CancelOrder',
                 type: 'POST',
                 data: JSON.stringify(cancel),
                 dataType: 'json',
@@ -65,7 +65,7 @@
                             text: "Se ha procesado la cancelación de la entrega.",
                             type: "success"
                         }).then(function () {
-                                window.location = '/Delivery/MyDeliveries';
+                            window.location = base_url+'/Delivery/MyDeliveries';
                         });
                     } else {
                         Swal.fire("Orden", "Lo sentimos. No se pudo procesar la cancelación.", "warning");

@@ -31,7 +31,7 @@
         $("#loader").fadeIn();
 
         $.ajax({
-            url: '/User/RegisterEmploye',
+            url: base_url+'/User/RegisterEmploye',
             method: 'POST',
             dataType: 'json',
             contentType: 'application/json',

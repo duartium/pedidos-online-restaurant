@@ -1,6 +1,6 @@
 ﻿document.addEventListener("DOMContentLoaded", function (event) {
     
-    var conn = new signalR.HubConnectionBuilder().withUrl("/OrdersHub").build();
+    var conn = new signalR.HubConnectionBuilder().withUrl(base_url+ "/OrdersHub").build();
     conn.on("UpdateOrdersTable", function () {
         fillOrdersTable();
     });
@@ -16,7 +16,7 @@
 function fillOrdersTable() {
     console.log('fill');
     $.ajax({
-        url: "/Order/GetAll",
+        url: base_url+"/Order/GetAll",
         type: "GET",
         contentType: "application/json; charset-utf-8",
         dateType: "json",
@@ -37,4 +37,3 @@ function fillOrdersTable() {
         }
     });
 }
-

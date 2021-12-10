@@ -80,7 +80,7 @@
     const UpdateStage = () => {
 
         $.ajax({
-            url: '/Order/GetStage',
+            url: base_url+'/Order/GetStage',
             method: 'POST',
             dataType: 'json',
             contentType: 'application/x-www-form-urlencoded',
@@ -113,7 +113,7 @@
     }
 
     $(document).on("click", "#logout", function () {
-        window.location.href = "/";
+        window.location.href = base_url;
     });
 </script>
 @section Scripts{

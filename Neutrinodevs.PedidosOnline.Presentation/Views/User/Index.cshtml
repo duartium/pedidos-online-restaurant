@@ -9,7 +9,7 @@
     <h1 style="padding-bottom: 3rem;">Usuarios</h1>
     <div class="row " style="margin-bottom: 3rem">
         <div class="col-xs-12 col-md-12">
-            <a href="/User/New" class="btn btn-success ">Nuevo</a>
+            <a href='@Url.Action("New", "User")' class="btn btn-success ">Nuevo</a>
         </div>
     </div>
     <div class="table-responsive">
@@ -46,7 +46,7 @@
     $(document).ready(function () {
         $("#tbl_users").dataTable({
             "language": {
-                "url": "/datatables.net/datatables-es_es.json"
+                "url": base_url+"/datatables.net/datatables-es_es.json"
             }
         });
     });

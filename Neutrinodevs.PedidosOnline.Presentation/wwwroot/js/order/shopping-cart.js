@@ -133,8 +133,12 @@ $(document).ready(function () {
 
 $("#btn_shopping_cart").click(function () {
     let items = localStorage.getItem('order');
-    if (items) {
+
+    console.log(items);
+    if (items != null && JSON.parse(items).length > 0) {
         setElementsToCart(JSON.parse(items));
+    } else {
+        disabledCartButtons(true);
     }
     pushbar.open('pushbar-cart');
 });

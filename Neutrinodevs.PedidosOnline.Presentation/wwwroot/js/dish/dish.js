@@ -47,7 +47,7 @@ $(document).ready(function () {
         $("#loader").fadeIn();
 
         $.ajax({
-            url: '/Dish/New',
+            url: base_url+'/Dish/New',
             method: 'POST',
             dataType: 'json',
             contentType: 'application/json',
@@ -79,7 +79,7 @@ function SaveImage(img) {
     formData.append("image", img);
 
     $.ajax({
-        url: "/Dish/SaveResource",
+        url: base_url+"/Dish/SaveResource",
         type: 'POST',
         contentType: false,
         processData: false,

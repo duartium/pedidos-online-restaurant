@@ -13,7 +13,7 @@
 
         const getDishes = () => {
             $.ajax({
-                url: '/Dish/GetAll',
+                url: base_url+'/Dish/GetAll',
                 async: false,
                 type: 'POST',
                 contentType: "application/json; charset=utf-8",
@@ -40,7 +40,7 @@
                 <h1>Productos</h1>
                 <div class="row">
                     <div class="col-xs-12 col-md-12" style="margin-top: 2rem">
-                        <a href="/Dish/New" class="btn btn-success">Nuevo</a>
+                        <a href='@Url.Action("New", "Dish")' class="btn btn-success">Nuevo</a>
                     </div>
                 </div>
             </div>
@@ -88,7 +88,7 @@
             let image_name = $(this).data("image");
             
             $("#img-product").removeAttr("src");
-            $("#img-product").attr('src', "/images/products/" + image_name);
+            $("#img-product").attr('src', base_url+"/images/products/" + image_name);
             $("#product-modal").modal();
         });
         
@@ -98,7 +98,7 @@
 
         tbl_dishes = $("#tbl_dishes").DataTable({
             "language": {
-                "url": "/datatables.net/datatables-es_es.json"
+                "url": base_url+"/datatables.net/datatables-es_es.json"
             },
             paging: true,
             data: dishes_list,

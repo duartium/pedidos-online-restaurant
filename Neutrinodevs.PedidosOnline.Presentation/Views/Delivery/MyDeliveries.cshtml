@@ -113,7 +113,7 @@
         $("#loader").fadeIn();
 
         $.ajax({
-            url: '/Order/SetOrderStage',
+            url: base_url+'/Order/SetOrderStage',
             method: 'POST',
             dataType: 'json',
             data: { idOrder: id_order, idStage: id_stage },

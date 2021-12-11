@@ -16,7 +16,7 @@
         const getMyDeliveries = () => {
             var datos = [];
             $.ajax({
-                url: '/Delivery/GetDeliveries?idDealer=' + user.id_user,
+                url: base_url+'/Delivery/GetDeliveries?idDealer=' + user.id_user,
                 async: false,
                 type: 'POST',
                 dataType: 'json',
@@ -153,7 +153,7 @@
             denyButtonText: 'No'
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location = `/Order/CancellationRequest?order=${id_order}&stage=6`;
+                window.location = `${base_url}/Order/CancellationRequest?order=${id_order}&stage=6`;
             }
         })
     };
@@ -163,7 +163,7 @@
 
         tbl_my_deliveries = $("#tbl_my_deliveries").DataTable({
             "language": {
-                "url": "/datatables.net/datatables-es_es.json"
+                "url": base_url+"/datatables.net/datatables-es_es.json"
             },
             paging: true,
             order: [],

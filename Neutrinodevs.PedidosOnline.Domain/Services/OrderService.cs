@@ -61,6 +61,7 @@ namespace Neutrinodevs.PedidosOnline.Domain.Services
                 .Replace("@subtotal", orderResume.Subtotal.ToString())
                 .Replace("@iva", orderResume.Iva.ToString());
 
+            string emailResp = "";
             _srvEmail.Send(new EmailParams
             {
                 SenderEmail = "delivery.lapesca@gmail.com",
@@ -68,7 +69,7 @@ namespace Neutrinodevs.PedidosOnline.Domain.Services
                 Subject = "Recibo de su pedido.",
                 EmailTo = orderResume.CustomerEmail,
                 Body = bodyHtml
-            });
+            }, out emailResp);
 
             return resp;   
         }

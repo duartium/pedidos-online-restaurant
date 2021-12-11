@@ -77,6 +77,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
                 if (idClient > 0)
                 {
                     string bodyHtml = CString.EMAIL_TEMPLATE.Replace("@code", user.CodeEmailVerification);
+                    string responseEmail = "";
 
                     _rpsEmail.Send(new EmailParams
                     {
@@ -85,7 +86,9 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
                         Subject = "Bienvenido",
                         EmailTo = user.Email,
                         Body = bodyHtml
-                    });
+                    }, out responseEmail);
+
+                    _logger.LogError(responseEmail);
 
                     userRegister.Code = "000";
                     userRegister.IdClient = idClient;

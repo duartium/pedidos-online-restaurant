@@ -14,7 +14,7 @@ namespace Neutrinodevs.PedidosOnline.Domain.Services
 
         }
 
-        public void Send(EmailParams emailParams)
+        public void Send(EmailParams emailParams, out string message)
         {
             try
             {
@@ -35,21 +35,22 @@ namespace Neutrinodevs.PedidosOnline.Domain.Services
                 smtp.Credentials = new NetworkCredential("delivery.lapesca@gmail.com", "Lapesca.bby123");
 
                 string output = null;
-
                 try
                 {
                     smtp.Send(msg);
                     msg.Dispose();
                     output = "Correo electrónico fue enviado satisfactoriamente.";
+                    message = output;
                 }
                 catch (Exception ex)
                 {
                     output = "Error enviando correo electrónico: " + ex.Message;
+                    message = output;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                message = ex.ToString();
             }
         }
     }

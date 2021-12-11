@@ -4,6 +4,6 @@ namespace Neutrinodevs.PedidosOnline.Domain.Contracts.Services
 {
     public interface IEmailService
     {
-        void Send(EmailParams emailParams);
+        void Send(EmailParams emailParams, out string message);
     }
 }

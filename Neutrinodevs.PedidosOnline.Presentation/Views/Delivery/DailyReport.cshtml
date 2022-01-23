@@ -1,0 +1,118 @@
+﻿
+@{
+    ViewData["Title"] = "Reporte Diario";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+@section HeaderScripts{
+    <script>
+        var tbl_daily_report;
+
+        var user;
+        let user_storage = localStorage.getItem('user');
+
+        if (user_storage)
+            user = JSON.parse(user_storage);
+        
+        const getDailyReport = () => {
+            var datos = {};
+            $.ajax({
+                url: base_url + '/Delivery/GetDailyReport?idDealer=' + user.id_user,
+                async: false,
+                type: 'POST',
+                contentType: 'application/json',
+                success: function (resp) {
+                    datos = JSON.parse(resp);
+                },
+                error: (err) => { console.log(err); return undefined; }
+            });
+            return datos;
+        }
+
+
+        const updateOrdersTable = () => {
+            let daily_report = getDailyReport();
+            tbl_daily_report.clear().rows.add(daily_report).draw();
+        }
+    </script>
+}
+<div style="margin-top: 3rem; padding: 3rem;" class="panel panel-default min-h-75">
+    <h1 style="padding-bottom: 3rem;">Mi Reporte Diario</h1>
+
+    <div class="profile-content">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="profile-state">
+                    <div class="icon-box">
+                        <span class="icon-bg icon-bg-3">
+                            <img src="~/images/dashboard/money-icon.png" alt="money-icon">
+                        </span>
+                        <h2>Mis Ventas del Día</h2>
+                    </div><!--/.icon-box-->
+                    <h3 id="total_mis_ventas">$0.00</h3>
+                </div><!--/.profile-state-->
+            </div><!--/.col-->
+            <div class="col-sm-3">
+                <div class="profile-state">
+                    <div class="icon-box">
+                        <span class="icon-bg icon-bg-4">
+                            <img src="~/images/dashboard/plane-icon.png" alt="deliver-icon">
+                        </span>
+                        <h2>Total Entregas</h2>
+                    </div><!--/.icon-box-->
+                    <h3 id="total_entregas">0</h3>
+                </div><!--/.profile-state-->
+            </div><!--/.col-->
+        </div><!--/.row-->
+
+    </div><!--/.profile-content-->
+
+    <div class="row">
+        <div class="col-12" style="margin-top:2rem; padding:1rem;">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered" id="tbl_daily_report" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nº PEDIDO</th>
+                            <th scope="col">HORA</th>
+                            <th scope="col">TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+   
+    $(document).ready(function () {
+        let daily_report = getDailyReport();
+        console.log(daily_report);
+        $("#total_mis_ventas").text(`$${parseFloat(daily_report.total).toFixed(2)}`);
+        $("#total_entregas").text(daily_report.successful_deliveries);
+
+        
+        let dayli_report_items = daily_report.items;
+        tbl_daily_report = $("#tbl_daily_report").DataTable({
+            "language": {
+                "url": base_url + "/datatables.net/datatables-es_es.json"
+            },
+            paging: true,
+            data: dayli_report_items,
+            order: [],
+            columns: [
+                { data: 'number' },
+                { data: 'time' },
+                { data: 'total_item', render: $.fn.dataTable.render.number(',', '.', 2, '') },
+            ],
+        });
+
+    });
+
+
+</script>
+@section Scripts{
+    <script src="~/datatables.net/jquery.dataTables.min.js"></script>
+}

@@ -26,7 +26,9 @@
 </head>
 <body>
     <script>
-        var base_url = 'http://localhost/Pesca';
+        //var base_url = 'http://localhost/Pesca';
+        var base_url = 'http://localhost:12681/';
+        
         const logout = () => {
             window.location.href = base_url;
         }
@@ -104,6 +106,12 @@
                             <li>
                                 <a href='@Url.Action("Index", "Delivery")'>
                                     <i data-feather="book-open"></i> <span>Pedidos</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href='@Url.Action("DailyReport", "Delivery")'>
+                                    <i data-feather="pie-chart"></i> <span>Reporte Diario</span>
                                 </a>
                             </li>
                         }

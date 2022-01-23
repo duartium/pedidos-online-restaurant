@@ -36,6 +36,21 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             }
         }
 
+        public IActionResult DailyReport(int idDealer)
+        {
+            try
+            {
+                ViewBag.User = new UserAuthenticateDto { IdRole = 3 };
+                //var dailySales = _rpsDelivery.GetDailySales(idDealer);
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return View(new List<OrderDeliveryDTO>());
+            }
+        }
+
         public IActionResult MyDeliveries()
         {
             ViewBag.User = new UserAuthenticateDto { IdRole = 3 };
@@ -62,6 +77,20 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             try
             {
                 return Json(JsonConvert.SerializeObject(_rpsDelivery.GetDeliveriesByDealer(idDealer) ?? new List<OrderDeliveryDTO>()));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return Json("001");
+            }
+        }
+
+        [HttpPost]
+        public JsonResult GetDailyReport(int idDealer)
+        {
+            try
+            {
+                return Json(JsonConvert.SerializeObject(_rpsDelivery.GetDailySales(idDealer) ?? new DailyOrdersDelivery()));
             }
             catch (Exception ex)
             {

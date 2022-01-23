@@ -1,14 +1,13 @@
-﻿using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
-using Neutrinodevs.PedidosOnline.Domain.Entities;
-using Neutrinodevs.PedidosOnline.Infraestructure.Models;
-using System.Linq;
-using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Delivery;
-using Microsoft.EntityFrameworkCore;
-using System.Globalization;
-using Neutrinodevs.PedidosOnline.Domain.DTOs.Order;
+using Neutrinodevs.PedidosOnline.Domain.Enums;
+using Neutrinodevs.PedidosOnline.Infraestructure.Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
 {
@@ -44,6 +43,25 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                                            }).OrderByDescending(x => x.IdOrder)
                                            .ToList();
             return orders;                         
+        }
+
+        public DailyOrdersDelivery GetDailySales(int idDealer)
+        {
+            DailyOrdersDelivery dailySales = new DailyOrdersDelivery();
+            dailySales.Items = _context.Pedidos.Where(x => x.Estado == 1 && x.Stage == (int)EtapaPedido.Entregado)
+                                           .Where(ped => ped.Estado == 1 && ped.DeliveryId == idDealer 
+                                           && ped.Fecha.ToString("yyyy-MM-dd").Equals(DateTime.Today.ToString("yyyy-MM-dd")))
+                                           .Select(pedido => new ItemDailyOrderDelivery
+                                           {
+                                               Number = pedido.Numero.ToString().PadLeft(7, '0'),
+                                               Time = pedido.DeliveryTime,
+                                               Total = decimal.Parse(pedido.Total.ToString(), CultureInfo.InvariantCulture)
+                                           }).ToList();
+
+            dailySales.Total = Math.Round(dailySales.Items.Select(x => x.Total).Sum(), 2);
+            dailySales.TotalProducts = 0;
+            dailySales.SuccessfulDeliveries = dailySales.Items.Count;
+            return dailySales;
         }
 
         public IEnumerable<OrderDeliveryDTO> GetDeliveriesByDealer(int idDealer)

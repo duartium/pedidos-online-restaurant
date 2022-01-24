@@ -1,4 +1,5 @@
-﻿using Neutrinodevs.PedidosOnline.Domain.DTOs.Order;
+﻿using Neutrinodevs.PedidosOnline.Domain.DTOs.Dashboard;
+using Neutrinodevs.PedidosOnline.Domain.DTOs.Order;
 using Neutrinodevs.PedidosOnline.Domain.Entities;
 using Neutrinodevs.PedidosOnline.Domain.Models;
 using System;
@@ -16,5 +17,6 @@ namespace Neutrinodevs.PedidosOnline.Domain.Contracts.Services
         bool FinishOrder(int idOrder, int idStage);
         bool Cancel(CancelOrder cancel);
         int GetStage(int idOrder);
+        ReportSales GetSalesReport(string startDate, string endDate);
     }
 }

@@ -1,0 +1,163 @@
+﻿
+@{
+    ViewData["Title"] = "Reporte de Ventas";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+@section HeaderScripts{
+    <link href="~/css/jquery-ui-1.12.1.css" type="text/css" />
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
+    <script>
+        var tbl_sales_report;
+
+        const getDailyReport = (start_date, end_date) => {
+            var datos = {};
+            $.ajax({
+                url: `${base_url}Dashboard/GetSalesReport?start_date=${start_date}&end_date=${end_date}`,
+                async: false,
+                type: 'POST',
+                contentType: 'application/json',
+                success: function (resp) {
+                    datos = JSON.parse(resp);
+                },
+                error: (err) => { console.log(err); return undefined; }
+            });
+            return datos;
+        }
+
+
+        const updateOrdersTable = (startDate, endDate) => {
+            let report_sales = getDailyReport(startDate, endDate);
+
+            $("#total_mis_ventas").text(`$${parseFloat(report_sales.total).toFixed(2)}`);
+
+            tbl_sales_report.clear().rows.add(report_sales.items).draw();
+        }
+    </script>
+}
+<div style="margin-top: 3rem; padding: 3rem;" class="panel panel-default min-h-75">
+    <h1 style="padding-bottom: 3rem;">Reporte de ventas</h1>
+
+    <div class="row">
+        <div class="form-group col-xs-12 col-md-3">
+            <label for="identification">Fecha de Inicio</label>
+            <input id="start_date" name="name" type="text" class="form-control " minlength="10" maxlength="10" autocomplete="off" readonly required />
+        </div>
+        <div class="form-group col-xs-12 col-md-3">
+            <label for="price">Fecha Fin</label>
+            <input id="end_date" name="name" type="text" class="form-control " minlength="10" maxlength="10" autocomplete="off" readonly required />
+        </div>
+        <div class="form-group col-xs-12 col-md-3">
+            <button class="btn btn-primary" type="button" id="btnSalesReport" style="margin-top:2.5rem">BUSCAR</button>
+        </div>
+        <div class="col-sm-3">
+            <div class="profile-state">
+                <div class="icon-box">
+                    <span class="icon-bg icon-bg-3">
+                        <img src="~/images/dashboard/money-icon.png" alt="money-icon">
+                    </span>
+                    <h2>Total Ventas</h2>
+                </div><!--/.icon-box-->
+                <h3 id="total_mis_ventas">$0.00</h3>
+            </div><!--/.profile-state-->
+        </div><!--/.col-->
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-12" style="margin-top:2rem; padding:1rem;">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered" id="tbl_sales_report" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th scope="col">FECHA</th>
+                            <th scope="col">Nº PEDIDO</th>
+                            <th scope="col">USUARIO</th>
+                            <th scope="col">TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(document).ready(function () {
+        //let report_sales = getDailyReport();
+        //console.log(report_sales);
+        //$("#total_mis_ventas").text(`$${parseFloat(report_sales.total).toFixed(2)}`);
+        //$("#total_entregas").text(report_sales.successful_deliveries);
+
+
+        /*let dayli_report_items = report_sales.items;*/
+        tbl_sales_report = $("#tbl_sales_report").DataTable({
+            "language": {
+                "url": base_url + "/datatables.net/datatables-es_es.json"
+            },
+            dom: 'Bfrtip',
+            buttons: [
+                'pdf'
+            ],
+            paging: true,
+            data: [],
+            order: [],
+            columns: [
+                { data: 'date' },
+                { data: 'number' },
+                { data: 'user_delivery' },
+                { data: 'total_item', render: $.fn.dataTable.render.number(',', '.', 2, '') },
+            ],
+        });
+
+    });
+
+
+</script>
+@section Scripts{
+    <script src="~/datatables.net/jquery.dataTables.min.js"></script>
+    @*<script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>*@
+    
+    <script src="~/js/jquery-ui-1.12.1.min.js"></script>
+    <script>
+        $.datepicker.regional['es'] = {
+            closeText: 'Cerrar',
+            prevText: '< Ant',
+            nextText: 'Sig >',
+            currentText: 'Hoy',
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+            weekHeader: 'Sm',
+            dateFormat: 'dd-mm-yy',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: ''
+        };
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+        $("#start_date, #end_date").datepicker();
+
+
+        $("#btnSalesReport").click(function () {
+
+            let start_date = $("#start_date").val();
+            let end_date = $("#end_date").val();
+
+            if (start_date.length == 0 || end_date.length == 0) {
+                Swal.fire('Notificación', 'Por favor, seleccione la fecha de inicio y fin para consultar las ventas.', 'warning');
+                return;
+            }
+
+
+            updateOrdersTable(start_date, end_date);
+        });
+    </script>
+
+}

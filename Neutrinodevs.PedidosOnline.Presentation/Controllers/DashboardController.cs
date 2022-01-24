@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Services;
+using Neutrinodevs.PedidosOnline.Domain.DTOs.Dashboard;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.User;
 using Neutrinodevs.PedidosOnline.Domain.Entities;
 using Newtonsoft.Json;
@@ -30,6 +31,12 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             return View();
         }
 
+        public IActionResult SalesReport()
+        {
+            ViewBag.User = new UserAuthenticateDto { IdRole = 4 };
+            return View();
+        }
+
         public IActionResult OrdersClient()
         {
             ViewBag.User = new UserAuthenticateDto { IdRole = 1 };
@@ -49,6 +56,20 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             {
                 _logger.LogError(ex.ToString());
                 return Conflict(new List<Order>());
+            }
+        }
+
+        [HttpPost]
+        public JsonResult GetSalesReport(string start_date, string end_date)
+        {
+            try
+            {
+                return Json(JsonConvert.SerializeObject(_srvOrder.GetSalesReport(start_date, end_date) ?? new ReportSales()));
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return Json(new ReportSales());
             }
         }
 

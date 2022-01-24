@@ -14,6 +14,8 @@ using System.Data.SqlClient;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Neutrinodevs.PedidosOnline.Domain.Constants;
+using Neutrinodevs.PedidosOnline.Domain.DTOs.Dashboard;
+using System.Globalization;
 
 namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
 {
@@ -130,9 +132,9 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                                      IdOrder = ped.IdPedido,
                                      DeliveryTime = ped.DeliveryTime,
                                      Number = ped.Numero.ToString().PadLeft(6, '0'),
-                                     Iva = Convert.ToDecimal(ped.Iva, System.Globalization.CultureInfo.InvariantCulture),
-                                     Total = Convert.ToDecimal(ped.Total, System.Globalization.CultureInfo.InvariantCulture),
-                                     Subtotal = Convert.ToDecimal(ped.Subtotal, System.Globalization.CultureInfo.InvariantCulture)
+                                     Iva = Convert.ToDecimal(ped.Iva, CultureInfo.InvariantCulture),
+                                     Total = Convert.ToDecimal(ped.Total, CultureInfo.InvariantCulture),
+                                     Subtotal = Convert.ToDecimal(ped.Subtotal, CultureInfo.InvariantCulture)
                                  }).FirstOrDefault();
 
                 var details = (from det in _context.PedidoDetalle
@@ -357,5 +359,44 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                 .Select(x => (int)x.Stage).FirstOrDefault();
         }
 
+        public ReportSales GetSalesReport(string startDate, string endDate)
+        {
+            DateTime dStartDate = new DateTime(int.Parse(startDate.Split('-').GetValue(2).ToString()), 
+                int.Parse(startDate.Split('-').GetValue(1).ToString()), int.Parse(startDate.Split('-').GetValue(0).ToString()));
+
+            DateTime dEndDate = new DateTime(int.Parse(endDate.Split('-').GetValue(2).ToString()),
+                int.Parse(endDate.Split('-').GetValue(1).ToString()), int.Parse(endDate.Split('-').GetValue(0).ToString()));
+
+            ReportSales orders = new ReportSales();
+            //orders.Items = _context.Pedidos.Where(x => x.Estado == 1 && x.Stage == 4 
+            //        && x.Fecha.Date >= dStartDate.Date && x.Fecha.Date <= dEndDate.Date)
+            //                               .Select(pedido => new ItemSale
+            //                               {
+            //                                   Number = pedido.Numero.ToString(),
+            //                                   Time = pedido.DeliveryTime,
+            //                                   Total = decimal.Parse(pedido.Total.ToString(), CultureInfo.InvariantCulture)
+            //                               }).ToList();
+
+            orders.Items = (from ped in _context.Pedidos
+                          join emp in _context.Empleados
+                          on ped.DeliveryId equals emp.IdEmpleado
+                          join user in _context.Usuarios
+                          on emp.UsuarioId equals user.IdUsuario
+                          where ped.Estado == 1 && ped.Stage == (int)EtapaPedido.Entregado
+                          && ped.Fecha.Date >= dStartDate.Date && ped.Fecha.Date <= dEndDate.Date
+                          select new ItemSale
+                              {
+                              Number = ped.Numero.ToString().PadLeft(7, '0'),
+                              Date = ped.Fecha.ToString("dd-MM-yyyy HH:mm"),
+                              Total = decimal.Parse(ped.Total.ToString(), CultureInfo.InvariantCulture),
+                              UserDelivery = user.Username
+                          }).ToList();
+
+
+            orders.Total = Math.Round(orders.Items.Select(x => x.Total).Sum(), 2);
+            orders.SuccessfulDeliveries = orders.Items.Count;
+
+            return orders;
+        }
     }
 }

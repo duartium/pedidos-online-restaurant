@@ -8,6 +8,14 @@
         return patron.test(te);
     });
 
+    $(document).on('keypress', '.numbers', function (e) {
+        tecla = (document.all) ? e.keyCode : e.which;
+        if (tecla == 8) return true;
+        patron = /[\d]/;
+        te = String.fromCharCode(tecla);
+        return patron.test(te);
+    });
+
     $('.letters').keypress(function (e) {
         tecla = (document.all) ? e.keyCode : e.which;
         if (tecla == 8) return true;

@@ -2,16 +2,55 @@
     ViewData["Title"] = "Nueva Venta";
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
+@section HeaderScripts{
+    <script>
+        var sale = {
+            id_client: 0,
+            products: []
+        };
+
+        const remove = (id) => {
+            
+        }
+
+        const selectProduct = (product) => {
+            let quantity = $("#quantity_" + product.id).val();
+            let price = parseFloat(product.price * quantity).toFixed(2);
+            let row = `<tr><td>${product.name}</td>
+                           <td>${quantity}</td>
+                           <td>${product.price.toFixed(2)}</td>
+                           <td>${price}</td>
+                           <td><button class='btn btn-danger btn-sm' type="button" data-id="${product.id}">Eliminar</i></button></td>
+                       </tr>`;
+            $("#tbody_products").append(row);
+
+            let _product = {
+                id: product.id,
+                quantity: quantity,
+                price: product.price.toFixed(2)
+            }
+
+            sale.products.push(_product);
+            console.log(sale.products);
+            $("#products-modal").modal('hide')
+        }
+
+
+    </script>
+}
 <style>
-    span svg{color:white}
-    input{
-        height:40px !important;
+    span svg {
+        color: white
+    }
+
+    #identification, #names {
+        height: 40px !important;
         font-size: 18px !important;
     }
+
     .feather-fixed-h {
         height: 1.5rem;
     }
-
 </style>
 <div class="row" style="margin-top:2rem">
     <div class="col-sm-12">
@@ -24,7 +63,7 @@
                 {
                     @Html.AntiForgeryToken()
                     <div class="row">
-                        <div class="form-group col-xs-12 col-md-3 col-lg-4">
+                        <div class="form-group col-xs-12 col-md-3">
                             <label for="identification">Cliente</label>
                             <div class="input-group">
                                 <input type="text" class="form-control numbers" id="identification" name="identification" maxlength="10" required>
@@ -39,21 +78,21 @@
 
                     <div class="row">
                         <div class="form-group col-xs-12 col-md-3 col-md-offset-4">
-                            <button type="button" class="btn btn-success btn-block"><i data-feather="plus-circle" style=" vertical-align: middle; "></i> Agregar producto</button>
+                            <button type="button" class="btn btn-success btn-block" id="btnAgregarProd"><i data-feather="plus-circle" style=" vertical-align: middle; "></i> Agregar producto</button>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="item">
                             <div class="item-responsive ">
-                                <table class="table table-striped" id="tbl_dishes">
+                                <table class="table table-striped" id="tbl_products">
                                     <thead>
                                         <tr>
-                                            <td>CODIGO</td>
-                                            <td>NOMBRE DE PRODUCTO</td>
-                                            <td>PRECIO</td>
-                                            <td>CATEGORÍA</td>
-                                            <td></td>
+                                            <th>NOMBRE DE PRODUCTO</th>
+                                            <th align="center">CANTIDAD</th>
+                                            <th align="right">P. UNIT</th>
+                                            <th align="right">VALOR</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody id="tbody_products">
@@ -75,34 +114,30 @@
 </div>
 
 <!-- Products modal -->
-<div class="modal fade" id="products-modal" tabindex="-1" role="dialog" aria-labelledby="products-modalTitle" aria-hidden="true" data-id="">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal fade" id="products-modal" tabindex="-1" role="dialog" aria-labelledby="products-modalTitle" aria-hidden="true" data-id="" >
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document" >
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="product-title"></h5>
+                <h5 class="modal-title">Mariscos y Bebidas</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="row container">
-                    <div class="col-sm-12 col-md-6">
-                        <div id="wrap-price" class="text-center">
-                            <span class="price text-success">$</span><span class="price text-success" id="modal-price"></span>
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6">
-                        <div class="input-group mb-3 mt-3">
-                            <div class="input-group-prepend">
-                                <button type="button" class="btn btn-dark btn-lg" onclick="setQuantity(-1)"><i class="fa fa-minus"></i></button>
-                            </div>
-                            <input type="text" class="quantity-product" id="txt_quantity" name="txt_quantity" value="1" maxlength="4" readonly />
-                            <div class="input-group-append">
-                                <button type="button" class="btn btn-dark btn-lg" onclick="setQuantity(1)"><i class="fa fa-plus"></i></button>
-                            </div>
-                            <div class="input-group-append mt-3">
-                                <button type="button" class="form-control btn btn-primary" id="add-cart"><i class="fa fa-cart-plus"></i> Agregar al carrito</button>
-                            </div>
+            <div class="modal-body" style="overflow-x: auto; max-height:500px;">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th width="80%">NOMBRE DE PRODUCTO</th>
+                                        <th width="10%">CANT.</th>
+                                        <th width="10%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_product_list">
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -115,19 +150,54 @@
     <script>
 
         const getProductList = (start_date, end_date) => {
-            
+
             $.ajax({
-                url: `${base_url}Dish/GetAll`,
+                url: `${base_url}Dish/GetProducts`,
                 type: 'POST',
                 contentType: 'application/json',
                 success: function (resp) {
-                    let datos =  JSON.parse(resp);
-                    console.log(datos);
+                    let datos = JSON.parse(resp);
 
+                    let rows = "";
+                    datos.forEach(function (valor, index) {
+                        rows += `<tr><td>${valor.name}</td>
+                                 <td><input type="number" class="form-control numbers" maxlength="3" min="1" value="1" id="quantity_${valor.id}" required></td>
+                                 <td><button class="btn btn-info" onclick='selectProduct(${JSON.stringify(valor)})'>Agregar</button></td></tr>`;
+                    });
+
+                    $("#tbody_product_list").append(rows);
                 },
                 error: (err) => { console.log(err); return undefined; }
             });
-            return datos;
         }
+
+        $("#btnAgregarProd").click(function () {
+
+            //if (sale.id_client == 0) {
+            //    swal.fire("Cliente no válido", "Por favor, seleccione el cliente para continuar.");
+            //    return;
+            //}
+
+            getProductList();
+
+            $('#products-modal').modal();
+        });
+
+        $("#frmSale").submit(function (e) {
+            e.preventDefault();
+
+            
+        });
+
+        $(document).on("click", ".btn-danger", function () {
+            let id = $(this).data("id");
+            let prods_filtered = sale.products.filter(x => x.id != id);
+            sale.products = prods_filtered;
+            console.log(sale);
+
+            $(this).closest('tr').remove();
+
+
+        });
     </script>
 }

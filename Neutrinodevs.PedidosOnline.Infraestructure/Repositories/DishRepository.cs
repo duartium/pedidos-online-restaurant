@@ -54,6 +54,27 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
             }
         }
 
+        public IEnumerable<ProductDTO> GetProducts()
+        {
+            try
+            {
+                var products = _context.Productos.Where(x => x.Estado == 1)
+                    .Select(x => new ProductDTO
+                    {
+                        Id = x.IdProducto,
+                        Nombre = x.Nombre,
+                        Precio = x.Precio
+                    }).OrderByDescending(x => x.Id)
+                    .ToList();
+                return products;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return null;
+            }
+        }
+
         public IEnumerable<ProductDTO> GetDrinks()
         {
             try

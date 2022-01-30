@@ -54,6 +54,21 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
         }
 
         [HttpPost]
+        public JsonResult GetProducts()
+        {
+            try
+            {
+                var products = _rpsDish.GetProducts();
+                return Json(JsonConvert.SerializeObject(products));
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return Json("999");
+            }
+        }
+
+        [HttpPost]
         public JsonResult GetDrinks()
         {
             try

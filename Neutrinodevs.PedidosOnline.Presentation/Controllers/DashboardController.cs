@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Services;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Dashboard;
+using Neutrinodevs.PedidosOnline.Domain.DTOs.Pos;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.User;
 using Neutrinodevs.PedidosOnline.Domain.Entities;
 using Newtonsoft.Json;
@@ -37,12 +38,24 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             return View();
         }
 
+        public IActionResult NewSale()
+        {
+            ViewBag.User = new UserAuthenticateDto { IdRole = 4 };
+            return View();
+        }
+
         public IActionResult OrdersClient()
         {
             ViewBag.User = new UserAuthenticateDto { IdRole = 1 };
             return View();
         }
 
+        [HttpPost]
+        public IActionResult NewSale(PosSaleDto posSaleDto)
+        {
+            ViewBag.User = new UserAuthenticateDto { IdRole = 4 };
+            return View();
+        }
 
         [HttpPost]
         public IActionResult GetAll()

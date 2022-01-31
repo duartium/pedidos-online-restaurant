@@ -73,6 +73,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IDeliveryRepository, DeliveryRepository>();
             services.AddScoped<IImageRepository, ImageRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
 
             var mapperConfig = new MapperConfiguration(m => {
                 m.AddProfile(new MappingProfile());
@@ -89,9 +90,6 @@ namespace Neutrinodevs.PedidosOnline.Presentation
             });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-           
-
-            
             
         }
 

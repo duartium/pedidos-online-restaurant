@@ -9,10 +9,6 @@
             products: []
         };
 
-        const remove = (id) => {
-            
-        }
-
         const selectProduct = (product) => {
             let quantity = $("#quantity_" + product.id).val();
             let price = parseFloat(product.price * quantity).toFixed(2);
@@ -64,10 +60,10 @@
                     @Html.AntiForgeryToken()
                     <div class="row">
                         <div class="form-group col-xs-12 col-md-3">
-                            <label for="identification">Cliente</label>
+                            <label for="identification">Cédula</label>
                             <div class="input-group">
                                 <input type="text" class="form-control numbers" id="identification" name="identification" maxlength="10" required>
-                                <span class="input-group-addon bg-success" style="cursor:pointer"><i data-feather="search"></i></span>
+                                <span class="input-group-addon bg-success" style="cursor:pointer" id="btnSearchClient"><i data-feather="search"></i></span>
                             </div>
                         </div>
                         <div class="form-group col-xs-12 col-md-5">
@@ -149,6 +145,59 @@
 @section Scripts{
     <script>
 
+        const findClient = () => {
+
+            let identification = $("#identification").val();
+            console.log(identification.length);
+            if (identification.length == 0) {
+                Swal.fire("Notificación", "Por favor ingrese el número de cédula del cliente para continuar.", "warning");
+                sale.id_client = 0;
+                $("#identification").val('')
+                return;
+            }
+
+            if (identification.length < 10) {
+                Swal.fire("Notificación", "La cédula del cliente debe tener 10 dítigos.", "warning");
+                sale.id_client = 0;
+                $("#identification").val('')
+                return;
+            }
+
+            
+
+            $.ajax({
+                url: `${base_url}Customer/Get?identification=${identification}`,
+                type: 'POST',
+                contentType: 'application/json',
+                success: function (resp) {
+                    if (resp == null) {
+                        Swal.fire({
+                            title: 'Notificación',
+                            text: 'El cliente con identificación ' + identification + ' no existe ¿Desea registrarlo?',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Sí'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                
+                            }
+                        })
+
+                        sale.id_client = 0;
+                        $("#identification").val('')
+                        return;
+                    }
+
+                    let client = JSON.parse(resp);
+                    sale.id_client = client.id_client;
+                    $("#names").val(client.full_name);
+                },
+                error: (err) => { console.log(err); return undefined; }
+            });
+        }
+
         const getProductList = (start_date, end_date) => {
 
             $.ajax({
@@ -172,22 +221,17 @@
         }
 
         $("#btnAgregarProd").click(function () {
-
-            //if (sale.id_client == 0) {
-            //    swal.fire("Cliente no válido", "Por favor, seleccione el cliente para continuar.");
-            //    return;
-            //}
+            if (sale.id_client == 0) {
+                swal.fire("Cliente no válido", "Por favor, seleccione el cliente para continuar.");
+                return;
+            }
 
             getProductList();
 
             $('#products-modal').modal();
         });
 
-        $("#frmSale").submit(function (e) {
-            e.preventDefault();
-
-            
-        });
+        
 
         $(document).on("click", ".btn-danger", function () {
             let id = $(this).data("id");
@@ -196,6 +240,19 @@
             console.log(sale);
 
             $(this).closest('tr').remove();
+        });
+
+        $("#btnSearchClient").click(function () {
+            findClient();
+        });
+
+        $("#frmSale").submit(function (e) {
+            e.preventDefault();
+
+            if (sale.products.length == 0) {
+                swal.fire("Notificación", "Por favor, agregue al menos un producto para la venta.");
+                return;
+            }
 
 
         });

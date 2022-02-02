@@ -51,10 +51,17 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
         }
 
         [HttpPost]
-        public IActionResult NewSale(PosSaleDto posSaleDto)
+        public JsonResult NewSale()
         {
-            ViewBag.User = new UserAuthenticateDto { IdRole = 4 };
-            return View();
+            try
+            {
+                return Json(JsonConvert.SerializeObject(new ReportSales()));
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return Json(new ReportSales());
+            }
         }
 
         [HttpPost]

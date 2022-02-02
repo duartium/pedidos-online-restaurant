@@ -46,7 +46,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
         {
             try
             {
-                var client = _rpsCustomer.Save(sale);
+                var client = new PosSaleDto();
                 return Ok(JsonConvert.SerializeObject(client));
             }
             catch (System.Exception ex)

@@ -32,46 +32,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
         public bool Save(PosSaleDto sale)
         {
             int result = 0;
-            using (_context.Database.BeginTransaction())
-            {
-                //se genera un nuevo secuancial
-                var secuencialRow = _context.Secuenciales.Where(x => x.Nombre.Equals("factura"))
-                    .Select(x => x).FirstOrDefault();
-
-                int nuevoSecuencial = (int)secuencialRow.Secuencial + 1;
-                secuencialRow.Secuencial = nuevoSecuencial;
-                _context.Update(secuencialRow);
-                _context.SaveChanges();
-
-                var comprobante = new ComprobanteVenta
-                {
-                    Fecha = DateTime.Now.ToUniversalTime(),
-                    Estado = (int)Estado.Activo,
-                    Numero = nuevoSecuencial,
-                    Subtotal = decimal.Parse(sale.Subtotal.Replace(",", ""), CultureInfo.InvariantCulture),
-                    Iva = decimal.Parse(sale.Iva.Replace(",", ""), CultureInfo.InvariantCulture),
-                    Total = decimal.Parse(sale.Total.Replace(",", ""), CultureInfo.InvariantCulture),
-                };
-                _context.ComprobanteVenta.Add(comprobante);
-                _context.SaveChanges();
-
-                //se asigna los items del pedido al comprobante de venta
-                var detallesComprobante = new List<ComprobanteDetalle>();
-                foreach (var idItem in sale.ProductIds)
-                {
-                    var detalle = new ComprobanteDetalle
-                    {
-                        ComprobanteId = comprobante.IdComprobante,
-                        ItemId = idItem.Id,
-                        Estado = (int)Estado.Activo
-                    };
-                    detallesComprobante.Add(detalle);
-                }
-                _context.ComprobanteDetalle.AddRange(detallesComprobante);
-                result = _context.SaveChanges();
-
-                _context.Database.CommitTransaction();
-            }
+            
 
             return (result > 0);
         }

@@ -29,6 +29,9 @@ namespace Neutrinodevs.PedidosOnline.Domain.DTOs.Product
         public int Cantidad { get; set; }
 
         [JsonProperty("price")]
-        public decimal Precio { get; set; }
+        public string Precio { get; set; }
+
+        [JsonProperty("full_value")]
+        public string PrecioTotal { get; set; }
     }
 }

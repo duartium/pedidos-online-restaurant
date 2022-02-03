@@ -6,31 +6,54 @@
     <script>
         var sale = {
             id_client: 0,
-            products: []
+            products: [],
+            subtotal: 0,
+            iva: 0,
+            total: 0
         };
 
         const selectProduct = (product) => {
+            
             let quantity = $("#quantity_" + product.id).val();
             let price = parseFloat(product.price * quantity).toFixed(2);
             let row = `<tr><td>${product.name}</td>
                            <td>${quantity}</td>
-                           <td>${product.price.toFixed(2)}</td>
+                           <td>${parseFloat(product.price).toFixed(2)}</td>
                            <td>${price}</td>
                            <td><button class='btn btn-danger btn-sm' type="button" data-id="${product.id}">Eliminar</i></button></td>
                        </tr>`;
             $("#tbody_products").append(row);
-
+            
             let _product = {
                 id: product.id,
                 quantity: quantity,
-                price: product.price.toFixed(2)
+                price: product.price.toFixed(2),
+                full_value: price
             }
 
             sale.products.push(_product);
-            console.log(sale.products);
-            $("#products-modal").modal('hide')
+
+            calcularTotales();
+            $("#products-modal").modal('hide');
         }
 
+        function calcularTotales() {
+            let total = 0;
+            
+            for (var i = 0; i < sale.products.length; i++) {
+                total += parseFloat(sale.products[i]["full_value"]);
+            }
+
+            sale.total = parseFloat(total).toFixed(2);
+            sale.subtotal = parseFloat(total / 1.12).toFixed(2);
+            sale.iva = parseFloat(parseFloat(total) * 0.12).toFixed(2);
+            
+
+            $("#subtotal").text(sale.subtotal);
+            $("#iva").text(sale.iva);
+            $("#total").text(sale.total);
+            
+        }
 
     </script>
 }
@@ -98,8 +121,31 @@
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="col-md-6 col-md-offset-6">
+                            <div id="wrap_order_detail table-responsive">
+                                <table class="table" id="tbl_order">
+                                    <tbody class='text-right'>
+                                        <tr>
+                                            <th>SUBTOTAL</th>
+                                            <th id="subtotal">0.00</th>
+                                        </tr>
+                                        <tr>
+                                            <th>IVA</th>
+                                            <th id="iva">0.00</th>
+                                        </tr>
+                                        <tr>
+                                            <th>TOTAL</th>
+                                            <th id="total">0.00</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row ">
-                        <div class="form-group col-xs-12 col-md-4 col-md-offset-8 text-right">
+                        <div class="form-group col-xs-12 col-md-4 col-md-offset-8">
                             <button type="submit" class="btn btn-primary btn-block" style="margin-top:2rem"><i data-feather="dollar-sign" style=" vertical-align: middle;"></i> VENDER</button>
                         </div>
                     </div>
@@ -148,7 +194,6 @@
         const findClient = () => {
 
             let identification = $("#identification").val();
-            console.log(identification.length);
             if (identification.length == 0) {
                 Swal.fire("Notificación", "Por favor ingrese el número de cédula del cliente para continuar.", "warning");
                 sale.id_client = 0;
@@ -170,8 +215,10 @@
                 type: 'POST',
                 contentType: 'application/json',
                 success: function (resp) {
-                    if (resp == null) {
-                        Swal.fire({
+                    let client = JSON.parse(resp);
+                    if (client == null || client == undefined) {
+                        
+                        swal.fire({
                             title: 'Notificación',
                             text: 'El cliente con identificación ' + identification + ' no existe ¿Desea registrarlo?',
                             icon: 'warning',
@@ -181,19 +228,20 @@
                             confirmButtonText: 'Sí'
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                
+
                             }
                         })
 
                         sale.id_client = 0;
                         $("#identification").val('');
                         return;
+                    } else {
+                        sale.id_client = client.id_client;
+                        $("#names").val(client.full_name);
+                        $("#names").focus();
                     }
 
-                    let client = JSON.parse(resp);
-                    sale.id_client = client.id_client;
-                    $("#names").val(client.full_name);
-                    $("#names").focus();
+                   
                 },
                 error: (err) => { console.log(err); return undefined; }
             });
@@ -211,7 +259,7 @@
                     let rows = "";
                     datos.forEach(function (valor, index) {
                         rows += `<tr><td>${valor.name}</td>
-                                 <td><input type="number" class="form-control numbers" maxlength="3" min="1" value="1" id="quantity_${valor.id}" required></td>
+                                 <td><input type="number" class="form-control numbers" maxlength="3" min="1" value="1" id="quantity_${valor.id}" required style="min-width:60px;"></td>
                                  <td><button class="btn btn-info" onclick='selectProduct(${JSON.stringify(valor)})'>Agregar</button></td></tr>`;
                     });
 
@@ -238,7 +286,13 @@
             let id = $(this).data("id");
             let prods_filtered = sale.products.filter(x => x.id != id);
             sale.products = prods_filtered;
-            console.log(sale);
+
+            
+
+            let total = sum("full_value", sale.products);
+
+           
+            
 
             $(this).closest('tr').remove();
         });
@@ -262,35 +316,21 @@
                 return;
             }
 
+            console.log(sale);
+            return;
             $.ajax({
-                url: `${base_url}Customer/Get?identification=${identification}`,
+                url: `${base_url}Dashboard/NewSale`,
                 type: 'POST',
+                data: {sale: sale},
                 contentType: 'application/json',
                 success: function (resp) {
                     if (resp == null) {
-                        Swal.fire({
-                            title: 'Notificación',
-                            text: 'El cliente con identificación ' + identification + ' no existe ¿Desea registrarlo?',
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Sí'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
 
-                            }
-                        })
-
-                        sale.id_client = 0;
-                        $("#identification").val('');
+                        
                         return;
                     }
 
-                    let client = JSON.parse(resp);
-                    sale.id_client = client.id_client;
-                    $("#names").val(client.full_name);
-                    $("#names").focus();
+                    $("#frmSale")[0].reset();
                 },
                 error: (err) => { console.log(err); return undefined; }
             });

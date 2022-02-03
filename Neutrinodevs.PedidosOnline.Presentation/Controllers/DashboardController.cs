@@ -51,7 +51,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
         }
 
         [HttpPost]
-        public JsonResult NewSale()
+        public JsonResult NewSale([FromBody] PosSaleDto sale)
         {
             try
             {

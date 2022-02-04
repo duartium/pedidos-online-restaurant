@@ -5,6 +5,7 @@ using Neutrinodevs.PedidosOnline.Domain.DTOs.Dashboard;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Pos;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.User;
 using Neutrinodevs.PedidosOnline.Domain.Entities;
+using Neutrinodevs.PedidosOnline.Domain.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
@@ -14,11 +15,13 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
     {
         private readonly ILogger<DashboardController> _logger;
         private readonly IOrderService _srvOrder;
+        private readonly ISaleService _srvSale;
 
-        public DashboardController(ILogger<DashboardController> logger, IOrderService orderService)
+        public DashboardController(ILogger<DashboardController> logger, IOrderService orderService, ISaleService saleService)
         {
             _logger = logger;
             _srvOrder = orderService;
+            _srvSale = saleService;
         }
 
         public IActionResult Index()
@@ -55,12 +58,15 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
         {
             try
             {
-                return Json(JsonConvert.SerializeObject(new ReportSales()));
+                if(_srvSale.Save(sale))
+                    return Json(JsonConvert.SerializeObject(new TransactionResponse { code = "000", message = "OK"}));
+                else
+                    return Json(JsonConvert.SerializeObject(new TransactionResponse { code = "001", message = "No se pudo registrar la venta."}));
             }
             catch (System.Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return Json(new ReportSales());
+                return Json(JsonConvert.SerializeObject(new TransactionResponse { code = "999", message = ex.Message }));
             }
         }
 

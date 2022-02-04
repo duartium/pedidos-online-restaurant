@@ -109,11 +109,23 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
 
                 entity.Property(e => e.IdComprobanteDet).HasColumnName("id_comprobante_det");
 
+                entity.Property(e => e.Cantidad).HasColumnName("cantidad");
+
                 entity.Property(e => e.ComprobanteId).HasColumnName("comprobante_id");
 
                 entity.Property(e => e.Estado).HasColumnName("estado");
 
                 entity.Property(e => e.ItemId).HasColumnName("item_id");
+
+                entity.Property(e => e.Precio)
+                    .HasColumnName("precio")
+                    .HasColumnType("decimal(10, 2)");
+
+                entity.Property(e => e.ProductId).HasColumnName("product_id");
+
+                entity.Property(e => e.Total)
+                    .HasColumnName("total")
+                    .HasColumnType("decimal(10, 2)");
 
                 entity.HasOne(d => d.Comprobante)
                     .WithMany(p => p.ComprobanteDetalle)
@@ -129,6 +141,8 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
                 entity.ToTable("COMPROBANTE_VENTA");
 
                 entity.Property(e => e.IdComprobante).HasColumnName("id_comprobante");
+
+                entity.Property(e => e.EsPos).HasColumnName("es_pos");
 
                 entity.Property(e => e.Estado).HasColumnName("estado");
 

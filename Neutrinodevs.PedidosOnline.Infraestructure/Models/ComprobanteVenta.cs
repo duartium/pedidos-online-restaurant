@@ -17,6 +17,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Models
         public decimal? Iva { get; set; }
         public decimal Total { get; set; }
         public int Estado { get; set; }
+        public bool? EsPos { get; set; }
 
         public ICollection<ComprobanteDetalle> ComprobanteDetalle { get; set; }
     }

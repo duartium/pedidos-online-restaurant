@@ -14,6 +14,7 @@ using Neutrinodevs.PedidosOnline.Infraestructure.Helpers;
 using Neutrinodevs.PedidosOnline.Infraestructure.Hubs.Hubs;
 using Neutrinodevs.PedidosOnline.Infraestructure.Models;
 using Neutrinodevs.PedidosOnline.Infraestructure.Repositories;
+using Neutrinodevs.PedidosOnline.Infraestructure.Services;
 using System;
 
 namespace Neutrinodevs.PedidosOnline.Presentation
@@ -74,6 +75,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation
             services.AddScoped<IDeliveryRepository, DeliveryRepository>();
             services.AddScoped<IImageRepository, ImageRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<ISaleService, SaleService>();
 
             var mapperConfig = new MapperConfiguration(m => {
                 m.AddProfile(new MappingProfile());
@@ -89,8 +91,8 @@ namespace Neutrinodevs.PedidosOnline.Presentation
                 options.Cookie.IsEssential = true;
             });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
             
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -321,19 +321,30 @@
                 type: 'POST',
                 data: JSON.stringify(sale),
                 contentType: 'application/json',
-                success: function (resp) {
+                success: function (response) {
+                    
+                    let resp = JSON.parse(response);
                     console.log(resp);
-                    if (resp == null) {
-
-                        
-                        return;
+                    if (resp.code != "000") {
+                        swal.fire("Notificación", resp.message, "warning");
+                    } else {
+                        swal.fire("Transacción exitosa", "Se ha registrado la venta.", "success");
+                        resetForm();
+                        $("#frmSale")[0].reset();
+                        $("#identification").focus();
                     }
-
-                    $("#frmSale")[0].reset();
                 },
                 error: (err) => { console.log(err); return undefined; }
             });
         });
+
+        const resetForm = () => {
+            $("#tbody_products tr").remove();
+
+            $("#subtotal").text("0.00");
+            $("#iva").text("0.00");
+            $("#total").text("0.00");
+        }
 
         $("#identification").focus();
     </script>

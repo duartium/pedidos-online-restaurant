@@ -33,6 +33,6 @@ namespace Neutrinodevs.PedidosOnline.Domain.DTOs.Product
         public string Price { get; set; }
 
         [JsonPropertyName("full_value")]
-        public string FullValue { get; set; }
+        public string full_value { get; set; }
     }
 }

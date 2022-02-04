@@ -39,19 +39,24 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Services
                     Subtotal = decimal.Parse(sale.Subtotal.Replace(",", ""), CultureInfo.InvariantCulture),
                     Iva = decimal.Parse(sale.Iva.Replace(",", ""), CultureInfo.InvariantCulture),
                     Total = decimal.Parse(sale.Total.Replace(",", ""), CultureInfo.InvariantCulture),
+                    EsPos = true
                 };
                 _context.ComprobanteVenta.Add(comprobante);
                 _context.SaveChanges();
 
                 //se asigna los items del pedido al comprobante de venta
                 var detallesComprobante = new List<ComprobanteDetalle>();
-                foreach (var idItem in sale.Products)
+                foreach (var item in sale.Products)
                 {
                     var detalle = new ComprobanteDetalle
                     {
                         ComprobanteId = comprobante.IdComprobante,
-                        ItemId = idItem.Id,
-                        Estado = (int)Estado.Activo
+                        ItemId = null,
+                        Estado = (int)Estado.Activo,
+                        Cantidad = item.Quantity,
+                        Precio = decimal.Parse(item.Price.Replace(",", ""), CultureInfo.InvariantCulture),
+                        Total = decimal.Parse(item.full_value.Replace(",", ""), CultureInfo.InvariantCulture),
+                        ProductId = item.Id
                     };
                     detallesComprobante.Add(detalle);
                 }

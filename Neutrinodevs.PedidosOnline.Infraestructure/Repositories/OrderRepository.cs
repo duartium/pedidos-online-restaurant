@@ -291,7 +291,8 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                     Numero = nuevoSecuencial,
                     Subtotal = (decimal)order.Subtotal,
                     Iva = order.Iva,
-                    Total = (decimal)order.Total
+                    Total = (decimal)order.Total,
+                    EsPos = false
                 };
                 _context.ComprobanteVenta.Add(comprobante);
                 _context.SaveChanges();

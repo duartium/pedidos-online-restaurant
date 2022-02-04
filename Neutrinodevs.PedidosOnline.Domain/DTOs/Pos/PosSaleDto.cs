@@ -1,24 +1,24 @@
-﻿using Neutrinodevs.PedidosOnline.Domain.DTOs.Customer;
-using Neutrinodevs.PedidosOnline.Domain.DTOs.Product;
+﻿using Neutrinodevs.PedidosOnline.Domain.DTOs.Product;
 using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Neutrinodevs.PedidosOnline.Domain.DTOs.Pos
 {
     public class PosSaleDto
     {
-        [JsonProperty("customer")]
-        public CustomerDTO Customer { get; set; }
+        [JsonProperty(PropertyName = "id_client")]
+        public int id_client { get; set; }
         
-        [JsonProperty("products")]
-        public ProductSaleDTO[] ProductIds { get; set; }
+        [JsonPropertyName("products")]
+        public ProductSaleDTO[] Products { get; set; }
 
-        [JsonProperty("subtotal")]
+        [JsonPropertyName("subtotal")]
         public string Subtotal { get; set; }
 
-        [JsonProperty("iva")]
+        [JsonPropertyName("iva")]
         public string Iva { get; set; }
 
-        [JsonProperty("total")]
+        [JsonPropertyName("total")]
         public string Total { get; set; }
     }
 }

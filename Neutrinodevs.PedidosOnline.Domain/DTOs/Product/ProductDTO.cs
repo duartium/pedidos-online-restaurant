@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Neutrinodevs.PedidosOnline.Domain.DTOs.Product
 {
@@ -16,22 +17,22 @@ namespace Neutrinodevs.PedidosOnline.Domain.DTOs.Product
         [JsonProperty("image")]
         public string Imagen { get; set; }
 
-        [JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
         public string JsonProduct { get; set; }
     }
 
     public class ProductSaleDTO
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public int Id { get; set; }
 
-        [JsonProperty("quantity")]
-        public int Cantidad { get; set; }
+        [JsonPropertyName("quantity")]
+        public int Quantity { get; set; }
 
-        [JsonProperty("price")]
-        public string Precio { get; set; }
+        [JsonPropertyName("price")]
+        public string Price { get; set; }
 
-        [JsonProperty("full_value")]
-        public string PrecioTotal { get; set; }
+        [JsonPropertyName("full_value")]
+        public string FullValue { get; set; }
     }
 }

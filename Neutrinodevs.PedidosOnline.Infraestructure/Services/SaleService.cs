@@ -45,7 +45,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Services
 
                 //se asigna los items del pedido al comprobante de venta
                 var detallesComprobante = new List<ComprobanteDetalle>();
-                foreach (var idItem in sale.ProductIds)
+                foreach (var idItem in sale.Products)
                 {
                     var detalle = new ComprobanteDetalle
                     {

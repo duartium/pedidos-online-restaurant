@@ -15,6 +15,12 @@
         const selectProduct = (product) => {
             
             let quantity = $("#quantity_" + product.id).val();
+
+            if (quantity == "" || quantity == "0") {
+                Swal.fire("Aviso", "Por favor, ingrese una cantidad válida", "warning");
+                return;
+            }
+
             let price = parseFloat(product.price * quantity).toFixed(2);
             let row = `<tr><td>${product.name}</td>
                            <td>${quantity}</td>
@@ -287,13 +293,7 @@
             let prods_filtered = sale.products.filter(x => x.id != id);
             sale.products = prods_filtered;
 
-            
-
-            let total = sum("full_value", sale.products);
-
-           
-            
-
+            calcularTotales();
             $(this).closest('tr').remove();
         });
 
@@ -315,15 +315,14 @@
                 swal.fire("Notificación", "Por favor, agregue al menos un producto para la venta.");
                 return;
             }
-
             console.log(sale);
-            return;
             $.ajax({
                 url: `${base_url}Dashboard/NewSale`,
                 type: 'POST',
-                data: {sale: sale},
+                data: JSON.stringify(sale),
                 contentType: 'application/json',
                 success: function (resp) {
+                    console.log(resp);
                     if (resp == null) {
 
                         

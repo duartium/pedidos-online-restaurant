@@ -1,0 +1,119 @@
+﻿
+@{
+    ViewData["Title"] = "Nuevo Cliente";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="panel panel-default" style="margin-top: 4rem">
+    <div class="panel-heading">
+        <h3>Nuevo Cliente</h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-xs-12 col-md-10 col-md-offset-1 ">
+                @using (Html.BeginForm("Register", "Customer", FormMethod.Post, new { id = "frmRegistrarme", @class = "pr-4 pt-5" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="row">
+                        <div class="form-group col-xs-12 col-md-4">
+                            <label for="identification">Cédula</label>
+                            <input id="identification" name="identification" type="text" class="form-control effect-8 numbers" minlength="10" maxlength="10" required />
+                        </div>
+                        <div class="form-group col-xs-12 col-md-4">
+                            <label for="name">Nombres</label>
+                            <input id="name" name="name" class="form-control letters" minlength="3" required />
+                        </div>
+                        <div class="form-group col-xs-12 col-md-4">
+                            <label for="last_name">Apellidos</label>
+                            <input id="last_name" name="last_name" type="text" class="form-control letters" minlength="3" required />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-xs-12 col-md-4">
+                            <label for="email">Correo electrónico</label>
+                            <input id="email" name="email" type="email" class="form-control" minlength="5" required />
+                        </div>
+                        <div class="form-group col-xs-12 col-md-4">
+                            <label for="phone">Celular/Telefono</label>
+                            <input id="phone" name="phone" type="text" class="form-control numbers" minlength="10" maxlength="10" required />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success ">REGISTRAR</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#identification").focus();
+
+    $("#frmRegistrarme").submit(function (e) {
+        e.preventDefault();
+
+        let user = {
+            identification: document.querySelector("#identification"),
+            first_name: document.querySelector("#name"),
+            last_name: document.querySelector("#last_name"),
+            email: document.querySelector("#email"),
+            phone: document.querySelector("#phone")
+        }
+
+        let user_register = {
+            identification: user.identification.value,
+            name: user.first_name.value,
+            last_name: user.last_name.value,
+            email: user.email.value,
+            contact: user.phone.value
+        }
+        
+        if (!$("#frmRegistrarme").valid()) {
+            return;
+        }
+
+        $("#loader").fadeIn();
+
+        $.ajax({
+            url: base_url + '/Customer/Register',
+            method: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify(user_register),
+            success: function (response) {
+                $("#loader").fadeOut();
+                let resp = response;
+                console.log(resp);
+                if (resp.code === '000') {
+                    Swal.fire('Notificación', 'Se ha registrado el cliente.', 'success');
+                    $("#frmRegistrarme")[0].reset();
+                }
+                else if (resp === '002') {
+                    Swal.fire('Notificación', 'El cliente ya se encuentra registrado.', 'warning');
+                }
+                else {
+                    Swal.fire('Notificación', 'Lo sentimos, no se pudo completar la solicitud.', 'error');
+                }
+            },
+            error: function () {
+                $("#loader").fadeOut();
+                Swal.fire('Notificación', 'Lo sentimos, no se pudo completar la solicitud.', 'error');
+            }
+        });
+    });
+
+    $(document).ready(function () {
+      
+        $("#frmRegistrarme").validate({
+            rule: {
+                identification: { required: true, maxlength: 3 },
+                name: { required: true, minlength: 3, maxlength: 3 },
+                last_name: { required: true, minlength: 3 },
+                email: { required: true, minlength: 6 },
+                phone: { required: true, minlength: 10 }
+            }
+        });
+
+    });
+</script>

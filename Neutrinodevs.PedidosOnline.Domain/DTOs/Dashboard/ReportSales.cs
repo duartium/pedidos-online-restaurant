@@ -28,5 +28,8 @@ namespace Neutrinodevs.PedidosOnline.Domain.DTOs.Dashboard
 
         [JsonProperty("total_item")]
         public decimal Total { get; set; }
+
+        [JsonProperty("sale_type")]
+        public string TipoVenta { get; set; }
     }
 }

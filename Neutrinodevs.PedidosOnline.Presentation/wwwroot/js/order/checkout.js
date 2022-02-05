@@ -22,8 +22,7 @@
         password: user.pass.value,
         address: delivery_position === undefined ? '' : $("#location").val() + '|' + delivery_position.lat + ',' + delivery_position.lng
     }
-    console.log(delivery_position);
-    console.log(user_register);
+    
     if (!$("#frmRegistrarme").valid()) {
         return;
     }
@@ -39,7 +38,7 @@
         success: function (response) {
             $("#loader").fadeOut();
             let resp = response;
-            console.log(resp);
+            
             if (resp.code === '000') {
                 let order_invoice = JSON.parse(localStorage.getItem('order_invoice'));
                 order_invoice.id_client = resp.id_client;

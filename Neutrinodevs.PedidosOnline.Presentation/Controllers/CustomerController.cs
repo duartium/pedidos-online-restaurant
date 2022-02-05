@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
+using Neutrinodevs.PedidosOnline.Domain.DTOs.Customer;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Pos;
+using Neutrinodevs.PedidosOnline.Domain.DTOs.User;
+using Neutrinodevs.PedidosOnline.Infraestructure.Repositories;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,15 +17,18 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
     {
         private readonly ICustomerRepository _rpsCustomer;
         private readonly ILogger<CustomerController> _logger;
+        private readonly UserRepository _rpsUser;
 
-        public CustomerController(ICustomerRepository customerRepository, ILogger<CustomerController> logger)
+        public CustomerController(ICustomerRepository customerRepository, ILogger<CustomerController> logger, UserRepository userRepository)
         {
             _rpsCustomer = customerRepository;
             _logger = logger;
+            _rpsUser = userRepository;
         }
 
-        public IActionResult Index()
+        public IActionResult NewCustomer()
         {
+            ViewBag.User = new UserAuthenticateDto { IdRole = 4 };
             return View();
         }
 
@@ -53,6 +59,35 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             {
                 _logger.LogError(ex.ToString());
                 return Conflict(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult Register([FromBody] CustomerSaveDTO user)
+        {
+            if (_rpsUser.ValidateDuplicateUser(user.Identification))
+                return Json("002");
+
+            var userRegister = new UserRegisterDto();
+            try
+            {
+                if (_rpsCustomer.Save(user))
+                {
+                    userRegister.Code = "000";
+                    return Json(userRegister);
+                }
+                else
+                {
+                    userRegister.Code = "001";
+                    return Json(userRegister);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                userRegister.Code = "001";
+                return Json(userRegister);
             }
         }
 

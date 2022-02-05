@@ -64,8 +64,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                         Id = x.IdProducto,
                         Nombre = x.Nombre,
                         Precio = x.Precio
-                    }).OrderByDescending(x => x.Id)
-                    .ToList();
+                    }).ToList();
                 return products;
             }
             catch (Exception ex)

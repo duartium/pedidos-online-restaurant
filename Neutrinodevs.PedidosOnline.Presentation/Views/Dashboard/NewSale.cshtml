@@ -234,7 +234,7 @@
                             confirmButtonText: 'Sí'
                         }).then((result) => {
                             if (result.isConfirmed) {
-
+                                window.location = base_url + '/Customer/NewCustomer';
                             }
                         })
 
@@ -308,6 +308,7 @@
             }
         });
 
+
         $("#frmSale").submit(function (e) {
             e.preventDefault();
 
@@ -315,14 +316,16 @@
                 swal.fire("Notificación", "Por favor, agregue al menos un producto para la venta.");
                 return;
             }
-            console.log(sale);
+
+            $("#loader").fadeIn();
+
             $.ajax({
                 url: `${base_url}Dashboard/NewSale`,
                 type: 'POST',
                 data: JSON.stringify(sale),
                 contentType: 'application/json',
                 success: function (response) {
-                    
+                    $("#loader").fadeOut();
                     let resp = JSON.parse(response);
                     console.log(resp);
                     if (resp.code != "000") {
@@ -334,7 +337,11 @@
                         $("#identification").focus();
                     }
                 },
-                error: (err) => { console.log(err); return undefined; }
+                error: (err) => {
+                    console.log(err);
+                    $("#loader").fadeOut();
+                    return undefined;
+                }
             });
         });
 

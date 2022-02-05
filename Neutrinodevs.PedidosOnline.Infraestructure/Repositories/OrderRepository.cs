@@ -390,9 +390,24 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                               Number = ped.Numero.ToString().PadLeft(7, '0'),
                               Date = ped.Fecha.ToString("dd-MM-yyyy HH:mm"),
                               Total = decimal.Parse(ped.Total.ToString(), CultureInfo.InvariantCulture),
+                              TipoVenta = "Online",
                               UserDelivery = user.Username
                           }).ToList();
 
+
+            var salesPOS = (from fac in _context.ComprobanteVenta
+                            where fac.Estado == 1
+                            && fac.Fecha.Date >= dStartDate.Date && fac.Fecha.Date <= dEndDate.Date
+                            select new ItemSale
+                            {
+                                Number = fac.Numero.ToString().PadLeft(7, '0'),
+                                Date = fac.Fecha.ToString("dd-MM-yyyy HH:mm"),
+                                Total = decimal.Parse(fac.Total.ToString(), CultureInfo.InvariantCulture),
+                                TipoVenta = "Punto de venta",
+                                UserDelivery = "Administrador"
+                            }).ToList();
+
+            orders.Items.AddRange(salesPOS);
 
             orders.Total = Math.Round(orders.Items.Select(x => x.Total).Sum(), 2);
             orders.SuccessfulDeliveries = orders.Items.Count;

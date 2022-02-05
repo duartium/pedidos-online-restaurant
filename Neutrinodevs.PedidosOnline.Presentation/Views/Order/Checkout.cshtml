@@ -35,6 +35,13 @@
         }
 
         function initMap() {
+            const BABAHOYO_BOUNDS = {
+                north: -1.79209,
+                south: -1.81607,
+                west: -79.54905,
+                east: -79.48322,
+            };
+            
             if (_pos == undefined) {
                 //setear posicion por defecto
                 current_position = { lat: parseFloat(-1.8003685577215554), lng: parseFloat(-79.523082290802) };
@@ -42,11 +49,14 @@
                 current_position = { lat: parseFloat(_pos.latitude.toFixed(5)), lng: parseFloat(_pos.longitude.toFixed(5)) };
             }
 
-
             map = new google.maps.Map(document.getElementById("map"), {
                 center: current_position,
                 zoom: 15,
-                mapTypeId: 'roadmap'
+                mapTypeId: 'roadmap',
+                restriction: {
+                    latLngBounds: BABAHOYO_BOUNDS,
+                    strictBounds: false,
+                },
             });
 
             marker = new google.maps.Marker({

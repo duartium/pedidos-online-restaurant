@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Services;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Dashboard;
+using Neutrinodevs.PedidosOnline.Domain.DTOs.Delivery;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Pos;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.User;
 using Neutrinodevs.PedidosOnline.Domain.Entities;
@@ -14,6 +16,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
     public class DashboardController : Controller
     {
         private readonly ILogger<DashboardController> _logger;
+        private readonly IDeliveryRepository _rpsDelivery;
         private readonly IOrderService _srvOrder;
         private readonly ISaleService _srvSale;
 
@@ -33,6 +36,21 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             //var current_user = JsonConvert.DeserializeObject<UserAuthenticateDto>(auth_user);
             ViewBag.User = new UserAuthenticateDto { IdRole = 4 };
             return View();
+        }
+
+        public IActionResult Orders()
+        {
+            try
+            {
+                ViewBag.User = new UserAuthenticateDto { IdRole = 4 };
+                var ordersAvailable = _rpsDelivery.GetAll();
+                return View(ordersAvailable ?? new List<OrderDeliveryDTO>());
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return View(new List<OrderDeliveryDTO>());
+            }
         }
 
         public IActionResult SalesReport()

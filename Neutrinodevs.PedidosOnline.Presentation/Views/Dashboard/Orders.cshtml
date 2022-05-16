@@ -1,0 +1,207 @@
+﻿@model List<Neutrinodevs.PedidosOnline.Domain.DTOs.Delivery.OrderDeliveryDTO>
+@{
+    ViewData["Title"] = "Pedidos";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+@section HeaderScripts{
+    <script>
+        var tbl_delivery;
+
+        const getDeliveryList = () => {
+            var datos = [];
+            $.ajax({
+                url: base_url + '/Delivery/GetAll',
+                async: false,
+                type: 'POST',
+                contentType: 'application/json',
+                success: function (resp) {
+                    datos = JSON.parse(resp);
+                },
+                error: (err) => { console.log(err); return undefined; }
+            });
+            return datos;
+        }
+
+
+        const setOrder = (id_order) => {
+            let user;
+            let user_storage = localStorage.getItem('user');
+            if (user_storage)
+                user = JSON.parse(user_storage);
+
+            $.ajax({
+                url: base_url + '/Order/AssignDelivery',
+                type: 'POST',
+                data: JSON.stringify({ IdOrder: id_order, IdEmployee: user.id_user }),
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (response) {
+                    console.log(response);
+                    if (response.code == '000') {
+                        connection.invoke("NotifyOrder");
+                        //updateOrdersTable();
+                        Swal.fire("Mensaje", response.message, "success");
+                    }
+                    else
+                        Swal.fire("Mensaje", response.message, "error");
+                },
+                error: function (err) {
+                    console.log(err);
+                    Swal.fire("Mensaje", "Se ha producido un error en la asignación", "error");
+                }
+            });
+        }
+
+        const updateOrdersTable = () => {
+            let delivery_list = getDeliveryList();
+            tbl_delivery.clear().rows.add(delivery_list).draw();
+        }
+    </script>
+}
+<div style="margin-top: 3rem; padding: 3rem;" class="panel panel-default min-h-75">
+    <h1 style="padding-bottom: 3rem;">Nuevos pedidos</h1>
+    <div class="row">
+        <div class="col-12" style="margin-top:2rem; padding:1rem;">
+            @if (Model.Count > 0)
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered" id="tbl_delivery" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nº PEDIDO</th>
+                                <th scope="col">CLIENTE</th>
+                                <th scope="col">CONTACTO</th>
+                                <th scope="col">DIRECCIÓN</th>
+                                <th scope="col">TOTAL</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div>
+                    <h4 class="text-center">No hay nuevos pedidos.</h4>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Product modal -->
+<div class="modal fade" id="product-modal" tabindex="-1" role="dialog" aria-labelledby="product-modalTitle" aria-hidden="true" data-id="">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detalle de pedido</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive" style="padding:2rem;">
+                            <table class="table table-hover table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>PRODUCTO</th>
+                                        <th>CANT.</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_product">
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const seeDetails = (product) => {
+        let num = 0;
+        let rowProduct = '';
+        $("#tbody_product").html('');
+        product.forEach(elem => {
+            num++;
+            rowProduct += `<tr><td>${num}</td><td>${elem.NombreProducto}</td><td>${elem.Cantidad}</td></tr>`;
+        });
+
+        $("#tbody_product").append(rowProduct);
+        $("#product-modal").modal();
+    }
+
+    $(document).ready(function () {
+        let delivery_list = getDeliveryList();
+        tbl_delivery = $("#tbl_delivery").DataTable({
+            "language": {
+                "url": base_url + "/datatables.net/datatables-es_es.json"
+            },
+            paging: true,
+            data: delivery_list,
+            order: [],
+            columns: [
+                { data: 'number' },
+                { data: 'customer_name' },
+                { data: 'cellphone_number' },
+                { data: 'address' },
+                { data: 'total', render: $.fn.dataTable.render.number(',', '.', 2, '') },
+                { data: 'items' },
+                { data: 'id_order' }
+            ],
+            columnDefs: [
+                {
+                    targets: 5,
+                    data: 'items',
+                    "render": function (items, type, row, meta) {
+                        return '<button class="btn btn-primary btn-sm see-details" data-product=\'' + items + '\'>Ver Detalle</a>';
+                    }
+                },
+                { orderable: false, searchable: false, targets: -1 },
+                { orderable: false, searchable: false, targets: 5 }
+                , {
+                    targets: 3,
+                    data: 'address',
+                    "render": function (address_data, type, row, meta) {
+                        let address_det = address_data.split("|");
+                        return address_det[0] + '<br><a class="btn btn-info btn-sm" style="margin: 0 auto" target="_blank" href="https://maps.google.com/?q=' + address_det[1] + '">Ver Mapa</a>';
+                    }
+                }
+                , {
+                    targets: -1,
+                    data: 'id_order',
+                    "render": function (id_order, type, row, meta) {
+                        return '<button class="btn btn-success btn-sm" onclick="setOrder(' + id_order + ')">Asignarme</a>';
+                    }
+                }
+            ]
+        });
+
+        $(document).on('click', '.see-details', function () {
+            let product = $(this).data("product");
+            seeDetails(product);
+        });
+
+    });
+
+
+</script>
+@section Scripts{
+    <script src="~/datatables.net/jquery.dataTables.min.js"></script>
+    <script src="~/aspnet/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/order/notify.js" type="text/javascript"></script>
+    <script>
+        connection.on("ReceiveNotifyOrder", function () {
+            console.log('RECIBIDO');
+            updateOrdersTable();
+        });
+    </script>
+}

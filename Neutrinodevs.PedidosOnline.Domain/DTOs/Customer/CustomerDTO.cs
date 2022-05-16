@@ -12,6 +12,18 @@ namespace Neutrinodevs.PedidosOnline.Domain.DTOs.Customer
 
         [JsonProperty("id_client")]
         public int IdClient { get; set; }
+
+        [JsonProperty("phone")]
+        public string Phone { get; set; }
+
+        [JsonProperty("email")]
+        public string Email { get; set; }
+
+        [JsonProperty("names")]
+        public string Names { get; set; }
+
+        [JsonProperty("surnames")]
+        public string Surnames { get; set; }
     }
 
     public class CustomerSaveDTO

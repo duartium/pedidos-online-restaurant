@@ -141,9 +141,9 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                                   select clients.IdCliente).FirstOrDefault();
                         auth.IdClient = idClient;
                         auth.Code = idClient > 0 ? "000" : "002";
-
                         break;
-
+                    
+                        #region cases repartidor, administrador
                     case (int)TipoUsuario.Repartidor:
 
                         int idRepartidor = (from users in _context.Usuarios
@@ -166,7 +166,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                         auth.Code = idAdmin > 0 ? "000" : "002";
                         break;
                 }
-                
+                #endregion
                 return auth;
             }
             catch (NullReferenceException ex)

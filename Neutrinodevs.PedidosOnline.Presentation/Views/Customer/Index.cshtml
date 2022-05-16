@@ -1,7 +1,54 @@
-﻿
+﻿@model IEnumerable<Neutrinodevs.PedidosOnline.Domain.DTOs.Customer.CustomerDTO>
 @{
     ViewData["Title"] = "Clientes";
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    int numRows = 0;
 }
 
-<h2>Clientes</h2>
+<div style="margin-top: 3rem; padding: 3rem" class="panel panel-default">
+    <h1 style="padding-bottom: 3rem;">Clientes</h1>
+    <div class="row " style="margin-bottom: 3rem">
+        <div class="col-xs-12 col-md-12">
+            <a href='@Url.Action("NewCustomer", "Customer")' class="btn btn-success ">Nuevo</a>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover table-striped" id="tbl_users">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Identificación</th>
+                    <th scope="col">Nombres</th>
+                    <th scope="col">Correo</th>
+                    <th scope="col">Teléfono</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    numRows++;
+                <tr>
+                    <th scope="row">@numRows</th>
+                    <td>@user.Identification</td>
+                    <td>@user.FullName</td>
+                    <td>@user.Email</td>
+                    <td>@user.Phone</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+        $("#tbl_users").dataTable({
+            "language": {
+                "url": base_url+"/datatables.net/datatables-es_es.json"
+            }
+        });
+    });
+</script>
+@section Scripts{
+    <script src="~/datatables.net/jquery.dataTables.min.js"></script>
+}

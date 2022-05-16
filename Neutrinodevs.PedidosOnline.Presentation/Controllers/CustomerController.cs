@@ -26,6 +26,14 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             _rpsUser = userRepository;
         }
 
+        public IActionResult Index()
+        {
+            ViewBag.User = new UserAuthenticateDto { IdRole = 4 };
+            var customers = _rpsCustomer.GetAll();
+            return View(customers);
+        }
+
+        [Route("New")]
         public IActionResult NewCustomer()
         {
             ViewBag.User = new UserAuthenticateDto { IdRole = 4 };

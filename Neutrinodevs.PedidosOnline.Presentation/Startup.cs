@@ -58,7 +58,6 @@ namespace Neutrinodevs.PedidosOnline.Presentation
                 options.Cookie.IsEssential = true;
             });
 
-
             services.AddSingleton(Configuration);
             services.AddDbContext<ND_PEDIDOS_ONLINEContext>(options =>
             {

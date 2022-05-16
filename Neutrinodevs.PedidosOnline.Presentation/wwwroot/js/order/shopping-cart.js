@@ -44,20 +44,6 @@ $("#add-cart").click(function () {
 });
 
 
-const saveLocalStorage = (product) => {
-    let order = localStorage.getItem('order');
-    if (order) {
-        let items = JSON.parse(order);
-        items.push(product);
-        localStorage.setItem("order", JSON.stringify(items));
-    } else {
-        let items = [];
-        items.push(product);
-        localStorage.setItem("order", JSON.stringify(items));
-    }
-    
-}
-
 const setPendingOrder = () => {
     let order = localStorage.getItem('order');
     if (order) {
@@ -100,6 +86,22 @@ const removeProdFromCart = (id_item, element, num_products) => {
     localStorage.setItem("order", JSON.stringify(new_items));
     element.parentNode.parentNode.removeChild(element.parentNode);
 }
+
+const saveLocalStorage = (product) => {
+    let order = localStorage.getItem('order');
+    if (order) {
+        let items = JSON.parse(order);
+        items.push(product);
+        localStorage.setItem("order", JSON.stringify(items));
+    } else {
+        let items = [];
+        items.push(product);
+        localStorage.setItem("order", JSON.stringify(items));
+    }
+
+}
+
+
 
 const setElementsToCart = (items) => {
     let wrap_items = $(".order-items");

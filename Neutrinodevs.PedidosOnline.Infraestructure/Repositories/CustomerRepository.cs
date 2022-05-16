@@ -4,7 +4,9 @@ using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Customer;
 using Neutrinodevs.PedidosOnline.Domain.Enums;
 using Neutrinodevs.PedidosOnline.Infraestructure.Models;
+using System.Collections.Generic;
 using System.Linq;
+using Neutrinodevs.PedidosOnline.Infraestructure.Extensions.Common;
 
 namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
 {
@@ -26,6 +28,18 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                     FullName = x.Nombres.ToUpper() + " " + x.Apellidos.ToUpper(),
                     Identification = identification
                 }).FirstOrDefault();
+        }
+
+        public IEnumerable<CustomerDTO> GetAll()
+        {
+            return _context.Clientes.Where(x => x.Estado == 1)
+                .Select(x => new CustomerDTO { 
+                    IdClient = x.IdCliente,
+                    Email = x.Email,
+                    Identification = x.Identificacion,
+                    Phone = x.Telefono,
+                    FullName = x.GetFullNames()
+                }).ToList();
         }
 
         public bool Save(CustomerSaveDTO userDto)

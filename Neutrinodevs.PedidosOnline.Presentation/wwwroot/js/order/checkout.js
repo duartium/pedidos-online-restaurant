@@ -22,6 +22,11 @@
         password: user.pass.value,
         address: delivery_position === undefined ? '' : $("#location").val() + '|' + delivery_position.lat + ',' + delivery_position.lng
     }
+
+    if (!EsCedulaValida(user_register.identification)) {
+        Swal.fire('Notificación', 'La cédula ingresada no es válida.', 'warning');
+        return;
+    }
     
     if (!$("#frmRegistrarme").valid()) {
         return;

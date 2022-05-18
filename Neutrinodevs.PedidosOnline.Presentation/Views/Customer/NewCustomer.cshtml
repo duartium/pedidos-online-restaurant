@@ -68,7 +68,12 @@
             email: user.email.value,
             contact: user.phone.value
         }
-        
+
+        if (!EsCedulaValida(user_register.identification)) {
+            Swal.fire('Notificación', 'La cédula ingresada no es válida.', 'warning');
+            return;
+        }
+
         if (!$("#frmRegistrarme").valid()) {
             return;
         }

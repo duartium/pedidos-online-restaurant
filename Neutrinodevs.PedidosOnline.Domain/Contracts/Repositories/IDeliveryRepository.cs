@@ -7,5 +7,6 @@ namespace Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories
     {
         IEnumerable<OrderDeliveryDTO> GetDeliveriesByDealer(int idDealer);
         DailyOrdersDelivery GetDailySales(int idDealer);
+        IEnumerable<DealerDTO> GetDealers();
     }
 }

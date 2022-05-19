@@ -20,11 +20,12 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
         private readonly IOrderService _srvOrder;
         private readonly ISaleService _srvSale;
 
-        public DashboardController(ILogger<DashboardController> logger, IOrderService orderService, ISaleService saleService)
+        public DashboardController(ILogger<DashboardController> logger, IOrderService orderService, ISaleService saleService, IDeliveryRepository deliveryRepository)
         {
             _logger = logger;
             _srvOrder = orderService;
             _srvSale = saleService;
+            _rpsDelivery = deliveryRepository;
         }
 
         public IActionResult Index()
@@ -114,6 +115,21 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             {
                 _logger.LogError(ex.ToString());
                 return Json(new ReportSales());
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetDealers()
+        {
+            try
+            {
+                var dealers = _rpsDelivery.GetDealers();
+                return Ok(JsonConvert.SerializeObject(dealers));
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return Conflict(new DealerDTO[0]);
             }
         }
 

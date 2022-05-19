@@ -22,15 +22,47 @@
             return datos;
         }
 
+        const getDealers = () => {
+            let datos = [];
+            $.ajax({
+                url: base_url + '/Dashboard/GetDealers',
+                async: false,
+                type: 'GET',
+                contentType: 'application/json',
+                success: function (resp) {
+                    datos = JSON.parse(resp);
+                },
+                error: (err) => { console.log(err); return undefined; }
+            });
+            return datos;
+        }
+
+        const showDealers = () => {
+            let rowDealers = '';
+            $("#tbody_dealers").html('');
+
+            dealers = getDealers();
+            dealers.forEach(elem => {
+                rowDealers += `<tr><td>${elem.full_names}</td><td>${elem.username}</td>`;
+                if (elem.activity_state == 'Disponible') {
+                    rowDealers += `<td><span class='badge badge-success'>${elem.activity_state}</span></td><td><button class='btn btn-success btn-sm'>Asignar</button></td></tr>`;
+                } else {
+                    rowDealers += `<td><span class='badge badge-primary'>${elem.activity_state}</span></td><td></td></tr>`;
+                }
+            });
+
+            $("#tbody_dealers").append(rowDealers);
+            $("#recaudador-modal").modal();
+        }
 
         const setOrder = (id_order) => {
             let user;
-            let user_storage = localStorage.getItem('user');
-            if (user_storage)
-                user = JSON.parse(user_storage);
+            //let user_storage = localStorage.getItem('user');
+            //if (user_storage)
+            //    user = JSON.parse(user_storage);
 
             $.ajax({
-                url: base_url + '/Order/AssignDelivery',
+                url: base_url + '/Dashboard/AssignDelivery',
                 type: 'POST',
                 data: JSON.stringify({ IdOrder: id_order, IdEmployee: user.id_user }),
                 dataType: 'json',
@@ -59,7 +91,9 @@
     </script>
 }
 <div style="margin-top: 3rem; padding: 3rem;" class="panel panel-default min-h-75">
-    <h1 style="padding-bottom: 3rem;">Nuevos pedidos</h1>
+    <div class="box-head">
+        <h2>Nuevos Pedidos</h2>
+    </div>
     <div class="row">
         <div class="col-12" style="margin-top:2rem; padding:1rem;">
             @if (Model.Count > 0)
@@ -125,6 +159,42 @@
         </div>
     </div>
 </div>
+
+<!-- Asignar Recaudador -->
+<div class="modal fade" id="recaudador-modal" tabindex="-1" role="dialog" aria-labelledby="recaudador-modalTitle" aria-hidden="true" data-id="">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Recaudadores</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive" style="padding:2rem;">
+                            <table class="table table-hover table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>NOMBRE RECAUDADOR</th>
+                                        <th>USUARIO</th>
+                                        <th>ESTADO</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_dealers">
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     const seeDetails = (product) => {
         let num = 0;
@@ -179,7 +249,7 @@
                     targets: -1,
                     data: 'id_order',
                     "render": function (id_order, type, row, meta) {
-                        return '<button class="btn btn-success btn-sm" onclick="setOrder(' + id_order + ')">Asignarme</a>';
+                        return '<button class="btn btn-success btn-sm" onclick="showDealers()">Asignar Repartidor</a>';
                     }
                 }
             ]

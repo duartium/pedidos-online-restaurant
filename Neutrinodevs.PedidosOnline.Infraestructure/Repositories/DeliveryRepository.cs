@@ -64,6 +64,21 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
             return dailySales;
         }
 
+        public IEnumerable<DealerDTO> GetDealers()
+        {
+            var dealers = (from emp in _context.Empleados join users in _context.Usuarios
+                           on emp.UsuarioId equals users.IdUsuario
+                           where emp.Estado == 1 && users.Estado == 1
+                           && users.TipoUsuario == 3
+                           select new DealerDTO {
+                               FullNames = emp.Nombres + " " + emp.Apellidos,
+                               Username = users.Username,
+                               ActivityState = emp.EstadoActividad == 1 ? "Disponible" : "En proceso de entrega"
+                           }).ToList();
+
+            return dealers;
+        }
+
         public IEnumerable<OrderDeliveryDTO> GetDeliveriesByDealer(int idDealer)
         {
             List<OrderDeliveryDTO> orders = null;

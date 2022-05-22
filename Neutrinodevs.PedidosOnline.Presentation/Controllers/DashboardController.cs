@@ -9,6 +9,7 @@ using Neutrinodevs.PedidosOnline.Domain.DTOs.User;
 using Neutrinodevs.PedidosOnline.Domain.Entities;
 using Neutrinodevs.PedidosOnline.Domain.Models;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
@@ -130,6 +131,30 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             {
                 _logger.LogError(ex.ToString());
                 return Conflict(new DealerDTO[0]);
+            }
+        }
+
+        [HttpPost]
+        public JsonResult AssignDelivery([FromBody] AssignDealerDTO assignDealerDTO)
+        {
+            try
+            {
+                if (assignDealerDTO == null) throw new ArgumentNullException(nameof(assignDealerDTO));
+                if (assignDealerDTO.IdDealer <= 0) throw new ArgumentNullException(nameof(assignDealerDTO.IdDealer));
+                if (assignDealerDTO.IdOrder <= 0) throw new ArgumentNullException(nameof(assignDealerDTO.IdOrder));
+
+                bool transaction = _srvOrder.AssignDelivery(assignDealerDTO.IdOrder, assignDealerDTO.IdDealer);
+                var json = new TransactionResponse
+                {
+                    code = transaction ? "000" : "001",
+                    message = !transaction ? "No se pudo realizar la asignación." : "Se asignó la orden con éxito."
+                };
+                return Json(json);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return Json(new TransactionResponse { code = "001" });
             }
         }
 

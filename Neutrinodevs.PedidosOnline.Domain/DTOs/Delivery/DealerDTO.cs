@@ -4,6 +4,9 @@ namespace Neutrinodevs.PedidosOnline.Domain.DTOs.Delivery
 {
     public class DealerDTO
     {
+        [JsonProperty("id")]
+        public int Id { get; set; }
+
         [JsonProperty("full_names")]
         public string FullNames { get; set; }
 

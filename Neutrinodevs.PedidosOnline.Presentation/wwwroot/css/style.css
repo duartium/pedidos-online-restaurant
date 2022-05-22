@@ -1004,3 +1004,9 @@ ul.notifications > li > .more:hover, ul.notifications > li > .more:focus {
     align-items: center;
     z-index: 999;
 }
+.badge-success {
+    background-color: #5cb85c;
+}
+.badge-primary {
+    background-color: #0275d8;
+}

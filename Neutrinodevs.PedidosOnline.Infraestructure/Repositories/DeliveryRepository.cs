@@ -71,6 +71,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                            where emp.Estado == 1 && users.Estado == 1
                            && users.TipoUsuario == 3
                            select new DealerDTO {
+                               Id = emp.IdEmpleado,
                                FullNames = emp.Nombres + " " + emp.Apellidos,
                                Username = users.Username,
                                ActivityState = emp.EstadoActividad == 1 ? "Disponible" : "En proceso de entrega"

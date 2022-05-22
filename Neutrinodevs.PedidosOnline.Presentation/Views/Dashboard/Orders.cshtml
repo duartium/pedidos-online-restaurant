@@ -37,15 +37,15 @@
             return datos;
         }
 
-        const showDealers = () => {
+        const showDealers = (idOrder) => {
             let rowDealers = '';
             $("#tbody_dealers").html('');
-
-            dealers = getDealers();
+            
+            dealers = getDealers(); console.log(dealers);
             dealers.forEach(elem => {
                 rowDealers += `<tr><td>${elem.full_names}</td><td>${elem.username}</td>`;
                 if (elem.activity_state == 'Disponible') {
-                    rowDealers += `<td><span class='badge badge-success'>${elem.activity_state}</span></td><td><button class='btn btn-success btn-sm'>Asignar</button></td></tr>`;
+                    rowDealers += `<td><span class='badge badge-success'>${elem.activity_state}</span></td><td><button onclick='setOrder(${idOrder}, ${elem.id})' class='btn btn-success btn-sm'>Asignar</button></td></tr>`;
                 } else {
                     rowDealers += `<td><span class='badge badge-primary'>${elem.activity_state}</span></td><td></td></tr>`;
                 }
@@ -55,23 +55,19 @@
             $("#recaudador-modal").modal();
         }
 
-        const setOrder = (id_order) => {
-            let user;
-            //let user_storage = localStorage.getItem('user');
-            //if (user_storage)
-            //    user = JSON.parse(user_storage);
-
+        const setOrder = (id_order, id_dealer) => {
             $.ajax({
                 url: base_url + '/Dashboard/AssignDelivery',
                 type: 'POST',
-                data: JSON.stringify({ IdOrder: id_order, IdEmployee: user.id_user }),
+                data: JSON.stringify({ IdOrder: id_order, IdDealer: id_dealer }),
                 dataType: 'json',
                 contentType: 'application/json',
                 success: function (response) {
                     console.log(response);
                     if (response.code == '000') {
-                        connection.invoke("NotifyOrder");
-                        //updateOrdersTable();
+                        //connection.invoke("NotifyOrder");
+                        updateOrdersTable();
+                        $("#recaudador-modal").modal("hide");
                         Swal.fire("Mensaje", response.message, "success");
                     }
                     else
@@ -249,7 +245,7 @@
                     targets: -1,
                     data: 'id_order',
                     "render": function (id_order, type, row, meta) {
-                        return '<button class="btn btn-success btn-sm" onclick="showDealers()">Asignar Repartidor</a>';
+                        return '<button class="btn btn-success btn-sm" onclick="showDealers('+id_order+')">Asignar Repartidor</a>';
                     }
                 }
             ]

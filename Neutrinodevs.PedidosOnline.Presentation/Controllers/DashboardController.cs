@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ND.EDUC_CONTINUA.DOMAIN.Contracts.Services;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Services;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Dashboard;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Delivery;
+using Neutrinodevs.PedidosOnline.Domain.DTOs.Order;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Pos;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.User;
 using Neutrinodevs.PedidosOnline.Domain.Entities;
@@ -20,13 +22,15 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
         private readonly IDeliveryRepository _rpsDelivery;
         private readonly IOrderService _srvOrder;
         private readonly ISaleService _srvSale;
-
-        public DashboardController(ILogger<DashboardController> logger, IOrderService orderService, ISaleService saleService, IDeliveryRepository deliveryRepository)
+        private readonly IPdfService _srvPdf;
+        public DashboardController(ILogger<DashboardController> logger, IOrderService orderService, 
+            ISaleService saleService, IDeliveryRepository deliveryRepository, IPdfService pdfService)
         {
             _logger = logger;
             _srvOrder = orderService;
             _srvSale = saleService;
             _rpsDelivery = deliveryRepository;
+            _srvPdf = pdfService;
         }
 
         public IActionResult Index()
@@ -155,6 +159,27 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             {
                 _logger.LogError(ex.ToString());
                 return Json(new TransactionResponse { code = "001" });
+            }
+        }
+
+
+        [HttpGet]
+        public ActionResult GetPdf(int idOrder)
+        {
+            try
+            {
+                if (idOrder <= 0) throw new ArgumentException("Se esperaba identificador del pedido.");
+
+                var order = _srvOrder.Get(idOrder);
+                byte[] pdfStream = _srvPdf.Generate(order);
+
+                //return new FileContentResult(pdfStream, "application/pdf", $"ReporteEstudiantes{DateTime.Now.ToString("yyyy-MM-dd_HHmmss")}.pdf");
+                return new FileContentResult(pdfStream, "application/pdf");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return RedirectToAction("Index", "Home");
             }
         }
 

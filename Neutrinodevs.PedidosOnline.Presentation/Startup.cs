@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using ND.EDUC_CONTINUA.DOMAIN.Contracts.Services;
+using ND.EDUC_CONTINUA.INFRAESTRUCTURE.Services;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
 using Neutrinodevs.PedidosOnline.Domain.Contracts.Services;
 using Neutrinodevs.PedidosOnline.Domain.Services;
@@ -75,6 +77,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation
             services.AddScoped<IImageRepository, ImageRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<ISaleService, SaleService>();
+            services.AddScoped<IPdfService, PdfService>();
 
             var mapperConfig = new MapperConfiguration(m => {
                 m.AddProfile(new MappingProfile());

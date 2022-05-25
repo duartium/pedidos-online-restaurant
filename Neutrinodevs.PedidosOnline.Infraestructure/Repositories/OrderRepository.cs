@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Neutrinodevs.PedidosOnline.Domain.Constants;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Dashboard;
 using System.Globalization;
+using Neutrinodevs.PedidosOnline.Infraestructure.Extensions.Common;
 
 namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
 {
@@ -126,10 +127,14 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
             {
                 var fullOrder = (from ped in _context.Pedidos
                                  join det in _context.PedidoDetalle on ped.IdPedido equals det.PedidoId
+                                 join cl in _context.Clientes on ped.ClienteId equals cl.IdCliente
+                                 join emp in _context.Empleados on ped.DeliveryId equals emp.IdEmpleado
                                  where ped.Estado == 1 && det.Estado == 1 && ped.IdPedido == idOrder
                                  select new FinalOrderDto
                                  {
                                      IdOrder = ped.IdPedido,
+                                     CustomerName = cl.GetFullNames(),
+                                     DealerName = emp.Nombres,
                                      DeliveryTime = ped.DeliveryTime,
                                      Number = ped.Numero.ToString().PadLeft(6, '0'),
                                      Iva = Convert.ToDecimal(ped.Iva, CultureInfo.InvariantCulture),

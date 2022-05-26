@@ -245,7 +245,7 @@
                     targets: -1,
                     data: 'id_order',
                     "render": function (id_order, type, row, meta) {
-                        return '<button class="btn btn-success btn-sm" onclick="showDealers('+id_order+')">Asignar Repartidor</a>';
+                        return '<button class="btn btn-success btn-sm" onclick="showDealers('+id_order+')">Asignar Repartidor</button>';
                     }
                 }
             ]
@@ -267,7 +267,7 @@
     <script>
         connection.on("ReceiveNotifyOrder", function () {
             console.log('RECIBIDO');
-            updateOrdersTable();
+            //updateOrdersTable();
         });
     </script>
 }

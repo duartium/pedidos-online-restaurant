@@ -129,6 +129,7 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                                  join det in _context.PedidoDetalle on ped.IdPedido equals det.PedidoId
                                  join cl in _context.Clientes on ped.ClienteId equals cl.IdCliente
                                  join emp in _context.Empleados on ped.DeliveryId equals emp.IdEmpleado
+                                 into subemp from emp in subemp.DefaultIfEmpty()
                                  where ped.Estado == 1 && det.Estado == 1 && ped.IdPedido == idOrder
                                  select new FinalOrderDto
                                  {
@@ -273,9 +274,12 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
             int result = 0;
             using (_context.Database.BeginTransaction())
             {
+                int idDealer = 0;
+
                 //se cambia a etapa: Entregado
                 var order = _context.Pedidos.Single(x => x.IdPedido == idOrder);
                 order.Stage = idStage;
+                idDealer = (int)order.DeliveryId;
 
                 _context.Entry(order).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 _context.SaveChanges();
@@ -320,6 +324,13 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                 }
                 _context.ComprobanteDetalle.AddRange(detallesComprobante);
                 result = _context.SaveChanges();
+
+                //Se cambia el estado de actividad del dealer a Disponible
+                var empleado = _context.Empleados.Single(x => x.IdEmpleado == idDealer);
+                empleado.EstadoActividad = 1;//Disponible
+                _context.Entry(empleado).State = EntityState.Modified;
+                _context.SaveChanges();
+
 
                 _context.Database.CommitTransaction();
             }

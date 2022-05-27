@@ -10,7 +10,7 @@
         const getDeliveryList = () => {
             var datos = [];
             $.ajax({
-                url: base_url + '/Delivery/GetAll',
+                url: base_url + '/Delivery/GetAssignmentPending',
                 async: false,
                 type: 'POST',
                 contentType: 'application/json',

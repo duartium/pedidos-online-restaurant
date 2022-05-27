@@ -39,7 +39,8 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
                                                CellphoneNumber = pedido.Cliente.Telefono,
                                                Subtotal = decimal.Parse(pedido.Subtotal.ToString(), CultureInfo.InvariantCulture),
                                                Total = decimal.Parse(pedido.Total.ToString(), CultureInfo.InvariantCulture),
-                                               JsonProducts = JsonConvert.SerializeObject(pedido.PedidoDetalle)
+                                               JsonProducts = JsonConvert.SerializeObject(pedido.PedidoDetalle),
+                                               IdStage = (int)pedido.Stage
                                            }).OrderByDescending(x => x.IdOrder)
                                            .ToList();
             return orders;                         

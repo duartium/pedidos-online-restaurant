@@ -13,6 +13,7 @@ using Neutrinodevs.PedidosOnline.Domain.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
 {
@@ -49,7 +50,7 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             try
             {
                 ViewBag.User = new UserAuthenticateDto { IdRole = 4 };
-                var ordersAvailable = _rpsDelivery.GetAll();
+                var ordersAvailable = _rpsDelivery.GetAll().Where(x => x.IdStage == 1).ToList();
                 return View(ordersAvailable ?? new List<OrderDeliveryDTO>());
             }
             catch (System.Exception ex)

@@ -72,6 +72,20 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
         }
 
         [HttpPost]
+        public JsonResult GetAssignmentPending()
+        {
+            try
+            {
+                return Json(JsonConvert.SerializeObject(_rpsDelivery.GetAll().Where(x => x.IdStage == 1) ?? new List<OrderDeliveryDTO>()));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return Json("001");
+            }
+        }
+
+        [HttpPost]
         public JsonResult GetDeliveries(int idDealer)
         {
             try

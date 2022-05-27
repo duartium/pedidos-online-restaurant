@@ -355,10 +355,19 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
             int resp = 0;
             using (var trans = _context.Database.BeginTransaction())
             {
+                int idDealer = 0;
+
                 var order = _context.Pedidos.Where(x => x.Estado == 1 && x.IdPedido == cancel.IdOrder).FirstOrDefault();
                 order.MotivoRechazo = cancel.Reason;
                 order.Stage = cancel.IdStage;
+                idDealer = (int)order.DeliveryId;
                 _context.Update(order);
+
+                //Se cambia el estado de actividad del dealer a Disponible
+                var empleado = _context.Empleados.Single(x => x.IdEmpleado == idDealer);
+                empleado.EstadoActividad = 1;//Disponible
+                _context.Entry(empleado).State = EntityState.Modified;
+                
                 resp = _context.SaveChanges();
 
                 if (resp > 0)

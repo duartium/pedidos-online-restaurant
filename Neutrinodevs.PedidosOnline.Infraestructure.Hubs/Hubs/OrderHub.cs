@@ -9,5 +9,10 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Hubs.Hubs
         {
             await Clients.All.SendAsync("ReceiveNotifyOrder");
         }
+
+        public async Task CancelOrderHub()
+        {
+            await Clients.All.SendAsync("ReceiveCancelOrder");
+        }
     }
 }

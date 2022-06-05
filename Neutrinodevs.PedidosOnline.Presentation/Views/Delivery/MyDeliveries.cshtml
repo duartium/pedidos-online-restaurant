@@ -16,7 +16,7 @@
         const getMyDeliveries = () => {
             var datos = [];
             $.ajax({
-                url: base_url+'/Delivery/GetDeliveries?idDealer=' + user.id_user,
+                url: base_url + '/Delivery/GetDeliveries?idDealer=' + user.id_user,
                 async: false,
                 type: 'POST',
                 dataType: 'json',
@@ -54,22 +54,22 @@
     <h1 style="padding-bottom: 3rem;">Mis Entregas Pendientes</h1>
     <div class="row">
         <div class="col-12 col-xs-12 table-responsive" style="margin-top:2rem; padding:1rem;">
-                <table class="table table-hover table-striped" id="tbl_my_deliveries" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Nº PEDIDO</th>
-                            <th>CLIENTE</th>
-                            <th>CONTACTO</th>
-                            <th>DIRECCIÓN</th>
-                            <th>TOTAL</th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+            <table class="table table-hover table-striped" id="tbl_my_deliveries" style="width:100%">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Nº PEDIDO</th>
+                        <th>CLIENTE</th>
+                        <th>CONTACTO</th>
+                        <th>DIRECCIÓN</th>
+                        <th>TOTAL</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -113,7 +113,7 @@
         $("#loader").fadeIn();
 
         $.ajax({
-            url: base_url+'/Order/SetOrderStage',
+            url: base_url + '/Order/SetOrderStage',
             method: 'POST',
             dataType: 'json',
             data: { idOrder: id_order, idStage: id_stage },
@@ -163,7 +163,7 @@
 
         tbl_my_deliveries = $("#tbl_my_deliveries").DataTable({
             "language": {
-                "url": base_url+"/datatables.net/datatables-es_es.json"
+                "url": base_url + "/datatables.net/datatables-es_es.json"
             },
             paging: true,
             order: [],
@@ -233,4 +233,14 @@
     <script src="~/datatables.net/jquery.dataTables.min.js"></script>
     <script src="~/aspnet/signalr/dist/browser/signalr.min.js"></script>
     <script src="~/js/order/notify.js" type="text/javascript"></script>
+    <script>
+        connection.on("ReceiveCancelOrder", function () {
+            console.log('RECIBIDO CANCEL');
+            updateOrdersTable();
+        });
+        connection.on("ReceiveNotifyOrder", function () {
+            console.log('RECIBIDO');
+            updateOrdersTable();
+        });
+    </script>
 }

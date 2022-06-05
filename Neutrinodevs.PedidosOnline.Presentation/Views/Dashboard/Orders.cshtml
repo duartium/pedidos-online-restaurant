@@ -65,8 +65,8 @@
                 success: function (response) {
                     console.log(response);
                     if (response.code == '000') {
-                        //connection.invoke("NotifyOrder");
-                        updateOrdersTable();
+                        connection.invoke("NotifyOrder");
+                        
                         $("#recaudador-modal").modal("hide");
                         Swal.fire("Mensaje", response.message, "success");
                     }
@@ -267,7 +267,7 @@
     <script>
         connection.on("ReceiveNotifyOrder", function () {
             console.log('RECIBIDO');
-            //updateOrdersTable();
+            updateOrdersTable();
         });
     </script>
 }

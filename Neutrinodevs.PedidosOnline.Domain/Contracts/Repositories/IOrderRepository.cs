@@ -1,7 +1,9 @@
 ﻿using Neutrinodevs.PedidosOnline.Domain.DTOs.Dashboard;
+using Neutrinodevs.PedidosOnline.Domain.DTOs.Delivery;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Order;
 using Neutrinodevs.PedidosOnline.Domain.Entities;
 using Neutrinodevs.PedidosOnline.Domain.Models;
+using System.Collections.Generic;
 
 namespace Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories
 {
@@ -16,5 +18,6 @@ namespace Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories
         bool Cancel(CancelOrder cancel);
         int GetStage(int idOrder);
         ReportSales GetSalesReport(string startDate, string endDate);
+        IEnumerable<OrderDeliveryDTO> GetAllByCustomer(int idCustomer);
     }
 }

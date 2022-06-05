@@ -78,6 +78,12 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             return View();
         }
 
+        public IActionResult History()
+        {
+            ViewBag.User = new UserAuthenticateDto { IdRole = 1 };
+            return View();
+        }
+
         [HttpPost]
         public JsonResult NewSale([FromBody] PosSaleDto sale)
         {

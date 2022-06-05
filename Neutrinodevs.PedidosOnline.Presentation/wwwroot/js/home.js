@@ -110,7 +110,9 @@ const login = (user) => {
                 if (resp.id_role === 3)
                     window.location.href = base_url+'/Delivery/MyDeliveries';
                 else if (resp.id_role === 4)
-                    window.location.href = base_url+'/Dashboard';
+                    window.location.href = base_url + '/Dashboard/';
+                else if (resp.id_role === 1)
+                    window.location.href = base_url + '/Dashboard/History?key='+resp.id_client;
                 else if (resp.id_role > 1)
                     window.location.href = base_url+'/Dashboard/OrdersClient';
             }

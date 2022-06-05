@@ -17,6 +17,8 @@ using Neutrinodevs.PedidosOnline.Domain.Constants;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Dashboard;
 using System.Globalization;
 using Neutrinodevs.PedidosOnline.Infraestructure.Extensions.Common;
+using Neutrinodevs.PedidosOnline.Domain.DTOs.Delivery;
+using Newtonsoft.Json;
 
 namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
 {
@@ -439,5 +441,39 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
 
             return orders;
         }
+
+
+        public IEnumerable<OrderDeliveryDTO> GetAllByCustomer(int idCustomer)
+        {
+            try
+            {
+                List<OrderDeliveryDTO> orders = null;
+                orders = _context.Pedidos.Where(x => x.Estado == 1 && x.Stage == 4)
+                                               .Include(cl => cl.Cliente)
+                                               .Include(det => det.PedidoDetalle)
+                                               .Where(ped => ped.Estado == 1 && ped.ClienteId == idCustomer
+                                               && ped.PedidoDetalle.Any(o => o.Estado == 1))
+                                               .Select(pedido => new OrderDeliveryDTO
+                                               {
+                                                   IdOrder = pedido.IdPedido,
+                                                   IdStage = (int)pedido.Stage,
+                                                   Number = pedido.Numero.ToString().PadLeft(5, '0'),
+                                                   Address = pedido.Cliente.Direccion,
+                                                   DeliveryTime = pedido.DeliveryTime,
+                                                   CustomerName = pedido.Cliente.Nombres + " " + pedido.Cliente.Apellidos,
+                                                   CellphoneNumber = pedido.Cliente.Telefono,
+                                                   Subtotal = decimal.Parse(pedido.Subtotal.ToString(), CultureInfo.InvariantCulture),
+                                                   Total = decimal.Parse(pedido.Total.ToString(), CultureInfo.InvariantCulture),
+                                                   JsonProducts = JsonConvert.SerializeObject(pedido.PedidoDetalle)
+                                               }).ToList();
+                return orders;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return null;
+            }
+        }
+
     }
 }

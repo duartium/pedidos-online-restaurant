@@ -1,0 +1,119 @@
+﻿@{
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    ViewData["Title"] = "Administración";
+}
+
+@section HeaderScripts{
+    <script>
+        var tbl_history;
+        var orders_list;
+
+        const getData = (resp) => {
+            orders_list = JSON.parse(resp);
+            console.log(orders_list);
+        }
+
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const idCustomer = urlParams.get('key')
+
+        const getOrdersHistory = () => {
+            $.ajax({
+                url: base_url + '/Customer/GetOrdersHistory?idCustomer=' + idCustomer,
+                async: false,
+                type: 'GET',
+                contentType: "application/json; charset=utf-8",
+                success: getData,
+                error: function (err) {
+                    console.log(err.responseText);
+                }
+            });
+        }
+
+        const updateOrdersTable = () => {
+            getOrdersHistory();
+
+            tbl_history.clear().rows.add(orders_list).draw();
+        }
+
+
+       
+
+        //$(document).on('click', '.see-details', function () {
+        //    let product = $(this).data("product");
+        //    seeDetails(product);
+        //});
+
+    
+    </script>
+}
+<div style="margin-top: 3rem; padding: 3rem;" class="panel panel-default min-h-75">
+    <div class="box-head">
+        <h2>Tus Pedidos Entregados</h2>
+    </div>
+    <div class="row">
+        <div class="col-12" style="margin-top:2rem; padding:1rem;">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered" id="tbl_history" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nº PEDIDO</th>
+                            <th scope="col">CLIENTE</th>
+                            <th scope="col">CONTACTO</th>
+                            <th scope="col">DIRECCIÓN</th>
+                            <th scope="col">TOTAL</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody_history">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script src="~/datatables.net/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            getOrdersHistory();
+            console.log(orders_list);
+            tbl_history = $("#tbl_history").DataTable({
+                "language": {
+                    "url": base_url + "/datatables.net/datatables-es_es.json"
+                },
+                paging: true,
+                data: orders_list,
+                order: [],
+                columns: [
+                    { data: 'number' },
+                    { data: 'customer_name' },
+                    { data: 'cellphone_number' },
+                    { data: 'address' },
+                    { data: 'total', render: $.fn.dataTable.render.number(',', '.', 2, '') },
+                    { data: 'items' },
+                ],
+                columnDefs: [
+                    {
+                        targets: 5,
+                        data: 'items',
+                        "render": function (items, type, row, meta) {
+                            return '<button class="btn btn-primary btn-sm see-details" data-product=\'' + items + '\'>Ver Detalle</a>';
+                        }
+                    },
+                    { orderable: false, searchable: false, targets: -1 },
+                    { orderable: false, searchable: false, targets: 5 }
+                    , {
+                        targets: 3,
+                        data: 'address',
+                        "render": function (address_data, type, row, meta) {
+                            let address_det = address_data.split("|");
+                            return address_det[0];
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+
+}

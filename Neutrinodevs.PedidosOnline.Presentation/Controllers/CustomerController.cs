@@ -16,14 +16,17 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
     public class CustomerController : Controller
     {
         private readonly ICustomerRepository _rpsCustomer;
+        private readonly IOrderRepository _rpsOrder;
         private readonly ILogger<CustomerController> _logger;
         private readonly UserRepository _rpsUser;
 
-        public CustomerController(ICustomerRepository customerRepository, ILogger<CustomerController> logger, UserRepository userRepository)
+        public CustomerController(ICustomerRepository customerRepository, ILogger<CustomerController> logger, 
+            UserRepository userRepository, IOrderRepository orderRepository)
         {
             _rpsCustomer = customerRepository;
             _logger = logger;
             _rpsUser = userRepository;
+            _rpsOrder = orderRepository;
         }
 
         public IActionResult Index()
@@ -99,5 +102,20 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             }
         }
 
+        
+        [HttpGet]
+        public IActionResult GetOrdersHistory(int idCustomer)
+        {
+            try
+            {
+                var orders = _rpsOrder.GetAllByCustomer(idCustomer);
+                return Ok(JsonConvert.SerializeObject(orders));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return Conflict(ex.Message);
+            }
+        }
     }
 }

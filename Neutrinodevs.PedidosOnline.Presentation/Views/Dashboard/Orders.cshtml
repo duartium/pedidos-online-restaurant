@@ -41,7 +41,7 @@
             let rowDealers = '';
             $("#tbody_dealers").html('');
             
-            dealers = getDealers(); console.log(dealers);
+            dealers = getDealers();
             dealers.forEach(elem => {
                 rowDealers += `<tr><td>${elem.full_names}</td><td>${elem.username}</td>`;
                 if (elem.activity_state == 'Disponible') {

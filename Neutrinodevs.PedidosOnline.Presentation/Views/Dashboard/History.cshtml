@@ -35,16 +35,11 @@
 
             tbl_history.clear().rows.add(orders_list).draw();
         }
-
-
        
-
-        //$(document).on('click', '.see-details', function () {
-        //    let product = $(this).data("product");
-        //    seeDetails(product);
-        //});
-
-    
+        $(document).on('click', '.see-details', function () {
+            let product = $(this).data("product");
+            seeDetails(product);
+        });
     </script>
 }
 <div style="margin-top: 3rem; padding: 3rem;" class="panel panel-default min-h-75">
@@ -62,7 +57,6 @@
                             <th scope="col">CONTACTO</th>
                             <th scope="col">DIRECCIÓN</th>
                             <th scope="col">TOTAL</th>
-                            <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody id="tbody_history">
@@ -75,9 +69,22 @@
 @section Scripts{
     <script src="~/datatables.net/jquery.dataTables.min.js"></script>
     <script>
+        const seeDetails = (product) => {
+            let num = 0;
+            let rowProduct = '';
+            $("#tbody_product").html('');
+            product.forEach(elem => {
+                num++;
+                rowProduct += `<tr><td>${num}</td><td>${elem.NombreProducto}</td><td>${elem.Cantidad}</td></tr>`;
+            });
+
+            $("#tbody_product").append(rowProduct);
+            $("#product-modal").modal();
+        }
+
         $(document).ready(function () {
             getOrdersHistory();
-            console.log(orders_list);
+            
             tbl_history = $("#tbl_history").DataTable({
                 "language": {
                     "url": base_url + "/datatables.net/datatables-es_es.json"
@@ -91,7 +98,7 @@
                     { data: 'cellphone_number' },
                     { data: 'address' },
                     { data: 'total', render: $.fn.dataTable.render.number(',', '.', 2, '') },
-                    { data: 'items' },
+                    /*{ data: 'items' },*/
                 ],
                 columnDefs: [
                     {
@@ -115,5 +122,4 @@
             });
         });
     </script>
-
 }

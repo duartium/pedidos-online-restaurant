@@ -1,8 +1,314 @@
-﻿
+﻿@model Neutrinodevs.PedidosOnline.Domain.DTOs.Customer.CustomerDTO
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Mis datos";
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
+@section HeaderScripts{
+    <link rel="stylesheet" href="~/css/master.css" />
+    <script>
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const idCustomer = urlParams.get('key')
 
-<h2>Edit</h2>
+        var delivery_position;
+        let map, infoWindow, _pos, marker;
+        var options = {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0,
+            types: ['(cities)'],
+            componentRestrictions: { country: "us" }
+        };
 
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(success, error, options);
+        } else {
+            // Browser doesn't support Geolocation
+            console.log('Browser doesnt support Geolocation');
+            //handleLocationError(false, infoWindow, map.getCenter());
+        }
+
+
+        function success(pos) {
+            _pos = pos.coords;
+            console.log('EL _pos: ' + JSON.stringify(_pos));
+        };
+
+        function error(err) {
+            console.warn('ERROR(' + err.code + '): ' + err.message);
+        }
+
+        function initMap() {
+            const BABAHOYO_BOUNDS = {
+                north: -1.79209,
+                south: -1.81607,
+                west: -79.54905,
+                east: -79.48322,
+            };
+
+            if (_pos == undefined) {
+                //setear posicion por defecto
+                current_position = { lat: parseFloat(-1.8003685577215554), lng: parseFloat(-79.523082290802) };
+            } else {
+                current_position = { lat: parseFloat(_pos.latitude.toFixed(5)), lng: parseFloat(_pos.longitude.toFixed(5)) };
+            }
+
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: current_position,
+                zoom: 15,
+                mapTypeId: 'roadmap',
+                restriction: {
+                    latLngBounds: BABAHOYO_BOUNDS,
+                    strictBounds: false,
+                },
+            });
+
+            marker = new google.maps.Marker({
+                position: current_position,
+                map,
+                draggable: true,
+                title: "Mi ubicación actual"
+            });
+            showLocationOnMap(current_position);
+
+
+            google.maps.event.addListener(map, 'click', function (event) {
+                placeMarker(event.latLng);
+            });
+        }
+
+
+        function showLocationOnMap(current_position) {
+            marker.setPosition(current_position);
+            map.setCenter(current_position);
+        }
+
+        const ok = () => {
+            var markerLatLng = marker.getPosition();
+            let position = { lat: markerLatLng.lat(), lng: markerLatLng.lng() };
+            delivery_position = position;
+            showInfo(position);
+        }
+
+        function showInfo(latlng) {
+            const geocoder = new google.maps.Geocoder();
+
+            geocoder.geocode({
+                'latLng': latlng
+            }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    if (results[1]) {
+                        // here assign the data to asp lables
+                        $("#location").val(results[1].formatted_address);
+                    } else {
+                        alert('No results found');
+                    }
+                } else {
+                    alert('Geocoder failed due to: ' + status);
+                }
+            });
+        }
+
+
+        function placeMarker(location) {
+            showLocationOnMap(location);
+            console.log(location);
+        }
+    </script>
+}
+<div style="margin-top: 3rem; padding: 3rem" class="panel panel-default">
+    <h1 style="padding-bottom: 3rem;">Mis datos</h1>
+    <div class="row">
+        <div class="col-12 col-md-12">
+            @using (Html.BeginForm("Update", "Customer", FormMethod.Post, new { id = "frmActualizarClte", @class = "pr-4" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="row">
+                    <div class="form-group col-xs-12 col-md-4 ">
+                        <label for="identification">Cédula</label>
+                        <input id="identification" name="identification" value="@Model.Identification" type="text" class="form-control effect-8 numbers" minlength="10" maxlength="10" required />
+                    </div>
+                    <div class="form-group col-xs-12 col-md-4">
+                        <label for="name">Nombres</label>
+                        <input id="name" name="name" class="form-control letters" minlength="3" value="@Model.Names" required />
+                    </div>
+                    <div class="form-group col-xs-12 col-md-4">
+                        <label for="last_name">Apellidos</label>
+                        <input id="last_name" name="last_name" type="text" class="form-control letters" minlength="3" value="@Model.Surnames" required />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-xs-12 col-md-4">
+                        <label for="email">Correo electrónico</label>
+                        <input id="email" name="email" type="email" class="form-control" minlength="5" value="@Model.Email" required />
+                    </div>
+                    <div class="form-group col-xs-12 col-md-4">
+                        <label for="phone">Celular/Telefono</label>
+                        <input id="phone" name="phone" type="text" class="form-control numbers" minlength="10" maxlength="10" value="@Model.Phone" required />
+                    </div>
+                    <div class="form-group col-xs-12 col-md-4">
+                        <label for="user">Usuario</label>
+                        <input id="user" name="user" type="text" class="form-control" minlength="6" maxlength="20" value="@Model.Username" disabled required />
+                    </div>
+                </div>
+                @*<div class="row">
+                    <div class="form-group col-xs-12 col-md-4">
+                        <label for="passsword">Contraseña</label>
+                        <input id="password" name="password" type="password" class="form-control" minlength="5" required />
+                    </div>
+                    <div class="form-group col-xs-12 col-md-4">
+                        <label for="passsword2">Confirmar contraseña</label>
+                        <input id="passsword2" name="passsword2" data-rule-equalTo="#password" type="password" class="form-control" minlength="5" required />
+                    </div>
+                </div>*@
+                <div class="row">
+                    <div class="form-group col-xs-12 col-md-8">
+                        <label for="location">Seleccione su ubicación</label>
+                        <input id="location" name="location" type="text" class="form-control" style="cursor:pointer" value="@Model.Address" readonly required />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-xs-12 col-md-3 ">
+                        <button type="submit" class="btn back-primary btn-block">ACTUALIZAR DATOS</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- Modal map-->
+<div class="modal fade" id="map-modal" tabindex="-1" role="dialog" aria-labelledby="map-modalTitle" aria-hidden="true" style="min-width:95%;">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="product-title">Seleccione su ubicación de entrega</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="height:100% !important">
+                <div id="map" style="height:100% !important">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .modal-dialog,
+    .modal-content {
+        height: 90%;
+    }
+
+    .modal-body {
+        /* 100% = dialog height, 120px = header + footer */
+        max-height: calc(100% - 40px);
+        overflow-y: scroll;
+    }
+</style>
+@section Scripts{
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3imid37BAw2_Uwsw59RjLw8DRJuGCbEc&callback=initMap">
+    </script>
+
+    @*<script src="~/aspnet/signalr/dist/browser/signalr.min.js"></script>
+        <script src="~/js/order/notify.js" type="text/javascript"></script>
+        <script src="~/js/order/checkout.js" type="text/javascript"></script>*@
+}
+<script>
+    $(document).ready(function () {
+        $("#location").click(function () {
+            $("#map-modal").modal()
+        });
+
+        $("#frmActualizarClte").validate({
+            rule: {
+                identification: { required: true, maxlength: 3 },
+                name: { required: true, minlength: 3, maxlength: 3 },
+                last_name: { required: true, minlength: 3 },
+                email: { required: true, minlength: 6 },
+                phone: { required: true, minlength: 10 },
+                user: { required: true, minlength: 6, maxlength: 20 },
+                //password: { required: true, minlength: 6 },
+                //passsword2: { required: true, minlength: 6 },
+                location: { required: true }
+            }
+        });
+
+        $('#map-modal').on('hidden.bs.modal', function () {
+            ok();
+        })
+
+    });
+
+    $(document).ready(function () {
+        $('body').on("click", '#misdatosAction', function () {
+
+            window.location.href = base_url + "/Customer/Edit?key="+idCustomer;
+        });
+    });
+
+    $("#frmActualizarClte").submit(function (e) {
+        e.preventDefault();
+
+        let user = {
+            identification: document.querySelector("#identification"),
+            first_name: document.querySelector("#name"),
+            last_name: document.querySelector("#last_name"),
+            email: document.querySelector("#email"),
+            phone: document.querySelector("#phone"),
+            username: document.querySelector("#user"),
+            //pass: document.querySelector("#password"),
+            //pass2: document.querySelector("#passsword2")
+        }
+
+        let user_register = {
+            id_client: idCustomer,
+            identification: user.identification.value,
+            names: user.first_name.value,
+            surnames: user.last_name.value,
+            email: user.email.value,
+            phone: user.phone.value,
+            username: user.username.value,
+            /*password: user.pass.value,*/
+            address: delivery_position === undefined ? $("#location").val() : $("#location").val() + '|' + delivery_position.lat + ',' + delivery_position.lng
+        }
+        console.log(user_register);
+        if (!EsCedulaValida(user_register.identification)) {
+            Swal.fire('Notificación', 'La cédula ingresada no es válida.', 'warning');
+            return;
+        }
+
+        if (!$("#frmActualizarClte").valid()) {
+            return;
+        }
+
+        $("#loader").fadeIn();
+
+        $.ajax({
+            url: base_url + '/Customer/Edit',
+            method: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify(user_register),
+            success: function (response) {
+                $("#loader").fadeOut();
+                let resp = response;
+
+                if (resp.code === '000') {
+                    Swal.fire('Notificación', 'Tus datos se han actualizado.', 'error');
+                }
+                else {
+                    Swal.fire('Notificación', 'Lo sentimos, no se pudo completar la solicitud.', 'error');
+                }
+            },
+            error: function () {
+                $("#loader").fadeOut();
+                Swal.fire('Notificación', 'Lo sentimos, no se pudo completar la solicitud.', 'error');
+            }
+        });
+    });
+
+</script>

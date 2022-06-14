@@ -7,6 +7,9 @@ namespace Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories
     {
         CustomerDTO Get(string identification);
         IEnumerable<CustomerDTO> GetAll();
+        CustomerDTO GetById(int id);
         bool Save(CustomerSaveDTO userDto);
+        bool Update(CustomerUpdateDto customer);
+
     }
 }

@@ -25,10 +25,53 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
             return _context.Clientes.Where(x => x.Identificacion.Equals(identification.Trim()) && x.Estado == 1)
                 .Select(x => new CustomerDTO { 
                     IdClient = x.IdCliente,
+                    Names = x.Nombres,
+                    Identification = identification,
+                    Email = x.Email,
+                    Phone = x.Telefono,
+                    Surnames = x.Apellidos
+                }).FirstOrDefault();
+        }
+
+        public CustomerDTO GetById(string identification)
+        {
+            return _context.Clientes.Where(x => x.Identificacion.Equals(identification.Trim()) && x.Estado == 1)
+                .Select(x => new CustomerDTO
+                {
+                    IdClient = x.IdCliente,
                     FullName = x.Nombres.ToUpper() + " " + x.Apellidos.ToUpper(),
                     Identification = identification
                 }).FirstOrDefault();
         }
+
+        public bool Update(CustomerUpdateDto customer)
+        {
+            try
+            {
+                int resp = -1;
+                using (var transaction = _context.Database.BeginTransaction())
+                {
+                    var client = _context.Clientes.Where(x => x.Estado == 1 && x.IdCliente == customer.IdClient).First();
+                    client.Identificacion = customer.Identification;
+                    client.Nombres = customer.Names;
+                    client.Apellidos = customer.Surnames;
+                    client.Direccion = customer.Address;
+                    client.Email = customer.Email;
+                    client.Telefono = customer.Phone;
+                    _context.Entry(client).State = EntityState.Modified;
+                    resp = _context.SaveChanges();
+                    
+                    transaction.Commit();
+                }
+                return resp > 0;
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex, $"db update error: {ex?.InnerException?.Message}");
+                return false;
+            }
+        }
+
 
         public IEnumerable<CustomerDTO> GetAll()
         {
@@ -78,5 +121,21 @@ namespace Neutrinodevs.PedidosOnline.Infraestructure.Repositories
             }
         }
 
+        public CustomerDTO GetById(int id)
+        {
+            return _context.Clientes.Where(x => x.Estado == 1 && x.IdCliente == id)
+                .Include(x => x.Usuario)
+                .Select(x => new CustomerDTO
+                {
+                    IdClient = x.IdCliente,
+                    Email = x.Email,
+                    Identification = x.Identificacion,
+                    Phone = x.Telefono,
+                    Names = x.Nombres,
+                    Surnames = x.Apellidos,
+                    Address = x.Direccion,
+                    Username = x.Usuario.Username
+                }).FirstOrDefault();
+        }
     }
 }

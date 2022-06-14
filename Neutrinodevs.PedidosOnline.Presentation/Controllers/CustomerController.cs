@@ -4,6 +4,7 @@ using Neutrinodevs.PedidosOnline.Domain.Contracts.Repositories;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Customer;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.Pos;
 using Neutrinodevs.PedidosOnline.Domain.DTOs.User;
+using Neutrinodevs.PedidosOnline.Domain.Models;
 using Neutrinodevs.PedidosOnline.Infraestructure.Repositories;
 using Newtonsoft.Json;
 using System;
@@ -34,6 +35,31 @@ namespace Neutrinodevs.PedidosOnline.Presentation.Controllers
             ViewBag.User = new UserAuthenticateDto { IdRole = 4 };
             var customers = _rpsCustomer.GetAll();
             return View(customers);
+        }
+
+        public IActionResult Edit(int key)
+        {
+            ViewBag.User = new UserAuthenticateDto { IdRole = 1 };
+
+            var customer = _rpsCustomer.GetById(key);
+            return View(customer ?? new CustomerDTO { });
+        }
+
+        [HttpPost]
+        public IActionResult Edit([FromBody] CustomerUpdateDto customer)
+        {
+            try
+            {
+                if(!_rpsCustomer.Update(customer))
+                    return Conflict(new TransactionResponse { code = "001", message = "No se pudo actualizar el cliente." });
+
+                return Ok(new TransactionResponse { code = "000", message = "OK" });
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                return Conflict(new TransactionResponse { code = "001", message = ex.Message });
+            }
         }
 
         [Route("New")]

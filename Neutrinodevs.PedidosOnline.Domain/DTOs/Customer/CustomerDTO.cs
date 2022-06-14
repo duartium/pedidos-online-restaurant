@@ -16,8 +16,14 @@ namespace Neutrinodevs.PedidosOnline.Domain.DTOs.Customer
         [JsonProperty("phone")]
         public string Phone { get; set; }
 
+        [JsonProperty("address")]
+        public string Address { get; set; }
+
         [JsonProperty("email")]
         public string Email { get; set; }
+
+        [JsonProperty("username")]
+        public string Username { get; set; }
 
         [JsonProperty("names")]
         public string Names { get; set; }
@@ -42,5 +48,29 @@ namespace Neutrinodevs.PedidosOnline.Domain.DTOs.Customer
 
         [JsonProperty("email")]
         public string Email { get; set; }
+    }
+
+    public class CustomerUpdateDto
+    {
+        [JsonProperty("identification")]
+        public string Identification { get; set; }
+
+        [JsonProperty("id_client")]
+        public int IdClient { get; set; }
+
+        [JsonProperty("phone")]
+        public string Phone { get; set; }
+
+        [JsonProperty("email")]
+        public string Email { get; set; }
+
+        [JsonProperty("names")]
+        public string Names { get; set; }
+
+        [JsonProperty("surnames")]
+        public string Surnames { get; set; }
+
+        [JsonProperty("address")]
+        public string Address { get; set; }
     }
 }

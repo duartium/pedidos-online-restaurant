@@ -18,16 +18,21 @@
         const idCustomer = urlParams.get('key')
 
         const getOrdersHistory = () => {
+            var datos = [];
+
             $.ajax({
                 url: base_url + '/Customer/GetOrdersHistory?idCustomer=' + idCustomer,
                 async: false,
                 type: 'GET',
                 contentType: "application/json; charset=utf-8",
-                success: getData,
+                success: function (resp) {
+                    datos = JSON.parse(resp);
+                },
                 error: function (err) {
                     console.log(err.responseText);
                 }
             });
+            return datos;
         }
 
         const updateOrdersTable = () => {
@@ -57,6 +62,7 @@
                             <th scope="col">CONTACTO</th>
                             <th scope="col">DIRECCIÓN</th>
                             <th scope="col">TOTAL</th>
+                            @*<th scope="col"></th>*@
                         </tr>
                     </thead>
                     <tbody id="tbody_history">
@@ -66,60 +72,64 @@
         </div>
     </div>
 </div>
+<script>
+    const seeDetails = (product) => {
+        let num = 0;
+        let rowProduct = '';
+        $("#tbody_product").html('');
+        product.forEach(elem => {
+            num++;
+            rowProduct += `<tr><td>${num}</td><td>${elem.NombreProducto}</td><td>${elem.Cantidad}</td></tr>`;
+        });
+
+        $("#tbody_product").append(rowProduct);
+        $("#product-modal").modal();
+    }
+
+    $(document).ready(function () {
+        let orders_list = getOrdersHistory();
+        console.log('ready', orders_list);
+        tbl_history = $("#tbl_history").DataTable({
+            "language": {
+                "url": base_url + "/datatables.net/datatables-es_es.json"
+            },
+            paging: true,
+            data: orders_list,
+            order: [],
+            columns: [
+                { data: 'number' },
+                { data: 'customer_name' },
+                { data: 'cellphone_number' },
+                { data: 'address' },
+                { data: 'total', render: $.fn.dataTable.render.number(',', '.', 2, '') },
+                /*{ data: 'items' }*/
+            ],
+            columnDefs: [
+                //{
+                //    targets: -1, orderable: false, searchable: false,
+                //    data: 'items',
+                //    "render": function (items, type, row, meta) {
+                //        return '<button class="btn btn-primary btn-sm see-details" data-product=\'' + items + '\'>Ver Detalle</a>';
+                //    }
+                //},
+                {
+                    targets: 3,
+                    data: 'address',
+                    "render": function (address_data, type, row, meta) {
+                        let address_det = address_data.split("|");
+                        return address_det[0];
+                    }
+                }
+            ]
+        });
+
+        $(document).on('click', '.see-details', function () {
+            let product = $(this).data("product");
+            seeDetails(product);
+        });
+    });
+</script>
+
 @section Scripts{
     <script src="~/datatables.net/jquery.dataTables.min.js"></script>
-    <script>
-        const seeDetails = (product) => {
-            let num = 0;
-            let rowProduct = '';
-            $("#tbody_product").html('');
-            product.forEach(elem => {
-                num++;
-                rowProduct += `<tr><td>${num}</td><td>${elem.NombreProducto}</td><td>${elem.Cantidad}</td></tr>`;
-            });
-
-            $("#tbody_product").append(rowProduct);
-            $("#product-modal").modal();
-        }
-
-        $(document).ready(function () {
-            getOrdersHistory();
-            
-            tbl_history = $("#tbl_history").DataTable({
-                "language": {
-                    "url": base_url + "/datatables.net/datatables-es_es.json"
-                },
-                paging: true,
-                data: orders_list,
-                order: [],
-                columns: [
-                    { data: 'number' },
-                    { data: 'customer_name' },
-                    { data: 'cellphone_number' },
-                    { data: 'address' },
-                    { data: 'total', render: $.fn.dataTable.render.number(',', '.', 2, '') },
-                    /*{ data: 'items' },*/
-                ],
-                columnDefs: [
-                    {
-                        targets: 5,
-                        data: 'items',
-                        "render": function (items, type, row, meta) {
-                            return '<button class="btn btn-primary btn-sm see-details" data-product=\'' + items + '\'>Ver Detalle</a>';
-                        }
-                    },
-                    { orderable: false, searchable: false, targets: -1 },
-                    { orderable: false, searchable: false, targets: 5 }
-                    , {
-                        targets: 3,
-                        data: 'address',
-                        "render": function (address_data, type, row, meta) {
-                            let address_det = address_data.split("|");
-                            return address_det[0];
-                        }
-                    }
-                ]
-            });
-        });
-    </script>
 }

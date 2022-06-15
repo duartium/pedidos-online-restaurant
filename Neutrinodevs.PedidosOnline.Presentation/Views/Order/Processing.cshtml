@@ -98,15 +98,17 @@
                 else if (resp == 3) {
                     $("#title").text("El repartidor se encuentra en camino");
                 } else if (resp == 4) {
-                    $("#title").text("Pedido Entregado!");
+                    $("#title").text("¡Pedido Entregado!");
                     $("#description").text("¡Gracias! Esperamos disfrutes tu pedido. Hemos enviado el recibo a tu correo electrónico.");
                     $("#order-info").empty();
                     $("#order-info").append("<button type='button' class='btn back-primary' id='logout'>Cerrar Sesión</button>");
+                    $("#btnCancelOrder").hide();
                 }
                 else if (resp > 4) {
                     $("#title").text("Lo sentimos...");
                     $("#description").text("El pedido ha sido cancelado. El repartidor tuvo problemas para entregar tu pedido.");
                     $("#order-info").remove();
+                    $("#btnCancelOrder").hide();
                 }
             },
             error: function () {

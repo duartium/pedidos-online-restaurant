@@ -1,5 +1,5 @@
 ﻿"use strict";
-var connection = new signalR.HubConnectionBuilder().withUrl("/OrdersHub").build();
+var connection = new signalR.HubConnectionBuilder().withUrl("/Pesca/OrdersHub").build();
 
 connection.start().then(function () {
     console.log("conectado globalmente");

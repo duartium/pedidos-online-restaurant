@@ -199,7 +199,7 @@
 
         const findClient = () => {
 
-            let identification = $("#identification").val();
+            var identification = $("#identification").val();
             if (identification.length == 0) {
                 Swal.fire("Notificación", "Por favor ingrese el número de cédula del cliente para continuar.", "warning");
                 sale.id_client = 0;
@@ -222,8 +222,10 @@
                 contentType: 'application/json',
                 success: function (resp) {
                     let client = JSON.parse(resp);
+                    console.log(client);
                     if (client == null || client == undefined) {
-                        
+                        $("#names").val("");
+
                         swal.fire({
                             title: 'Notificación',
                             text: 'El cliente con identificación ' + identification + ' no existe ¿Desea registrarlo?',
@@ -243,7 +245,7 @@
                         return;
                     } else {
                         sale.id_client = client.id_client;
-                        $("#names").val(client.full_name);
+                        $("#names").val(client.names + " "+client.surnames);
                         $("#names").focus();
                     }
 

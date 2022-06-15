@@ -32,7 +32,8 @@ namespace Neutrinodevs.PedidosOnline.Domain.Services
                 smtp.Port = 587;
                 smtp.EnableSsl = true;
                 smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new NetworkCredential("delivery.lapesca@gmail.com", "Lapesca.bby123");
+                smtp.Credentials = new NetworkCredential("delivery.lapesca@gmail.com", "xwtgkbwuxqkaghes");
+                //smtp.Credentials = new NetworkCredential("delivery.lapesca@gmail.com", "Lapesca.bby123");
 
                 string output = null;
                 try

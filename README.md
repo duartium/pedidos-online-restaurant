@@ -12,3 +12,20 @@ Una aplicación web diseñada para el Restaurante Pesca que permite realizar ped
 ## Tecnologías utilizadas 💻
 C# (MVC), SignalR, Entity Framework, MSSQL DB, Javascript, Bootstrap, Html, Css3, Datatable
 
+## Inicio
+![cover](https://github.com/duartium/pedidos-online-restaurant/blob/master/Docs/capture1.png?raw=true)
+
+## Seleción de platos
+![cover](https://github.com/duartium/pedidos-online-restaurant/blob/master/Docs/capture2.png?raw=true)
+
+## Barra de carrito de compras
+![cover](https://github.com/duartium/pedidos-online-restaurant/blob/master/Docs/capture3.png?raw=true)
+
+## Confirmación de pedido
+![cover](https://github.com/duartium/pedidos-online-restaurant/blob/master/Docs/capture4.png?raw=true)
+
+## Finalización de compra
+![cover](https://github.com/duartium/pedidos-online-restaurant/blob/master/Docs/capture5.png?raw=true)
+
+## Punto de venta
+![cover](https://github.com/duartium/pedidos-online-restaurant/blob/master/Docs/capture6.png?raw=true)
